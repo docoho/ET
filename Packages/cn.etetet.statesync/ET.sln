@@ -406,6 +406,8 @@ Global
 		{6989927F-5D63-31EA-E91E-E4A959ABE0FC}.Release|x64.Build.0 = Debug|Any CPU
 		{6989927F-5D63-31EA-E91E-E4A959ABE0FC}.Release|x86.ActiveCfg = Debug|Any CPU
 		{6989927F-5D63-31EA-E91E-E4A959ABE0FC}.Release|x86.Build.0 = Debug|Any CPU
+		{67F431D2-91EC-7CDB-6684-4D210359554C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F431D2-91EC-7CDB-6684-4D210359554C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
