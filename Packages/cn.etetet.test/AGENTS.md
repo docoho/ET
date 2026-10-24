@@ -47,3 +47,9 @@
 | `FiberInit_TestCase.cs` | `TestCase` 场景初始化，每个用例均为全新服务器环境 |
 | `TestArgs.cs` | 命令行参数定义 |
 | `ITestHandler.cs` | 测试处理器接口 |
+
+## UnityBridge 测试命令
+
+- UnityTestRun 处理器位于 Scripts/Editor/Test，随测试代码参与 CodeMode 选择，汇入 ET.Editor。
+- 依赖方向保持 test → unitybridge；unitybridge 核心不得直接引用 ET.Test。
+- 验证：未启用测试包时 Unity 编译无 ET.Test 引用错误；启用测试包的 ClientServer 模式下，确认 UnityTestRun 命令可发现并执行。
