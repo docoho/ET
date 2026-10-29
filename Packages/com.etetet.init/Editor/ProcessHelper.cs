@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,7 +15,20 @@ namespace ET
                 return Run("powershell.exe", arguments, workingDirectory, waitExit);
             }
 
-            return Run("/usr/local/bin/pwsh", arguments, workingDirectory, waitExit);
+            string pwsh = "/usr/local/bin/pwsh";
+            if (!System.IO.File.Exists(pwsh))
+            {
+                if (System.IO.File.Exists("/opt/homebrew/bin/pwsh"))
+                {
+                    pwsh = "/opt/homebrew/bin/pwsh";
+                }
+                else
+                {
+                    pwsh = "pwsh";
+                }
+            }
+
+            return Run(pwsh, arguments, workingDirectory, waitExit);
         }
         
         public static Process DotNet(string arguments, string workingDirectory = ".", bool waitExit = false)
@@ -25,7 +38,20 @@ namespace ET
                 return Run("dotnet.exe", arguments, workingDirectory, waitExit);
             }
 
-            return Run("/usr/local/share/dotnet/dotnet", arguments, workingDirectory, waitExit);
+            string dotnet = "/usr/local/share/dotnet/dotnet";
+            if (!System.IO.File.Exists(dotnet))
+            {
+                if (System.IO.File.Exists("/opt/homebrew/bin/dotnet"))
+                {
+                    dotnet = "/opt/homebrew/bin/dotnet";
+                }
+                else
+                {
+                    dotnet = "dotnet";
+                }
+            }
+
+            return Run(dotnet, arguments, workingDirectory, waitExit);
         }
 
         public static Process Run(string exe, string arguments, string workingDirectory = ".", bool waitExit = false)
@@ -43,6 +69,11 @@ namespace ET
                     redirectStandardError = true;
                     useShellExecute = false;
                 }
+
+                if (!string.IsNullOrEmpty(workingDirectory) && !System.IO.Directory.Exists(workingDirectory))
+                {
+                    System.IO.Directory.CreateDirectory(workingDirectory);
+                }
                 
                 ProcessStartInfo info = new()
                 {
@@ -53,9 +84,17 @@ namespace ET
                     WorkingDirectory = workingDirectory,
                     RedirectStandardOutput = redirectStandardOutput,
                     RedirectStandardError = redirectStandardError,
-                    StandardOutputEncoding = Encoding.UTF8,
-                    StandardErrorEncoding = Encoding.UTF8
                 };
+
+                if (redirectStandardOutput)
+                {
+                    info.StandardOutputEncoding = Encoding.UTF8;
+                }
+
+                if (redirectStandardError)
+                {
+                    info.StandardErrorEncoding = Encoding.UTF8;
+                }
 
                 Process process = Process.Start(info);
 

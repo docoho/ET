@@ -1,0 +1,45 @@
+#import <UIKit/UIKit.h>
+#include "UnityAppController.h"
+
+// Unity 2022 的入口已经能够从 connectedScenes 创建窗口。
+// 采用场景生命周期后，需由场景委托继续转发 Unity 的激活和暂停回调。
+@interface ETUnitySceneDelegate : UIResponder<UIWindowSceneDelegate>
+@property (nonatomic, retain) UIWindow* window;
+@end
+
+@implementation ETUnitySceneDelegate
+
+- (void)scene:(UIScene*)scene willConnectToSession:(UISceneSession*)session options:(UISceneConnectionOptions*)options
+{
+    if (![scene isKindOfClass:[UIWindowScene class]])
+        return;
+
+    self.window = GetAppController().window;
+    if (self.window != nil)
+        self.window.windowScene = (UIWindowScene*)scene;
+}
+
+- (void)sceneDidBecomeActive:(UIScene*)scene
+{
+    // 场景应用启动时处于后台；此时再初始化 Unity，窗口才能关联到已连接的场景。
+    UnityAppController* controller = GetAppController();
+    [controller applicationDidBecomeActive:UIApplication.sharedApplication];
+    self.window = controller.window;
+}
+
+- (void)sceneWillResignActive:(UIScene*)scene
+{
+    [GetAppController() applicationWillResignActive:UIApplication.sharedApplication];
+}
+
+- (void)sceneWillEnterForeground:(UIScene*)scene
+{
+    [GetAppController() applicationWillEnterForeground:UIApplication.sharedApplication];
+}
+
+- (void)sceneDidEnterBackground:(UIScene*)scene
+{
+    [GetAppController() applicationDidEnterBackground:UIApplication.sharedApplication];
+}
+
+@end
