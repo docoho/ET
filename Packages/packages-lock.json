@@ -680,15 +680,6 @@
         "cn.etetet.core": "1.0.0"
       }
     },
-    "com.coplaydev.coplay": {
-      "version": "file:com.coplaydev.coplay",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.inputsystem": "1.1.1",
-        "com.unity.cloud.gltfast": "6.12.1"
-      }
-    },
     "com.coplaydev.unity-mcp": {
       "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
       "depth": 0,
