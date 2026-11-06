@@ -1,9 +1,12 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using YooAsset;
 
 namespace ET
 {
+    /// <summary>
+    /// 客户端打包目标平台枚举。
+    /// </summary>
     public enum PlatformType
     {
         None,
@@ -16,6 +19,10 @@ namespace ET
     }
 
 
+    /// <summary>
+    /// 客户端构建工具编辑器窗口（菜单项：<c>ET/Loader/Build Tool</c>）。
+    /// 提供可视化的目标平台（<see cref="PlatformType"/>）与构建选项（<see cref="BuildOptions"/>）选择，并调用 <see cref="BuildHelper.Build"/> 执行客户端打包。
+    /// </summary>
     public class BuildEditor : EditorWindow
     {
         private PlatformType activePlatform;
@@ -25,12 +32,18 @@ namespace ET
         private GlobalConfig globalConfig;
         private YooConfig yooConfig;
 
+        /// <summary>
+        /// 打开客户端构建工具窗口。
+        /// </summary>
         [MenuItem("ET/Loader/Build Tool", false)]
         public static void ShowWindow()
         {
             GetWindow<BuildEditor>();
         }
 
+        /// <summary>
+        /// 窗口激活时加载 <see cref="GlobalConfig"/> 与 <see cref="YooConfig"/>，并识别当前编辑器所处的激活平台。
+        /// </summary>
         private void OnEnable()
         {
             globalConfig = Resources.Load<GlobalConfig>(nameof(GlobalConfig));
@@ -54,6 +67,9 @@ namespace ET
             platformType = activePlatform;
         }
 
+        /// <summary>
+        /// 绘制打包工具窗口 GUI，校验 <see cref="GlobalConfig.CodeMode"/> 必须为 <see cref="CodeMode.Client"/> 后触发打包。
+        /// </summary>
         private void OnGUI()
         {
             EditorGUILayout.LabelField("PlatformType ");
@@ -72,6 +88,7 @@ namespace ET
                     return;
                 }
 
+                // 客户端打包要求 CodeMode 必须先切换为 Client，避免将服务端代码打入客户端包
                 if (this.globalConfig.CodeMode != CodeMode.Client)
                 {
                     Log.Error("build package CodeMode must be CodeMode.Client, please select Client");

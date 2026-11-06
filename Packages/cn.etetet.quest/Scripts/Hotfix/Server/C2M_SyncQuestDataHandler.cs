@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端处理客户端全量同步任务数据请求（C2M_SyncQuestData）的消息处理器。
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_SyncQuestDataHandler : MessageLocationHandler<Unit, C2M_SyncQuestData, M2C_SyncQuestData>
     {

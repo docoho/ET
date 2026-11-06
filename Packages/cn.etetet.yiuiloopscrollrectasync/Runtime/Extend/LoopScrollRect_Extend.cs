@@ -1,8 +1,12 @@
-﻿using ET;
+using ET;
 using Sirenix.OdinInspector;
 
 namespace UnityEngine.UI
 {
+    /// <summary>
+    /// LoopScrollRect的YIUI定制扩展分部类。
+    /// 增加了缓存父节点、单选/多选配置、分帧创建间隔及预加载个数等序列化字段与可见行计算属性。
+    /// </summary>
     [EnableClass]
     public abstract partial class LoopScrollRect
     {

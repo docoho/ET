@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,6 +7,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// <c>ETTask</c> 异步调用与返回值规范分析器（ET0008 / ET0009 / ET0021）。
+    /// <para>1. 在同步方法或同步 Lambda 中调用返回 <c>ETTask</c> 的方法时，强制要求链式调用 <c>.Coroutine()</c>（ET0008）。</para>
+    /// <para>2. 在 <c>async</c> 异步方法或异步 Lambda 中调用返回 <c>ETTask</c> 的方法时，强制要求使用 <c>await</c> 等待或显式调用 <c>.Coroutine()</c>，防止意外丢弃异步任务导致异常被吞（ET0009）。</para>
+    /// <para>3. 全局禁止声明 <c>async void</c> 方法、局部函数或 <c>async Action</c> Lambda 表达式，所有异步方法必须返回 <c>ETTask</c>（ET0021）。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ETTaskAnalyzer:DiagnosticAnalyzer
     {

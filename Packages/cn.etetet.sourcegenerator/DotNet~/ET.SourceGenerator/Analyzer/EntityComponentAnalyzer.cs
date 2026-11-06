@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -8,6 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 实体组件挂载与获取类型约束分析器（ET0007 / ET0014）。
+    /// <para>1. 检查 <c>entity.AddComponent&lt;T&gt;()</c> 和 <c>entity.GetComponent&lt;T&gt;()</c> 调用，确保组件类型 <c>T</c> 标记了匹配的 <c>[ComponentOf(typeof(ParentEntity))]</c> 或无参通用 <c>[ComponentOf]</c>。</para>
+    /// <para>2. 禁止在未标记 <c>[EnableAccessEntiyChild]</c> 的方法或属性中对基类 <c>Entity</c> / <c>LSEntity</c> 引用直接调用组件操作。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EntityComponentAnalyzer:DiagnosticAnalyzer
     {

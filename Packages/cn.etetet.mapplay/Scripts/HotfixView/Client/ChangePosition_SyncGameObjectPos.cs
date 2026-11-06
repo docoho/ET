@@ -1,8 +1,11 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端逻辑层 Unit 坐标变更事件的表现层处理器：同步更新 GameObject 的世界坐标、地形贴地高度以及 Cinemachine 相机跟随点。
+    /// </summary>
     [Event(SceneType.Current)]
     public class ChangePosition_SyncGameObjectPos: AEvent<Scene, ChangePosition>
     {

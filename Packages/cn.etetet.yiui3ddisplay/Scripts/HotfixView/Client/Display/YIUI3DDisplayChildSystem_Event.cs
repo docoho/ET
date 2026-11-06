@@ -1,17 +1,19 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（射线检测、拖拽旋转与点击交互事件处理部分）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
     {
-        //开关点击回调
-        //用此方法必须保证方法的参数为(GameObject, GameObject)
+        /// <summary>
+        /// 开关3D模型点击回调。
+        /// 用此方法必须保证宿主组件实现了 IYIUI3DDisplayClick 系统的回调方法。
+        /// </summary>
         public static void ResetOnClick(this YIUI3DDisplayChild self, bool value)
         {
             self.OnClick = value;

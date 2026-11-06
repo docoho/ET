@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
@@ -6,6 +6,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
+    /// 打开红点运行时可视化调试界面的GM命令。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/XzyawmryHitNVNk9QVtcDAftn5O
     /// </summary>
     //主要用于在GM包上测试功能

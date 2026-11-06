@@ -4,8 +4,14 @@ using System.Linq;
 
 namespace ET.Test
 {
+    /// <summary>
+    /// 测试用例执行调度辅助类，支持单条执行、串行批量执行以及分批并发（Parallel + Exclusive）执行。
+    /// </summary>
     public static class TestRunHelper
     {
+        /// <summary>
+        /// 运行单个测试用例并捕获耗时、返回值与异常，组装为 TestCaseResult
+        /// </summary>
         public static async ETTask<TestCaseResult> RunOne(Fiber fiber, TestArgs options, TestCaseInfo testCaseInfo)
         {
             TimeInfo timeInfo = fiber.GetSingleton<TimeInfo>();

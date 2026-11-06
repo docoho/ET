@@ -1,7 +1,7 @@
 namespace ET
 {
 	/// <summary>
-	/// cn.etetet.spell Text Constants
+	/// cn.etetet.spell Text Constants（技能施法相关的提示文本常量 ID 定义）
 	/// </summary>
 	public static partial class TextConstDefine
 	{

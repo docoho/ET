@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace ET
 {
+    /// <summary>
+    /// 主线程纤程调度器（对应 <see cref="SchedulerType.Main"/>）。
+    /// 由进程主循环或 Unity 主线程的 <c>Update</c> / <c>LateUpdate</c> 驱动其中注册的所有 Fiber。
+    /// </summary>
     internal class MainThreadScheduler: IScheduler
     {
         private readonly ConcurrentQueue<Fiber> fiberQueue = new();

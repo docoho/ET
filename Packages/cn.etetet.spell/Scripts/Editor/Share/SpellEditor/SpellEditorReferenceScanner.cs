@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能与 Buff 行为树引用扫描器，递归遍历行为树节点，提取 BTCreateSpell 与 BTAddBuff 所指向的目标 ID。
+    /// </summary>
     public static class SpellEditorReferenceScanner
     {
         public static void ScanSpell(SpellConfig spellConfig, string ownerPath, List<SpellEditorReference> results)

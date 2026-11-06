@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 禁止 Entity 及其子类字段或属性持有 MessageObject 及其可变引用类型成员的 Roslyn 静态分析器（ETMO001），防止网络消息对象池回收导致实体状态被污染。
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MessageObjectReferenceAnalyzer : DiagnosticAnalyzer
     {

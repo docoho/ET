@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 将指定路径 Prefab 资产实例化到当前场景（PrefabUtility.InstantiatePrefab，支持 Undo）的命令处理器（PrefabInstantiate）。
+    /// </summary>
     internal sealed class UnityBridgePrefabInstantiateHandler : AUnityBridgeHandler<PrefabInstantiateRequest, PrefabInstantiateResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabInstantiateRequest command)

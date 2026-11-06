@@ -1,7 +1,13 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端 Buff 创建、更新与移除辅助类（驱动客户端侧 <see cref="EffectClientBuffAdd"/> 与 <see cref="EffectClientBuffRemove"/> 表现行为树）。
+    /// </summary>
     public static class BuffHelper
     {
+        /// <summary>
+        /// 根据服务端下发的 <see cref="M2C_BuffAdd"/> 消息在客户端创建对应的 <see cref="Buff"/> 实体并执行客户端添加效果行为树。
+        /// </summary>
         public static Buff CreateBuff(Unit unit, M2C_BuffAdd buffAdd)
         {
             Buff buff = unit.GetComponent<BuffComponent>().CreateBuff(buffAdd.BuffId, buffAdd.BuffConfigId, buffAdd.CasterId);
@@ -30,6 +36,9 @@
             return buff;
         }
         
+        /// <summary>
+        /// 更新客户端 Buff 的过期时间、Tick 间隔与层数。
+        /// </summary>
         public static void UpdateBuff(Buff buff, long expireTime, int tickTime, int stack)
         {
             if (stack > 0)
@@ -48,6 +57,9 @@
             }
         }
         
+        /// <summary>
+        /// 移除客户端单位身上的指定 Buff 并触发 <see cref="EffectClientBuffRemove"/> 客户端移除效果行为树。
+        /// </summary>
         public static void RemoveBuff(Unit unit, long id, BuffFlags removeType)
         {
             BuffComponent buffComponent = unit.GetComponent<BuffComponent>();

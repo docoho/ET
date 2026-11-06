@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.8
-    /// Desc
+    /// Desc    主界面当前选中目标信息框（TargetInfo）组件系统，每帧检测本地玩家 <see cref="TargetComponent"/> 变化并刷新目标头像与血量/蓝量
     /// </summary>
     public static partial class TargetInfoComponentSystem
     {
+        /// <summary>
+        /// 初始化目标信息框，默认隐藏并获取本地玩家的 <see cref="TargetComponent"/>
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this TargetInfoComponent self)
         {

@@ -1,10 +1,13 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// 红点Key删除或修改ID时的级联引用检查与自动修正辅助类。
+    /// </summary>
     internal static class UIRedDotKeyEditorHelper
     {
         internal static RedDotLinkData GetCheckKeyLink(RedDotConfigAsset configAsset, int key)

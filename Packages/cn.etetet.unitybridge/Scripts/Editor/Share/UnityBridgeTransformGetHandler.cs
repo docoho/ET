@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取指定场景对象 Transform 位置、旋转、缩放、父节点路径及子节点数量的命令处理器（TransformGet）。
+    /// </summary>
     internal sealed class UnityBridgeTransformGetHandler : AUnityBridgeHandler<TransformGetRequest, TransformGetResponse>
     {
         protected override async ETTask<IResponse> Run(TransformGetRequest command)

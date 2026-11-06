@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,9 @@ namespace YIUIFramework.Editor
         }
     }
 
+    /// <summary>
+    /// 红点配置有向无环图（DAG）校验器，基于拓扑排序（Kahn算法）检测红点父子关系是否存在循环依赖。
+    /// </summary>
     internal class UIRedDotConfigDAG
     {
         private List<Node> Nodes { get; set; }

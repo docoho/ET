@@ -13,6 +13,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// Roslyn 符号扩展辅助类，安全提取局部变量、字段、属性或参数的类型符号。
+    /// </summary>
     public static class SymbolExtensions
     {
         public static ITypeSymbol GetSymbolTypeSafe(this ISymbol symbol) => symbol switch
@@ -25,6 +28,10 @@ namespace ET
         };
     }
 
+    /// <summary>
+    /// 禁止在 await 之后直接访问 Entity 及其子类变量的静态诊断分析器（ETAE001）。
+    /// <para>由于异步挂起（await）期间实体可能已经被销毁或回收到对象池，直接持有 Entity 引用跨越 await 会导致悬空引用或串号 Bug，强制要求使用 EntityRef&lt;T&gt; 包装并在恢复后重新解包。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AwaitEntityAnalyzer : DiagnosticAnalyzer
     {

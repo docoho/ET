@@ -1,10 +1,16 @@
-﻿using System;
+using System;
 using System.Threading;
 
 namespace ET
 {
+    /// <summary>
+    /// 帧同步（LockStep）服务端独立进程启动入口类
+    /// </summary>
     public static class Program
     {
+        /// <summary>
+        /// 帧同步服务端主函数：防裁剪加载 Model 程序集，启动 Init 生命周期并在主循环中驱动 Update/LateUpdate
+        /// </summary>
         public static void Main()
         {
             //这里大家看着可能比较困惑，为什么要绕一大圈呢，之前这里直接调用Model层，现在却要在CoderLoader中获取Model的程序集找到Entry入口再调用

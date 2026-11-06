@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 读取工程内文本资源内容（支持指定起始行、最大行数与字符截断保护）的命令处理器（AssetReadText）。
+    /// </summary>
     internal sealed class UnityBridgeAssetReadTextHandler : AUnityBridgeHandler<AssetReadTextRequest, AssetReadTextResponse>
     {
         protected override async ETTask<IResponse> Run(AssetReadTextRequest command)

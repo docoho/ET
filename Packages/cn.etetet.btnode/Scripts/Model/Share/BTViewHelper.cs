@@ -2,11 +2,14 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树节点在编辑器检视面板（Odin Inspector）下的辅助扩展工具类。
+    /// </summary>
     public static class BTViewHelper
     {
 #if UNITY_EDITOR
         /// <summary>
-        /// 获取用于Odin Inspector ValueDropdown的选项列表
+        /// 获取用于Odin Inspector ValueDropdown的选项列表（将 EnumSingleton 枚举映射为下拉菜单项）。
         /// </summary>
         public static IEnumerable<Sirenix.OdinInspector.ValueDropdownItem<int>> GetEnumDropdownOptions<TEnum>(this TEnum tEnum) where TEnum : EnumSingleton<TEnum>
         {

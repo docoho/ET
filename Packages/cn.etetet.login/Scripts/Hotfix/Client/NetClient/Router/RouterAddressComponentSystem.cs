@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端路由地址管理组件系统：负责通过 HTTP 从 RouterManager 拉取并定时刷新可用 Router 节点列表与 Realm 列表。
+    /// </summary>
     [EntitySystemOf(typeof(RouterAddressComponent))]
     public static partial class RouterAddressComponentSystem
     {
@@ -16,11 +19,17 @@ namespace ET.Client
             self.AddressFamily = IPAddress.Parse(ip).AddressFamily;
         }
         
+        /// <summary>
+        /// 初始化并首次拉取所有 Router 与 Realm 地址信息。
+        /// </summary>
         public static async ETTask Init(this RouterAddressComponent self)
         {
             await self.GetAllRouter();
         }
 
+        /// <summary>
+        /// 通过 HTTP 请求从 RouterManager 获取最新 Router/Realm 列表，并将 Router 列表随机打乱以实现客户端负载均衡。
+        /// </summary>
         private static async ETTask GetAllRouter(this RouterAddressComponent self)
         {
             EntityRef<RouterAddressComponent> selfRef = self;
@@ -53,6 +62,9 @@ namespace ET.Client
             await self.GetAllRouter();
         }
 
+        /// <summary>
+        /// 轮询获取下一个可用的 Router 节点地址（支持 IPv6 映射转换）。
+        /// </summary>
         public static Address GetAddress(this RouterAddressComponent self)
         {
             if (self.Routers.Count == 0)
@@ -72,6 +84,9 @@ namespace ET.Client
             return new IPEndPoint(ipAddress, int.Parse(ss[1]));
         }
         
+        /// <summary>
+        /// 根据账号取模一致性哈希获取对应的 Realm 登录服地址。
+        /// </summary>
         public static IPEndPoint GetRealmAddress(this RouterAddressComponent self, string account)
         {
             int v = account.Mode(self.Realms.Count);

@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI跨层字符串调用核心单例系统。
+    /// 在Awake时扫描所有标记了 [YIUIInvokeSystem] 的Handler类并建立按InvokeType索引的全局字典，实现MonoBehaviour/ModelView到HotfixView的零耦合回调。
+    /// </summary>
     [CodeProcess]
     public partial class YIUIInvokeSystem : Singleton<YIUIInvokeSystem>, ISingletonAwake
     {

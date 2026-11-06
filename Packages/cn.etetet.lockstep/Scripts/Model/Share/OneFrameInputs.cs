@@ -3,13 +3,23 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 单个逻辑帧内房间所有玩家的操作输入集合扩展部分（支持深拷贝 <see cref="CopyTo"/> 与预测帧相等性比对）
+    /// </summary>
     public partial class OneFrameInputs
     {
+        /// <summary>
+        /// 比较两个单帧输入集合是否相等
+        /// </summary>
         protected bool Equals(OneFrameInputs other)
         {
             return Equals(this.Inputs, other.Inputs);
         }
 
+        /// <summary>
+        /// 将当前帧的所有玩家输入深拷贝到目标 <see cref="OneFrameInputs"/> 实例中
+        /// </summary>
+        /// <param name="to">拷贝目标对象</param>
         public void CopyTo(OneFrameInputs to)
         {
             to.Inputs.Clear();

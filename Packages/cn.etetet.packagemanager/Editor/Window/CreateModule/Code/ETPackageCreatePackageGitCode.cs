@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 根据模板生成新包根目录下的 `packagegit.json`（配置 PackageId 与 ScriptsReferences 程序集引用映射）
+    /// </summary>
     public class ETPackageCreatePackageGitCode : BaseTemplate
     {
         private readonly string m_EventName = "PackageGit";

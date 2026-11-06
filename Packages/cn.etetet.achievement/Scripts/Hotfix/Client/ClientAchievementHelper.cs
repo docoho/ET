@@ -1,13 +1,16 @@
 namespace ET.Client
 {
     /// <summary>
-    /// 客户端成就帮助类
+    /// 客户端成就网络请求辅助类，封装向服务端查询成就列表、详情、统计数据及领取奖励的异步 RPC 调用
     /// </summary>
     public static class ClientAchievementHelper
     {
         /// <summary>
-        /// 获取成就列表
+        /// 向服务端请求获取指定分类（或全部分类）的成就列表
         /// </summary>
+        /// <param name="scene">客户端根场景</param>
+        /// <param name="categoryId">成就分类 ID（0 表示全部分类）</param>
+        /// <returns>成就信息数组</returns>
         public static async ETTask<AchievementInfo[]> GetAchievements(Scene scene, int categoryId = 0)
         {
             // 在await前创建EntityRef

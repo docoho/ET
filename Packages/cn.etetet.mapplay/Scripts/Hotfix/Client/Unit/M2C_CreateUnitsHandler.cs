@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+	/// <summary>
+	/// 客户端收到视野内新增单位列表（M2C_CreateUnits）的消息处理器：遍历创建尚不存在的客户端 Unit。
+	/// </summary>
 	[MessageHandler(SceneType.Current)]
 	public class M2C_CreateUnitsHandler: MessageHandler<Scene, M2C_CreateUnits>
 	{

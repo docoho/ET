@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 红点调试面板中单个红点节点项的UI组件系统，负责展示节点数量、父子个数及切换父/子视图事件。
+    /// </summary>
     [FriendOf(typeof(RedDotDataItemComponent))]
     public static partial class RedDotDataItemComponentSystem
     {

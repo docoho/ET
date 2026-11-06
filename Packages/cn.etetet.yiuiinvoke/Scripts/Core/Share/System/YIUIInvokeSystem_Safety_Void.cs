@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用系统（安全无返回值调用SafetyInvoke分部类，未注册对应处理器时静默忽略）。
+    /// </summary>
     public partial class YIUIInvokeSystem
     {
+        /// <summary>安全执行无返回值的YIUI调用，若未注册对应处理器则直接返回。</summary>
         public void SafetyInvoke<T>(T self, string invokeType) where T : Entity
         {
             if (!CheckInvoke(invokeType))

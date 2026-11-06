@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static ET.IQUEUEHEAD;
 using static ET.KCPBASIC;
@@ -13,6 +13,13 @@ using static ET.KCPBASIC;
 
 namespace ET
 {
+    /// <summary>
+    /// KCP 核心算法纯 C# 非安全指针（<c>unsafe</c>）移植实现（直译自 skywind3000 的 C 语言版 <c>ikcp.c</c>）。
+    /// <remarks>
+    /// 通过 <see cref="NativeMemory"/> / <see cref="Marshal"/> 直接在非托管内存上分配控制块（<see cref="IKCPCB"/>）和分片节点（<see cref="IKCPSEG"/>），
+    /// 保持与原生 C 版本一致的内存布局、ARQ 滑动窗口、快速重传（Fast Resend）及非退让拥塞控制逻辑。
+    /// </remarks>
+    /// </summary>
     internal static unsafe class IKCP
     {
         private static void memcpy(void* dest, void* src, int n) => Unsafe.CopyBlock(dest, src, (uint)n);

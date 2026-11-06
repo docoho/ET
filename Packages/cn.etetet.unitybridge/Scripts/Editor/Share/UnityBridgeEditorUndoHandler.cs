@@ -2,6 +2,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 触发编辑器撤销（Undo.PerformUndo）操作的命令处理器（EditorUndo）。
+    /// </summary>
     internal sealed class UnityBridgeEditorUndoHandler : AUnityBridgeHandler<EditorUndoRequest, EditorUndoResponse>
     {
         protected override async ETTask<IResponse> Run(EditorUndoRequest command)

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 从目标场景对象或 Prefab 节点移除指定组件的命令处理器（InspectorRemoveComponent）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorRemoveComponentHandler :
             AUnityBridgeInspectorHandler<InspectorRemoveComponentRequest, InspectorRemoveComponentResponse>
     {

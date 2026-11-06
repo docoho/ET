@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM命令分类键值反射辅助类，负责扫描 EGMType 常量字段及其 [GMGroup] 名称。
+    /// </summary>
     public static class GMKeyHelper
     {
         [StaticField]

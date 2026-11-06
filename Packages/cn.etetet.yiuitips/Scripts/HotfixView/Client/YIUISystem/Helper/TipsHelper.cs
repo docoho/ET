@@ -4,10 +4,8 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 弹窗助手
-    /// 可打开任意View 建议命名Tips[XXX]View
-    /// T 必须是View 且必须有 IYIUIOpen〈ParamVo〉 接口
-    /// View关闭发送回收消息 EventPutTipsView
+    /// 弹窗助手（泛型主入口分部类）。
+    /// 可打开任意实现了 IYIUIOpen&lt;ParamVo&gt; 的Tips子窗口，关闭时自动触发 EventPutTipsView 回收进池。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/OdNgwu0KsiyJ6NkK8vCcwbjbn1g
     /// </summary>
     public static partial class TipsHelper

@@ -1,5 +1,8 @@
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 批量顺序执行多条子命令的处理器（BatchExecute），支持遇错即停（StopOnError）或全量执行汇总。
+    /// </summary>
     internal sealed class UnityBridgeBatchExecuteHandler : AUnityBridgeHandler<BatchExecuteRequest, BatchExecuteResponse>
     {
         protected override async ETTask<IResponse> Run(BatchExecuteRequest command)

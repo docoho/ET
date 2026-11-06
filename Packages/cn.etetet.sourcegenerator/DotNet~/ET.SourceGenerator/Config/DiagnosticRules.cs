@@ -1,7 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 
 namespace ET
 {
+    /// <summary>
+    /// 诊断规则（ET1001）：要求标记了 [EntitySystem] 等标签的函数必须声明在 static partial 类中。
+    /// </summary>
     public static class ETSystemMethodIsInStaticPartialClassRule
     {
         private const string Title = "ETSystem函数必须声明在静态分部类中";
@@ -21,6 +24,9 @@ namespace ET
     }
 
     
+    /// <summary>
+    /// 诊断规则（ET0008）：在同步方法中调用返回 ETTask 的异步方法时，必须显式调用 .Coroutine() 后缀。
+    /// </summary>
     public static class ETTaskInSyncMethodAnalyzerRule
     {
         private const string Title = "ETTask方法调用在非异步方法体内使用错误";
@@ -39,6 +45,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0009）：在异步方法中调用返回 ETTask 的方法时，必须添加 await 前缀或 .Coroutine() 后缀，防止漏掉等待。
+    /// </summary>
     public static class ETTaskInAsyncMethodAnalyzerRule
     {
         private const string Title = "ETTask方法调用在异步方法体内使用错误";
@@ -57,6 +66,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0011）：标记了 [UniqueId(min, max)] 的类中的 const int/short/long 字段值必须在指定区间内。
+    /// </summary>
     public static class UniqueIdRangeAnaluzerRule
     {
         private const string Title = "唯一Id字段数值区间约束";
@@ -75,6 +87,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0012）：同名 [UniqueId] 分部类中的唯一 ID 常量值禁止与其他模块重复。
+    /// </summary>
     public static class UniqueIdDuplicateAnalyzerRule
     {
         private const string Title = "唯一Id字段禁止重复";
@@ -93,6 +108,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0001）：调用 AddChild/AddChildWithId 时，子实体类必须标记对应的 [ChildOf(typeof(Parent))]。
+    /// </summary>
     public static class AddChildTypeAnalyzerRule
     {
         private const string Title = "AddChild方法类型约束错误";
@@ -111,6 +129,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0014）：禁止在非所属 Entity 的外部直接访问 Children 或 Components 字典。
+    /// </summary>
     public static class DisableAccessEntityChildAnalyzerRule
     {
         private const string Title = "禁止在Entity类中直接调用Child和Component";
@@ -129,6 +150,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0007）：调用 AddComponent/GetComponent 时，组件类必须标记对应的 [ComponentOf(typeof(Parent))]。
+    /// </summary>
     public static class EntityComponentAnalyzerRule
     {
         private const string Title = "实体类添加或获取组件类型错误";
@@ -147,6 +171,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0039）：未标记 [AllowInstance] 的 Singleton 禁止通过全局 .Instance 或 World.GetSingleton 访问，以保证 Fiber 线程安全。
+    /// </summary>
     public static class DisableSingletonInstanceAccessAnalyzerRule
     {
         private const string Title = "禁止通过全局入口访问 Singleton";
@@ -165,6 +192,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0015）：所有非 const 静态字段必须显式标记 [StaticField]，明确提示开发者注意多 Fiber 并发问题。
+    /// </summary>
     public static class StaticFieldDeclarationAnalyzerRule
     {
         private const string Title = "Static字段声明需要标记标签";
@@ -183,6 +213,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0016）：带有 ETCancellationToken 参数的异步方法在 await 返回后必须立即检查 token.IsCancel()。
+    /// </summary>
     public static class CheckETCancellTokenAfterAwaitAnalyzerRule
     {
         private const string Title = "含有ETCancelToken参数的异步函数内调用await表达式后必须判断CancelToken.IsCancel";
@@ -201,6 +234,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0017）：带有 ETCancellationToken 参数的异步方法内调用其他支持取消的异步方法时必须传递同一个 CancelToken。
+    /// </summary>
     public static class AwaitExpressionCancelTokenParamAnalyzerRule
     {
         private const string Title = "含有ETCancelToken参数的异步函数内调用await表达式必须传入同一个CancelToken";
@@ -219,6 +255,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0018）：异步方法声明处的 ETCancellationToken 参数禁止设置默认值（如 = null）。
+    /// </summary>
     public static class AsyncMethodWithCancelTokenParamAnalyzerRule
     {
         private const string Title = "异步函数声明处的ETCancelToken参数禁止声明默认值";
@@ -237,6 +276,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0019）：调用含 ETCancellationToken 参数的方法时禁止显式传入 null。
+    /// </summary>
     public static class ExpressionWithCancelTokenParamAnalyzerRule
     {
         private const string Title = "函数调用处的ETCancelToken参数禁止传入null";
@@ -255,6 +297,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0003）：实体类必须直接继承自 Entity 或 LSEntity，禁止实体类之间的多层继承。
+    /// </summary>
     public static class EntityClassDeclarationAnalyzerRule
     {
         private const string Title = "实体类限制多层继承";
@@ -270,6 +315,9 @@ namespace ET
             DiagnosticSeverity.Error, true, Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0010）：实体类内部禁止声明委托字段或属性（符合データ与逻辑分离及热重载安全原则）。
+    /// </summary>
     public static class EntityDelegateDeclarationAnalyzerRule
     {
         private const string Title = "实体类禁止声明委托字段或属性";
@@ -288,6 +336,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0020）：实体类内部禁止直接持有其他 Entity 的强引用字段，必须改用 EntityRef&lt;T&gt; 或 EntityWeakRef&lt;T&gt;。
+    /// </summary>
     public static class EntityFieldDeclarationInEntityAnalyzerRule
     {
         private const string Title = "实体类禁止声明实体字段";
@@ -306,6 +357,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0021）：禁止声明返回值为 async void 的方法，异步方法必须返回 ETTask。
+    /// </summary>
     public static class AsyncMethodReturnTypeAnalyzerRule
     {
         private const string Title = "禁止声明返回值为void的异步方法";
@@ -324,6 +378,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0022）：禁止在 Server 侧代码中引用 ET.Client 命名空间。
+    /// </summary>
     public static class ClientClassInServerAnalyzerRule
     {
         private const string Title = "禁止在Server程序集内引用ET.Client命名空间";
@@ -342,6 +399,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0023）：帧同步实体 LSEntity 中禁止声明 float/double 浮点数字段或属性，以保证跨平台确定性计算。
+    /// </summary>
     public static class LSEntityFloatMemberAnalyzer
     {
         private const string Title = "LSEntity类禁止声明浮点数字段或属性";
@@ -360,6 +420,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0024）：Entity 声明了生命周期接口（如 IAwake/IDestroy），但在对应的 System 类中存在尚未编写的生命周期方法。
+    /// </summary>
     public static class EntitySystemAnalyzerRule
     {
         private const string Title = "Entity类存在未生成的生命周期函数";
@@ -378,6 +441,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0025）：[EntitySystem] 方法标签只能添加在标记了 [EntitySystemOf] 的静态类中。
+    /// </summary>
     public static class EntitySystemMethodNeedSystemOfAttrAnalyzerRule
     {
         private const string Title = "EntitySystem标签只能添加在含有EntitySystemOf标签的静态类中";
@@ -396,6 +462,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0038）：标记了 [EntitySystemOf] 的 System 类所在相对目录必须与对应 Entity 所在的相对目录一致。
+    /// </summary>
     public static class EntitySystemLocationAnalyzerRule
     {
         private const string Title = "EntitySystemOf的System类位置不一致";
@@ -414,6 +483,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0026）：在 Entity 类或包含 Entity 参数的方法内部，必须使用 Fiber 专属日志（self.Fiber().Log）而非全局 Log。
+    /// </summary>
     public static class FiberLogAnalyzerRule
     {
         private const string Title = "实体类内部或含有实体类参数的函数内部必须使用Fiber输出日志";
@@ -432,6 +504,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0027）：不同实体类的全名 BKDR HashCode 发生哈希碰撞时报错，要求修改类名以保证唯一。
+    /// </summary>
     public static class EntityHashCodeAnalyzerRule
     {
         private const string Title = "实体类HashCode禁止重复";
@@ -450,6 +525,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0028）：同一个实体类禁止同时标记 [ComponentOf] 和 [ChildOf]。
+    /// </summary>
     public static class EntityComponentChildAnalyzerRule
     {
         private const string Title = "实体类禁止同时标记为Component和Child";
@@ -468,6 +546,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0029）：实体类禁止声明为包含泛型类型参数的泛型类。
+    /// </summary>
     public static class EntityCannotDeclareGenericTypeRule
     {
         private const string Title = "实体类禁止声明为泛型实体类";
@@ -486,6 +567,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0030）：网络消息类（实现 IMessage）内部禁止直接声明 Entity 类型的字段。
+    /// </summary>
     public static class NetMessageAnalyzerRule
     {
         private const string Title = "消息类禁止声明实体字段";
@@ -504,6 +588,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0031）：标记了 [DisableNew] 的类型禁止通过 new 关键字直接构造实例（如 Entity 必须通过 AddComponent/AddChild 创建）。
+    /// </summary>
     public static class DisableNewAnalyzerRule
     {
         private const string Title = "含有DisableNew标记的类禁止使用new构造对象";
@@ -522,6 +609,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0037）：标记了 [DisableGetComponent] 的组件禁止直接通过 GetComponent 获取，除非调用方方法显式标记了 [EnableGetComponent]。
+    /// </summary>
     public static class DisableGetComponentAnalyzerRule
     {
         private const string Title = "禁止直接使用GetComponent获取被禁用的组件";
@@ -540,6 +630,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0032）：Model/ModelView 程序集中禁止声明未继承 Object/Entity 的普通类，除非显式标记 [EnableClass]。
+    /// </summary>
     public static class EntityClassDeclarationAnalyzerrRule
     {
         private const string Title = "Model/ModelView程序集禁止声明非实体类";
@@ -558,6 +651,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0034）：禁止使用 using 语句包裹 CoroutineLock，防止超时自动释放后触发重复释放（应使用 try-finally）。
+    /// </summary>
     public static class CoroutineLockUsingAnalyzerRule
     {
         private const string Title = "禁止使用 using 语句获取 CoroutineLock";
@@ -576,6 +672,9 @@ namespace ET
                     Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0035）：禁止在 try-finally 的 finally 块之外直接手动调用 CoroutineLock.Dispose。
+    /// </summary>
     public static class CoroutineLockDisposeAnalyzerRule
     {
         private const string Title = "禁止手动调用 CoroutineLock.Dispose";
@@ -594,6 +693,9 @@ namespace ET
                 Description);
     }
 
+    /// <summary>
+    /// 诊断规则（ET0040）：实现 IPool 的类型必须声明为 partial 以由生成器自动生成 IPool.Clear()，或手写显式接口实现 void IPool.Clear()。
+    /// </summary>
     public static class IPoolClearAnalyzerRule
     {
         private const string Title = "IPool类型必须可清理";

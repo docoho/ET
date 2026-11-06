@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.9
-    /// Desc
+    /// Desc    2D 屏幕空间头顶血条（HPView）组件系统，将单位头顶挂点世界坐标投影到 HUD 画布局部坐标并更新血量百分比
     /// </summary>
     public static partial class HPViewComponentSystem
     {
+        /// <summary>
+        /// 初始化时获取所属 <see cref="Unit"/>、头顶血条挂点 <see cref="BindPoint.HP"/> 及数值组件引用
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this HPViewComponent self)
         {

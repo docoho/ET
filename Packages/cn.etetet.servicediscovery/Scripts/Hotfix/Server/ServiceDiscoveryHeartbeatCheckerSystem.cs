@@ -1,5 +1,9 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务发现中心主节点监控各进程 Agent 心跳超时的巡检组件系统（<see cref="ServiceDiscoveryHeartbeatChecker"/>）。
+    /// 仅当所属 <see cref="ServiceDiscovery"/> 处于活跃主节点（IsActiveMaster）角色时挂载运行，按进程地址（<see cref="Address"/>）检测超时，并在超时后批量摘除该进程下的所有服务。
+    /// </summary>
     [EntitySystemOf(typeof(ServiceDiscoveryHeartbeatChecker))]
     public static partial class ServiceDiscoveryHeartbeatCheckerSystem
     {
@@ -15,6 +19,9 @@ namespace ET.Server
         {
         }
 
+        /// <summary>
+        /// 每帧检查是否到达 Agent 心跳巡检间隔（<see cref="ServiceDiscoveryAgentHeartbeatComponent.HeartbeatCheckInterval"/>）。
+        /// </summary>
         [EntitySystem]
         private static void Update(this ServiceDiscoveryHeartbeatChecker self)
         {
@@ -64,6 +71,7 @@ namespace ET.Server
                     }
                 }
 
+                // 逐个注销该超时进程地址下的所有服务并广播下线通知
                 foreach (string sceneName in timeoutScenes)
                 {
                     serviceDiscovery.UnregisterServiceAsync(sceneName, true).Coroutine();

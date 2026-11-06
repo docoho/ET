@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取指定路径 Prefab 资产内部节点层级树与组件信息的命令处理器（PrefabGetHierarchy）。
+    /// </summary>
     internal sealed class UnityBridgePrefabGetHierarchyHandler : AUnityBridgeHandler<PrefabGetHierarchyRequest, PrefabGetHierarchyResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabGetHierarchyRequest command)

@@ -1,7 +1,13 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端玩家登出辅助工具类。
+    /// </summary>
     public static class LogoutHelper
     {
+        /// <summary>
+        /// 从网关 PlayerComponent 移除玩家实体，并通过 ActorLocation 通知玩家当前所在的地图服销毁对应的 Unit。
+        /// </summary>
         public static async ETTask Logout(Player player)
         {
             long playerId = player.Id;

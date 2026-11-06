@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 监听 YIUIEventInitializeAfter 事件，在YIUI框架初始化完成后自动挂载GMCommandComponent并打开GM悬浮按钮面板。
+    /// </summary>
     [Event(SceneType.All)]
     public class YIUIEventInitializeAfterGMHandler : AEvent<Scene, YIUIEventInitializeAfter>
     {

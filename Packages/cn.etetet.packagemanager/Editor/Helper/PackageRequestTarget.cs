@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -6,12 +6,18 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 封装 Unity PackageManager `Client.Search` 查询单个包远端详情与最新版本的异步请求器
+    /// </summary>
     public class PackageRequestTarget
     {
         private string                                         m_Name;
         private SearchRequest                                  m_TargetRequest;
         private Action<UnityEditor.PackageManager.PackageInfo> m_RequestTargetCallback;
 
+        /// <summary>
+        /// 发起针对指定包名的远端查询请求并在完成时回调返回 PackageInfo
+        /// </summary>
         public PackageRequestTarget(string name, Action<UnityEditor.PackageManager.PackageInfo> callback)
         {
             if (string.IsNullOrEmpty(name))

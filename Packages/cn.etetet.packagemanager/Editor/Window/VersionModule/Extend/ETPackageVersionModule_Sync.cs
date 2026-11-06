@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +13,16 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 包版本管理模块分部类（负责强制同步双向依赖版本号及本地配置刷新）
+    /// </summary>
     public partial class ETPackageVersionModule
     {
         #region 强制依赖同步
 
+        /// <summary>
+        /// 弹出确认框以执行所有已修改包的反向依赖版本同步
+        /// </summary>
         [Button("强制依赖同步", 50)]
         [ButtonGroup("同步")]
         [GUIColor(0f, 0.8f, 1)]
@@ -27,6 +33,9 @@ namespace ET.PackageManager.Editor
             UnityTipsHelper.CallBack($"确定强制依赖同步?", SyncRefPackages);
         }
 
+        /// <summary>
+        /// 遍历所有发生版本变更的包及所有 ET 包，同步其正向与反向依赖的版本号
+        /// </summary>
         private void SyncRefPackages()
         {
             var changeInfo = new List<PackageVersionData>();
@@ -81,6 +90,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 递归更新所有依赖当前包（DependenciesSelf）的上游包依赖版本，并自动递增上游包的小版本号
+        /// </summary>
         public void ChageDependencies(PackageVersionData data)
         {
             var dataVersion = data.Version;

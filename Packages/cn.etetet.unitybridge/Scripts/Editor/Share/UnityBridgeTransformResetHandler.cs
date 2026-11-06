@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 重置指定 Transform 的局部位置、旋转或缩放（支持 Undo）的命令处理器（TransformReset）。
+    /// </summary>
     internal sealed class UnityBridgeTransformResetHandler : AUnityBridgeHandler<TransformResetRequest, TransformResetResponse>
     {
         protected override async ETTask<IResponse> Run(TransformResetRequest command)

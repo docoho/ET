@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 执行菜单项 ET/Scripts/Compile 触发脚本编译并跨 Domain Reload 等待编译完成的延迟命令处理器（Compile）。
+    /// </summary>
     internal sealed class UnityBridgeCompileScriptsHandler : AUnityBridgeDeferredHandler<Compile, CompileResponse>
     {
         protected override async ETTask<CompileResponse> Run(Compile command, UnityBridgeDeferredContext deferred)

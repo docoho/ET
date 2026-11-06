@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace ET
 {
+    /// <summary>
+    /// UIElements 鼠标拖拽缩放操纵器，支持在元素右下角拖拽调整宽度或高度。
+    /// </summary>
     public class ResizableManipulator : MouseManipulator
     {
         public const float DefaultResizeZone = 10f;

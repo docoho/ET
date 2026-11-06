@@ -2,12 +2,27 @@ using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// 基于反射（<see cref="MethodInfo"/>）的静态方法调用包装实现。
+    /// <remarks>
+    /// 在构造时预先分配好参数数组 <see cref="param"/>，避免每次调用 <c>Run</c> 时重复分配 <c>object[]</c> 数组。
+    /// </remarks>
+    /// </summary>
     public class StaticMethod : IStaticMethod
     {
+        /// <summary>
+        /// 反射获取的目标静态方法元数据。
+        /// </summary>
         private readonly MethodInfo methodInfo;
 
+        /// <summary>
+        /// 预分配的参数数组缓存。
+        /// </summary>
         private readonly object[] param;
 
+        /// <summary>
+        /// 从指定程序集中查找指定类型和名称的静态方法并缓存其反射信息。
+        /// </summary>
         public StaticMethod(Assembly assembly, string typeName, string methodName)
         {
             this.methodInfo = assembly.GetType(typeName).GetMethod(methodName);

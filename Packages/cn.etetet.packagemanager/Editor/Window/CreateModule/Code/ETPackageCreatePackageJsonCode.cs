@@ -1,5 +1,8 @@
-﻿namespace ET.PackageManager.Editor
+namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 根据模板生成新包根目录下的 UPM 清单文件 `package.json`
+    /// </summary>
     public class ETPackageCreatePackageJsonCode : BaseTemplate
     {
         private readonly string m_EventName = "PackageJson";

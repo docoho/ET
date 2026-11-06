@@ -1,15 +1,26 @@
-﻿using System;
+using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 状态同步模式下网关（Gate）收到客户端网络数据包（<see cref="NetComponentOnRead"/>）的消息分发处理器
+    /// </summary>
     [Invoke(SceneType.Gate)]
     public class NetComponentOnReadInvoker_Gate: AInvokeHandler<NetComponentOnRead>
     {
+        /// <summary>
+        /// 异步处理网关收到的数据包
+        /// </summary>
+        /// <param name="args">网络读取事件参数</param>
         public override void Handle(NetComponentOnRead args)
         {
             HandleAsync(args).Coroutine();
         }
 
+        /// <summary>
+        /// 执行客户端消息频率防刷检测（单类消息每秒上限 20 条），并根据消息接口类型分发至本地会话处理器或转发至玩家所在 Map 的 Unit Actor
+        /// </summary>
+        /// <param name="args">网络读取事件参数</param>
         private async ETTask HandleAsync(NetComponentOnRead args)
         {
             Session session = args.Session;

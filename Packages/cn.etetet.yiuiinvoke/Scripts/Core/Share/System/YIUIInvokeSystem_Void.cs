@@ -1,9 +1,15 @@
-﻿using System;
+using System;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用系统（无返回值Invoke分发执行分部类，自动串联Before/After切面监听器）。
+    /// </summary>
     public partial class YIUIInvokeSystem
     {
+        /// <summary>
+        /// 执行无参、无返回值的YIUI调用（依次执行Before监听器 -> 主Invoker -> After监听器）。
+        /// </summary>
         public void Invoke<T>(T self, string invokeType) where T : Entity
         {
             if (self == null || self.IsDisposed)

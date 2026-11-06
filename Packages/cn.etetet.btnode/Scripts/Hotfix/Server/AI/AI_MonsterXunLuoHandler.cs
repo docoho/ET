@@ -1,7 +1,10 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 怪物巡逻异步协程处理器：在出生点周围 AOI 半径内循环随机取点寻路移动并随机停留等待。
+    /// </summary>
     public class AI_MonsterXunLuoHandler: ABTCoroutineHandler<AI_MonsterXunLuo>
     {
         protected override async ETTask RunAsync(AI_MonsterXunLuo node, BTEnv env)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,9 +6,15 @@ using UnityEngine.UI;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM调试主窗口视图组件系统，管理左侧GM分类循环列表与右侧GM命令循环列表的联动刷新。
+    /// </summary>
     [FriendOf(typeof(GMViewComponent))]
     public static partial class GMViewComponentSystem
     {
+        /// <summary>
+        /// YIUI初始化生命周期，绑定分类列表和命令列表的LoopScrollRect组件。
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this GMViewComponent self)
         {

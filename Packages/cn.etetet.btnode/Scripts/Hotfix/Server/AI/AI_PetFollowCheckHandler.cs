@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 宠物跟随条件检查处理器：当宠物无攻击目标且与主人距离大于等于 3 米时返回 0（触发跟随）。
+    /// </summary>
     public class AI_PetFollowCheckHandler: ABTHandler<AI_PetFollowCheck>
     {
         protected override int Run(AI_PetFollowCheck node, BTEnv env)

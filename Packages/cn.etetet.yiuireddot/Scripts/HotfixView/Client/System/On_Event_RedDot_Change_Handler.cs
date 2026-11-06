@@ -1,7 +1,10 @@
-﻿using YIUIFramework;
+using YIUIFramework;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 监听逻辑层派发的 Event_RedDot_Change 事件，将红点数量变更同步至视图层 RedDotMgr。
+    /// </summary>
     [Event(SceneType.All)]
     public class On_Event_RedDot_Change_Handler : AEvent<Scene, Event_RedDot_Change>
     {

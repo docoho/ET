@@ -1,18 +1,27 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端技能施法范围指示器表现组件系统（实时跟随鼠标射线在地面投影指示圈，并在左键点击时返回选定坐标）。
+    /// </summary>
     [EntitySystemOf(typeof(SpellIndicatorComponent))]
     public static partial class SpellIndicatorComponentSystem
     {
+        /// <summary>
+        /// 组件唤醒初始化。
+        /// </summary>
         [EntitySystem]
         private static void Awake(this SpellIndicatorComponent self)
         {
 
         }
 
+        /// <summary>
+        /// 每帧检测鼠标在地面（Map 层）的射线交点，限制在最大施法距离内更新指示器位置，并在左键按下时完成坐标选择。
+        /// </summary>
         [EntitySystem]
         private static void Update(this SpellIndicatorComponent self)
         {
@@ -47,6 +56,9 @@ namespace ET.Client
             }
         }
 
+        /// <summary>
+        /// 显示并缩放指定的施法指示器预制体实例，异步等待玩家点击确认施法位置。
+        /// </summary>
         public static async ETTask<Vector3> WaitPos(this SpellIndicatorComponent self, GameObject go, int radius, int maxDistance)
         {
             self.Task = ETTask<Vector3>.Create();
@@ -65,6 +77,9 @@ namespace ET.Client
             return await self.Task;
         }
 
+        /// <summary>
+        /// 根据圆形目标选择器（<see cref="TargetSelectorCircle"/>）加载指示器资源并等待玩家选择坐标。
+        /// </summary>
         public static async ETTask<Vector3> WaitSpellIndicator(this SpellIndicatorComponent self, TargetSelectorCircle targetSelectorCircle)
         {
             EntityRef<SpellIndicatorComponent> selfRef = self;
@@ -73,6 +88,9 @@ namespace ET.Client
             return await self.WaitPos(spellIndicator, targetSelectorCircle.Radius, targetSelectorCircle.MaxDistance);
         }
         
+        /// <summary>
+        /// 根据坐标点目标选择器（<see cref="TargetSelectorPosition"/>）加载指示器资源并等待玩家选择坐标。
+        /// </summary>
         public static async ETTask<Vector3> WaitSpellIndicator(this SpellIndicatorComponent self, TargetSelectorPosition targetSelectorPosition)
         {
             EntityRef<SpellIndicatorComponent> selfRef = self;

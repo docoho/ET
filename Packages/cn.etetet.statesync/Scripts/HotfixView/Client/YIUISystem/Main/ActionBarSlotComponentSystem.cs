@@ -8,21 +8,30 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.14
-    /// Desc
+    /// Desc    主界面单个技能快捷栏槽位（ActionBarSlot）组件系统，负责显示技能图标并在每帧刷新技能独立 CD 与公共冷却（GCD）遮罩进度
     /// </summary>
     public static partial class ActionBarSlotComponentSystem
     {
+        /// <summary>
+        /// 初始化槽位时重置显示信息
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this ActionBarSlotComponent self)
         {
             self.ResetInfo();
         }
 
+        /// <summary>
+        /// 槽位销毁回调
+        /// </summary>
         [EntitySystem]
         private static void Destroy(this ActionBarSlotComponent self)
         {
         }
 
+        /// <summary>
+        /// 每帧计算并刷新当前槽位绑定技能的剩余冷却倒计时与扇形遮罩比例（优先显示技能独立 CD，其次显示公共 CD）
+        /// </summary>
         [EntitySystem]
         private static void LateUpdate(this ET.Client.ActionBarSlotComponent self)
         {

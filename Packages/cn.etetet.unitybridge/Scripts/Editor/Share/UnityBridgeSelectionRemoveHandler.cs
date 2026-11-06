@@ -9,6 +9,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 从当前编辑器选中集合（Selection.objects）中移除指定对象的命令处理器（SelectionRemove）。
+    /// </summary>
     internal sealed class UnityBridgeSelectionRemoveHandler : AUnityBridgeHandler<SelectionRemoveRequest, SelectionRemoveResponse>
     {
         protected override async ETTask<IResponse> Run(SelectionRemoveRequest command)

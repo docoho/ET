@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// AOI 视野进入事件处理器：当单位 B 进入玩家 A 的视野范围时，向玩家 A 的客户端发送 M2C_CreateUnits 通知创建 B。
+    /// </summary>
     // 进入视野通知
     [Event(SceneType.Map)]
     public class UnitEnterSightRange_NotifyClient: AEvent<Scene, UnitEnterSightRange>

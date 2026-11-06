@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
@@ -6,7 +6,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（ECS实体主定义，持有UI3DDisplay MonoBehaviour引用及模型/相机缓存池）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     [ChildOf]

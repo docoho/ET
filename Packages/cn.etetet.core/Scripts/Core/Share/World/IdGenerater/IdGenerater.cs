@@ -1,16 +1,28 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace ET
 {
+    /// <summary>
+    /// 64 位持久化业务 ID（雪花算法变体）的位域拆解结构体。
+    /// <para>
+    /// 位布局（共 64 bit）：<c>[高 16 bit: Process 进程标识] + [中 28 bit: 自 2025 年起的秒数] + [低 20 bit: 每秒内自增序号]</c>。
+    /// </para>
+    /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct IdStruct
     {
+        /// <summary>高 16 位：进程与副本唯一编号（0 ~ 65535）</summary>
         public ushort Process;  // 16bit
+        /// <summary>中 28 位：相对于 2025-01-01 00:00:00 UTC 的秒数（2^28 秒 ≈ 8.5 年）</summary>
         public uint Time;    // 28bit  可用大约8年
+        /// <summary>低 20 位：同一秒内的自增序列号（单进程每秒最多可生成 2^20 = 1,048,575 个唯一 ID）</summary>
         public uint Value;   // 20bit
 
+        /// <summary>
+        /// 将三段字段打包合成为一个 64 位 <see cref="long"/> 整数。
+        /// </summary>
         public long ToLong()
         {
             ulong result = 0;
@@ -29,6 +41,9 @@ namespace ET
             this.Value = value;
         }
 
+        /// <summary>
+        /// 将一个 64 位 <paramref name="id"/> 反向拆解还原出进程号、时间戳与自增序列号。
+        /// </summary>
         public IdStruct(long id)
         {
             ulong result = (ulong) id;
@@ -45,6 +60,10 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// 分布式全局唯一 64 位业务 ID 生成器单例（Snowflake 雪花算法）。
+    /// 用于生成实体的持久化 <see cref="Entity.Id"/>（如角色 ID、道具 ID、邮件 ID 等，保证跨进程、跨重启全局唯一）。
+    /// </summary>
     [AllowInstance]
     public class IdGenerater: Singleton<IdGenerater>, ISingletonAwake
     {
@@ -70,6 +89,9 @@ namespace ET
             return a;
         }
         
+        /// <summary>
+        /// 线程安全地生成一个新的 64 位全局唯一持久化 ID（若单秒内生成超过 104 万个，会自动向下一秒借位避免重复）。
+        /// </summary>
         public long GenerateId()
         {
             uint time = TimeSince2025();
@@ -100,6 +122,9 @@ namespace ET
             return idStruct.ToLong();
         }
 
+        /// <summary>
+        /// 获取当前进程及副本组合出的唯一 16 位进程标识（<c>Options.Process + Options.ReplicaIndex</c>）。
+        /// </summary>
         public ushort GetProcessReplicaIndex()
         {
             // 因为改成了服务发现，支持一个进程多个副本，比如gate只需要配一个进程，可以支持多个,同一个Replica是同一个进程Id

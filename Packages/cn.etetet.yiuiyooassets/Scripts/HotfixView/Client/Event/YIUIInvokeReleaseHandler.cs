@@ -2,6 +2,9 @@ using YIUIFramework;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// YIUI 同步释放 Sprite 资源的 Invoke 回调处理器，委托给 YIUIYooAssetsSpriteComponent 释放对应图集或散图引用。
+    /// </summary>
     [Invoke(EYIUIInvokeType.Sync)]
     public class YIUIInvokeReleaseSpriteSyncHandler : AInvokeEntityHandler<YIUIInvokeEntity_ReleaseSprite>
     {

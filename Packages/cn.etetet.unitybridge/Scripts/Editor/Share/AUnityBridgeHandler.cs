@@ -2,6 +2,9 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 编辑器命令处理器泛型抽象基类，封装请求类型绑定与错误响应构造辅助方法。
+    /// </summary>
     [EnableClass]
     public abstract class AUnityBridgeHandler<TRequest, TResponse> : IUnityBridgeHandler
             where TRequest : class, IRequest

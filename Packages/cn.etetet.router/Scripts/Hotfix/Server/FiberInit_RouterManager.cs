@@ -3,6 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 软路由管理中心场景（<c>SceneType.RouterManager</c>）初始化处理器。
+    /// <para>启动 HTTP 监听组件（提供 <c>/get_router</c> 接口），并通过 <see cref="ServiceDiscoveryProxy"/> 订阅全集群所有在线的 <c>Router</c> 和 <c>Realm</c> 节点列表变更。</para>
+    /// </summary>
     [Invoke(SceneType.RouterManager)]
     public class FiberInit_RouterManager: AInvokeHandler<FiberInit, ETTask>
     {

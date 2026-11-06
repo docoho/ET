@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// YIUI循环滚动列表事件派发辅助类，通过 EntitySystemSingleton 触发宿主的 Renderer、OnClick 与 OnClickCheck 回调。
+    /// </summary>
     public static class YIUILoopHelper
     {
         public static void Renderer(Type rendererType, Entity self, Entity item, object data, int index, bool select)

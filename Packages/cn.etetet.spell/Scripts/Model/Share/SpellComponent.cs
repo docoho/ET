@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能属性修改器（SpellMod）类型枚举，用于支持天赋、装备或 Buff 动态修改特定技能的参数。
+    /// </summary>
     public enum SpellModType
     {
         SPELLMOD_DAMAGE                    = 10,  // 伤害
@@ -37,18 +40,30 @@ namespace ET
         SPELLMOD_SPELL_COST_REFUND_ON_FAIL = 40
     };
     
+    /// <summary>
+    /// 单位身上的技能管理组件，记录当前正在施放的主技能 Buff、全局冷却（GCD）、各技能独立 CD 以及技能修改点（SpellMods）。
+    /// </summary>
     [ComponentOf(typeof(Unit))]
     public class SpellComponent: Entity, IAwake, ITransfer
     {
+        /// <summary>
+        /// 当前正在施放的主技能关联的 Buff 引用。
+        /// </summary>
         [BsonIgnore]
         public EntityRef<Buff> Current { get; set; }
         
+        /// <summary>
+        /// 公共冷却（GCD）结束时间戳。
+        /// </summary>
         public long CDTime { get; set; }
 
+        /// <summary>
+        /// 各技能独立冷却结束时间戳字典（Key 为 SpellConfig.Id，Value 为冷却结束毫秒时间戳）。
+        /// </summary>
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<int, long> SpellCD = new();
 
-        // 技能修改点
+        // 技能修改点（外层 Key 为 SpellConfig.Id，内层 Key 为 SpellModType，Value 为累加修改值）
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<int, Dictionary<int, int>> SpellMods = new();
     }

@@ -7,6 +7,9 @@ using Sirenix.OdinInspector.Editor;
 
 namespace ET
 {
+    /// <summary>
+    /// [BTInput] 下拉框辅助工具类，负责沿行为树从根节点到目标节点的执行路径收集所有前置节点产出的 [BTOutput] 变量名与类型。
+    /// </summary>
     internal static class BTInputDropdownHelper
     {
         internal sealed class OptionItem

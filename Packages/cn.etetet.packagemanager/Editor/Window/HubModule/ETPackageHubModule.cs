@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 官方与社区包仓库（Hub）浏览与安装管理模块
+    /// </summary>
     [ETPackageMenu("库")]
     public class ETPackageHubModule : BasePackageToolModule
     {
@@ -19,10 +22,19 @@ namespace ET.PackageManager.Editor
         [DisplayAsString(false, 100, TextAlignment.Center, true)]
         private const string m_CheckUpdateAllReqing = "请求所有包最新数据中...";
 
+        /// <summary>
+        /// 所有远端包数据是否已请求完毕
+        /// </summary>
         public bool CheckUpdateAllEnd { get; private set; }
 
+        /// <summary>
+        /// 远端请求是否成功
+        /// </summary>
         public bool RequestAllResult { get; private set; }
 
+        /// <summary>
+        /// 初始化模块：先检查本地包更新，再拉取 GitHub 上的 ET-Packages 列表并按分类构建子菜单
+        /// </summary>
         public override void Initialize()
         {
             CheckUpdateAllEnd = false;

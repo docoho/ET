@@ -102,6 +102,7 @@ namespace YooAsset.Editor
 
     /// <summary>
     /// 只收集没有图集的图片
+    /// （若图片位于 AtlasIgnore 目录、Sprites 根目录，或没有对应的图集文件时才收集为独立散图资源）
     /// </summary>
     [DisplayName("YIUI_没有图集的图片")]
     public class YIUIFilterRule_NoAtlas_Sprite : IFilterRule

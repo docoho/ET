@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.IO;
 using MongoDB.Bson;
@@ -7,11 +7,23 @@ using MongoDB.Bson.Serialization;
 
 namespace ET
 {
+    /// <summary>
+    /// MongoDB BSON 与 JSON 序列化、反序列化及深拷贝辅助工具类。
+    /// <remarks>
+    /// 在 ET 中廣泛用于：数据库实体存取、实体跨进程传送（Transfer）序列化、调试日志对象转 JSON 打印等。
+    /// </remarks>
+    /// </summary>
     public static class MongoHelper
     {
+        /// <summary>
+        /// 默认 JSON 输出配置（宽松扩展 JSON 模式，适合日志打印）。
+        /// </summary>
         [StaticField]
         private static readonly JsonWriterSettings defaultSettings = new() { OutputMode = JsonOutputMode.RelaxedExtendedJson };
         
+        /// <summary>
+        /// 配置文件导出专用的格式化 JSON 输出配置（带制表符缩进与换行）。
+        /// </summary>
         [StaticField]
         public static readonly JsonWriterSettings ConfigSettings = new() 
         { 
@@ -21,6 +33,9 @@ namespace ET
             OutputMode = JsonOutputMode.Shell 
         };
         
+        /// <summary>
+        /// 将对象序列化为默认格式的 JSON 字符串。
+        /// </summary>
         public static string ToJson(object obj)
         {
             try
@@ -37,6 +52,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 使用指定的 <see cref="JsonWriterSettings"/> 将对象序列化为 JSON 字符串。
+        /// </summary>
         public static string ToJson(object obj, JsonWriterSettings settings)
         {
             try
@@ -53,6 +71,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将 JSON 字符串反序列化为指定泛型类型 <typeparamref name="T"/> 的实例。
+        /// </summary>
         public static T FromJson<T>(string str)
         {
             try
@@ -65,6 +86,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将 JSON 字符串反序列化为指定 <see cref="Type"/> 的实例。
+        /// </summary>
         public static object FromJson(Type type, string str)
         {
             try
@@ -77,6 +101,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将对象序列化为 BSON 二进制字节数组。
+        /// </summary>
         public static byte[] Serialize(object obj)
         {
             try
@@ -93,6 +120,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将对象以 BSON 二进制格式直接序列化写入指定的 <see cref="MemoryStream"/> 中。
+        /// </summary>
         public static void Serialize(object message, MemoryStream stream)
         {
             try
@@ -116,6 +146,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 从 BSON 字节数组中反序列化出指定 <see cref="Type"/> 的对象。
+        /// </summary>
         public static object Deserialize(Type type, byte[] bytes)
         {
             try
@@ -128,6 +161,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 从 BSON 字节数组的指定切片区间反序列化出指定 <see cref="Type"/> 的对象。
+        /// </summary>
         public static object Deserialize(Type type, byte[] bytes, int index, int count)
         {
             try
@@ -142,6 +178,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 从流（<see cref="Stream"/>）中反序列化出指定 <see cref="Type"/> 的对象。
+        /// </summary>
         public static object Deserialize(Type type, Stream stream)
         {
             try
@@ -154,6 +193,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 从 BSON 字节数组中反序列化出指定泛型类型 <typeparamref name="T"/> 的对象。
+        /// </summary>
         public static T Deserialize<T>(byte[] bytes)
         {
             try
@@ -168,11 +210,17 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 从 BSON 字节数组的指定切片区间反序列化出指定泛型类型 <typeparamref name="T"/> 的对象。
+        /// </summary>
         public static T Deserialize<T>(byte[] bytes, int index, int count)
         {
             return (T)Deserialize(typeof (T), bytes, index, count);
         }
 
+        /// <summary>
+        /// 通过 BSON 序列化再反序列化的方式对对象进行深拷贝（Clone）。
+        /// </summary>
         public static T Clone<T>(T t)
         {
             return Deserialize<T>(Serialize(t));

@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Author: 亦亦
 // Mail: 379338943@qq.com
 // Data: 2023年2月12日
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— 列表项点击选中队列、哈希集合与单选/多选配置状态分部类。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     public partial class YIUILoopScrollChild

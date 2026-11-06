@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace ET.Client
 {
     /// <summary>
+    /// 红点运行时可视化调试面板组件系统，支持搜索红点、钻取父子关系、动态修改叶节点数量及查看历史变更调用栈。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/XzyawmryHitNVNk9QVtcDAftn5O
     /// </summary>
     [FriendOf(typeof(RedDotPanelComponent))]

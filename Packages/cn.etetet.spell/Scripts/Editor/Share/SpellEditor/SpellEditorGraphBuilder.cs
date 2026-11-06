@@ -4,6 +4,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能链路图构建器，从指定的主技能 ID 出发，递归扫描主 Buff、BTCreateSpell 和 BTAddBuff 节点，梳理出整条技能与 Buff 依赖关系链。
+    /// </summary>
     public static class SpellEditorGraphBuilder
     {
         public static SpellEditorBuildResult Build(SpellEditorAssetIndex index, int mainSpellId)

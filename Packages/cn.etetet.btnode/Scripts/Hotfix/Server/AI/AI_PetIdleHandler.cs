@@ -1,7 +1,10 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 宠物待机异步协程处理器：在主人身边 1~2 米范围内随机走动并等待。
+    /// </summary>
     public class AI_PetIdleHandler: ABTCoroutineHandler<AI_PetIdle>
     {
         protected override async ETTask RunAsync(AI_PetIdle node, BTEnv env)

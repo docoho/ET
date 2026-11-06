@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -8,20 +8,48 @@ using System.Net.Sockets;
 
 namespace ET
 {
+	/// <summary>
+	/// TCP 异步调度操作类型枚举。
+	/// </summary>
 	public enum TcpOp
 	{
+		/// <summary>
+		/// 触发通道开始从发送缓冲区异步发送数据。
+		/// </summary>
 		StartSend,
+		/// <summary>
+		/// 触发通道开始异步接收数据。
+		/// </summary>
 		StartRecv,
+		/// <summary>
+		/// 触发通道发起异步连接。
+		/// </summary>
 		Connect,
 	}
 	
+	/// <summary>
+	/// TCP 服务内部跨线程事件队列传递的参数结构体。
+	/// </summary>
 	public struct TArgs
 	{
+		/// <summary>
+		/// 当 <see cref="SocketAsyncEventArgs"/> 为 null 时，指示要主动发起的 <see cref="TcpOp"/> 操作。
+		/// </summary>
 		public TcpOp Op;
+		/// <summary>
+		/// 关联的 <see cref="TChannel"/> 通道 Id。
+		/// </summary>
 		public long ChannelId;
+		/// <summary>
+		/// 底层异步 Socket 操作完成时回传的事件参数（若为主动发起指令则为 null）。
+		/// </summary>
 		public SocketAsyncEventArgs SocketAsyncEventArgs;
 	}
 	
+	/// <summary>
+	/// 基于 TCP 协议的网络服务实现，负责监听端口接受新连接（Accept）、管理所有 <see cref="TChannel"/> 通道，
+	/// 并在 <see cref="Update"/> 中单线程消费 <see cref="Queue"/> 中的所有异步 Socket 完成事件。
+	/// </summary>
 	public sealed class TService : AService
 	{
 		private readonly Dictionary<long, TChannel> idChannels = new();

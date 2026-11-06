@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
@@ -6,11 +6,17 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（异步加载与展示模型部分）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
     {
+        /// <summary>
+        /// 异步加载并展示指定资源名称的3D模型及观察摄像机。
+        /// </summary>
+        /// <param name="self">3D展示子组件实体</param>
+        /// <param name="resName">3D模型预制体资源名称</param>
+        /// <param name="cameraName">子层级中的目标相机名称（为空则使用默认ShowCamera）</param>
         public static async ETTask<GameObject> ShowAsync(this YIUI3DDisplayChild self, string resName, string cameraName = "")
         {
             if (self.UI3DDisplay == null)

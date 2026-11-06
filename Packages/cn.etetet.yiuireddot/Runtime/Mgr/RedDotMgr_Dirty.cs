@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 红点 管理器
-    /// 脏数据管理 防止频繁调用简单版
+    /// 红点管理器 —— 异步脏标记批量刷新分部类，合并同一时间窗口内的频繁红点计数修改以降低UI刷新开销。
     /// </summary>
     public partial class RedDotMgr
     {

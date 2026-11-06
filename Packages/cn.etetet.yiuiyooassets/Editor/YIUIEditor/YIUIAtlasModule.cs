@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -8,8 +8,14 @@ using UnityEngine.U2D;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI 编辑器图集模块扩展，提供打包所有 SpriteAtlas 并生成运行时全局图集映射配置资产（YIUIAtlasData）的功能。
+    /// </summary>
     public partial class YIUIAtlasModule
     {
+        /// <summary>
+        /// 打包全部图集并扫描所有 .spriteatlasv2 文件，提取图集与散图对应关系并保存为 YIUIAtlasData.asset
+        /// </summary>
         public static void RefreshAtlasData()
         {
             SpriteAtlasUtility.PackAllAtlases(EditorUserBuildSettings.activeBuildTarget, false);

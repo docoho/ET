@@ -12,6 +12,10 @@ using Microsoft.CodeAnalysis.Editing;
 
 namespace ET
 {
+    /// <summary>
+    /// 针对 <see cref="BracesAnalyzer"/>（ET0999）的 IDE 快速修复提供器（CodeFixProvider）。
+    /// <para>当检测到 <c>if</c>、<c>else</c>、<c>for</c>、<c>foreach</c>、<c>while</c>、<c>do</c> 语句缺少花括号时，提供一键自动包裹 <c>{ }</c> 代码块的修复操作。</para>
+    /// </summary>
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(BracesCodeFixProvider)), Shared]
     public class BracesCodeFixProvider : CodeFixProvider
     {

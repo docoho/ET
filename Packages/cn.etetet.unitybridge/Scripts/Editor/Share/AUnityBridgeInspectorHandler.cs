@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge Inspector 属性与组件操作处理器抽象基类，封装场景对象、Prefab 资产与普通资源的定位解析、SerializedProperty 读写以及修改保存逻辑。
+    /// </summary>
     internal abstract class AUnityBridgeInspectorHandler<TRequest, TResponse> : AUnityBridgeHandler<TRequest, TResponse>
             where TRequest : class, IRequest
             where TResponse : class, IResponse

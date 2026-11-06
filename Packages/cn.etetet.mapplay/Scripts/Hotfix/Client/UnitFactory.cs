@@ -1,9 +1,15 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端地图单位（Unit）创建工厂类：根据服务端同步的 UnitInfo 组装客户端 Unit 实体并发布 AfterUnitCreate 事件。
+    /// </summary>
     public static partial class UnitFactory
     {
+        /// <summary>
+        /// 在客户端当前地图场景（currentScene）中创建并初始化一个 Unit 实体。
+        /// </summary>
         public static Unit Create(Scene currentScene, UnitInfo unitInfo)
         {
 	        UnitComponent unitComponent = currentScene.GetComponent<UnitComponent>();

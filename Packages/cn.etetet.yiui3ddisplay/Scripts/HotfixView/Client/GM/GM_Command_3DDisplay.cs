@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using YIUIFramework;
 
 namespace ET.Client
@@ -6,6 +6,9 @@ namespace ET.Client
     //主要用于在GM包上测试功能
     //当前包没有强制引用GM包
     //如果没有引用GM包  请删除这个文件
+    /// <summary>
+    /// 打开3D模型展示测试界面的GM命令。
+    /// </summary>
     [GM(EGMType.Display3D, 1, "3D显示测试")]
     public class GM_DisplayTest1 : IGMCommand
     {

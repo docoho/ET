@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -9,6 +9,10 @@ using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace ET
 {
+    /// <summary>
+    /// <c>ETCancellationToken</c> 异步取消令牌使用规范分析器（ET0016 / ET0017 / ET0018 / ET0019）。
+    /// <para>檢查异步方法中取消令牌的传递、默认值声明以及 <c>await</c> 之后的 <c>IsCancel()</c> 状态判断。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ETCancellationTokenAnalyzer: DiagnosticAnalyzer
     {

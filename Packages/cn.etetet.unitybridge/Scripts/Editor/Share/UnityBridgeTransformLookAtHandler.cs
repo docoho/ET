@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 使指定 Transform 朝向目标节点或目标世界坐标点（Transform.LookAt，支持 Undo）的命令处理器（TransformLookAt）。
+    /// </summary>
     internal sealed class UnityBridgeTransformLookAtHandler : AUnityBridgeHandler<TransformLookAtRequest, TransformLookAtResponse>
     {
         protected override async ETTask<IResponse> Run(TransformLookAtRequest command)

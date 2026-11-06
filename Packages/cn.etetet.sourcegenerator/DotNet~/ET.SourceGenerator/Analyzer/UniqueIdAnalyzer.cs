@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,6 +7,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 唯一整型常量 ID（<c>[UniqueId]</c>）区间与查重分析器（ET0011 / ET0012）。
+    /// <para>在编译结束阶段汇总当前程序集及引用程序集中所有标记了 <c>[UniqueId(min, max)]</c> 的类型（含跨包扩展的 <c>partial static class</c>，如 <c>PackageType</c>、<c>SceneType</c>、<c>NumericType</c>、<c>CoroutineLockType</c> 等），检查其内部所有整型 <c>const</c> 常量是否超出 <c>[min, max]</c> 范围或存在重复值。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class UniqueIdAnalyzer : DiagnosticAnalyzer
     {

@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端表现层处理地图服下发的错误提示消息（M2C_Error）：根据错误码查询 TextConfig 中文模板，弹出红色飘字提示（TipsTextViewComponent）。
+    /// </summary>
     [MessageHandler(SceneType.Client)]
     public class M2C_ErrorViewHandler : MessageHandler<Scene, M2C_Error>
     {

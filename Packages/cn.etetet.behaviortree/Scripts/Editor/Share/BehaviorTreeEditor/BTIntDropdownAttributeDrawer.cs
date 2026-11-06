@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// [BTIntDropdown] 特性的 Odin 自定义属性绘制器，通过反射读取枚举单例中的键值映射并提供带搜索栏的下拉选择器。
+    /// </summary>
     public sealed class BTIntDropdownAttributeDrawer : OdinAttributeDrawer<BTIntDropdownAttribute, int>
     {
         protected override void DrawPropertyLayout(GUIContent label)

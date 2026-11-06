@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -6,6 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 服务端代码禁止引用客户端命名空间分析器（ET0022）。
+    /// <para>检查非 Client 目录下的源码文件是否包含 <c>using ET.Client...</c>，防止服务端逻辑意外耦合客户端专属类型。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClientClassInServerAnalyzer : DiagnosticAnalyzer
     {

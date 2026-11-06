@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Author: 亦亦
 // Mail: 379338943@qq.com
 // Data: 2023年2月12日
@@ -13,6 +13,9 @@ using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI自动化工具窗口中的“红点”管理模块入口，整合红点枚举Key管理视图与红点父子关系配置视图。
+    /// </summary>
     [YIUIAutoMenu("红点", 100000)]
     internal class UIRedDotModule : BaseYIUIToolModule
     {

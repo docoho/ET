@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端战斗伤害结算辅助类（负责生命值扣减、SpellMod 伤害/仇恨修正、仇恨累加、受击 Buff 行为树触发以及死亡事件发布）。
+    /// </summary>
     public static class DamageHelper
     {
+        /// <summary>
+        /// 结算攻击者 <paramref name="attacker"/> 通过 <paramref name="damageBuff"/> 对目标 <paramref name="target"/> 造成的伤害。
+        /// </summary>
         public static void Damage(Unit attacker, Unit target, Buff damageBuff, int value)
         {
             // 计算命中

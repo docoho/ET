@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
     /// <summary>
-    /// ET包管理 更新检测窗口
+    /// ET包管理 更新检测窗口（无 Odin Inspector 环境下的原生 IMGUI 回退窗口）
     /// </summary>
     public class ETPackageUpdateWindow : EditorWindow
     {
@@ -26,10 +26,19 @@ namespace ET.PackageManager.Editor
             GetWindow<ETPackageUpdateWindow>()?.Close();
         }
 
+        /// <summary>
+        /// 格式化后的可更新包展示信息文本
+        /// </summary>
         private string m_UpdatePackageInfo;
 
+        /// <summary>
+        /// 富文本大号字体 GUI 样式
+        /// </summary>
         private GUIStyle m_CustomStyle;
 
+        /// <summary>
+        /// 窗口启用时发起所有包的最新版本检查请求
+        /// </summary>
         private void OnEnable()
         {
             m_CustomStyle       = new(EditorStyles.wordWrappedMiniLabel) { fontSize = 30, richText = true };
@@ -37,6 +46,9 @@ namespace ET.PackageManager.Editor
             PackageHelper.CheckUpdateAll(CheckUpdateAll);
         }
 
+        /// <summary>
+        /// 版本检查请求完成回调
+        /// </summary>
         private void CheckUpdateAll(bool result)
         {
             if (!result)
@@ -48,6 +60,9 @@ namespace ET.PackageManager.Editor
             ShowUpdateInfo();
         }
 
+        /// <summary>
+        /// 比对本地已注册的 cn.etetet.* 包版本与远端最新版本，生成更新提示文本
+        /// </summary>
         private void ShowUpdateInfo()
         {
             var sb = SbPool.Get();

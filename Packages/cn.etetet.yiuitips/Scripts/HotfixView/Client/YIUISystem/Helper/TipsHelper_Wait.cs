@@ -4,7 +4,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 可等待的弹窗
+    /// 可等待结果的泛型弹窗助手（基于 HashWait 生成唯一等待ID，挂起协程直到弹窗调用 NotifyWait 返回确认/取消结果）。
     /// </summary>
     public static partial class TipsHelper
     {

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 每个具体红点的 运行时数据
+    /// 每个具体红点的运行时节点数据（维护父子引用集合、真实计数、玩家提示开关及向上级联通知）。
     /// </summary>
     public partial class RedDotData
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— 对外公开数据绑定、刷新、可见项查询与选中集获取API分部类。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     [FriendOf(typeof(YIUILoopScrollChild))]

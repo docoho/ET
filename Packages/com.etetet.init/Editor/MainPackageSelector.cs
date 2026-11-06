@@ -9,15 +9,17 @@ using UnityEngine;
 namespace Hibzz.DependencyResolver
 {
     /// <summary>
-    /// 主包选择器 - 按包名设置主包并收集依赖
+    /// 主包选择器 - 按包名设置主包并收集其 <c>package.json</c> 中声明的 <c>cn.etetet.*</c> 依赖包，输出到项目根目录的 <c>MainPackage.txt</c>。
     /// </summary>
     public static class MainPackageSelector
     {
         private const string OutputFileName = "MainPackage.txt";
 
         /// <summary>
-        /// 按包名设置主包并收集依赖
+        /// 按包名设置主包并收集依赖，将主包与依赖包列表写入 <c>MainPackage.txt</c>。
         /// </summary>
+        /// <param name="packageName">目标主包名（如 <c>cn.etetet.allserver</c>）。</param>
+        /// <returns>设置成功返回 true，否则返回 false。</returns>
         public static bool SetAsMainPackage(string packageName)
         {
             if (string.IsNullOrWhiteSpace(packageName))
@@ -65,6 +67,9 @@ namespace Hibzz.DependencyResolver
 
         #region 依赖收集
 
+        /// <summary>
+        /// 尝试根据传入的包名在 <c>Packages/</c> 目录下定位对应的 <c>package.json</c> 并解析出准确的包名。
+        /// </summary>
         private static bool TryResolvePackageName(string packageName, out string resolvedPackageName, out string packageJsonPath)
         {
             resolvedPackageName = null;
@@ -101,6 +106,9 @@ namespace Hibzz.DependencyResolver
             return true;
         }
 
+        /// <summary>
+        /// 从 <c>package.json</c> 文件内容中通过正则提取 <c>"name"</c> 字段值。
+        /// </summary>
         private static string TryReadPackageNameFromPackageJson(string packageJsonPath)
         {
             try
@@ -121,7 +129,7 @@ namespace Hibzz.DependencyResolver
         }
 
         /// <summary>
-        /// 获取包的依赖列表
+        /// 获取指定包的 <c>package.json</c> 中声明的依赖包名称列表。
         /// </summary>
         private static List<string> GetPackageDependencies(string packageName)
         {
@@ -147,7 +155,7 @@ namespace Hibzz.DependencyResolver
         }
 
         /// <summary>
-        /// 解析 package.json 中的 dependencies
+        /// 解析 <c>package.json</c> 中的 <c>dependencies</c> 对象块，提取所有依赖包名。
         /// </summary>
         private static List<string> ParseDependencies(string json)
         {
@@ -178,7 +186,7 @@ namespace Hibzz.DependencyResolver
         #region 文件输出
 
         /// <summary>
-        /// 写入 MainPackage.txt 文件
+        /// 写入 <c>MainPackage.txt</c> 文件（第一行为主包名，后续行为按字母排序的依赖包名）。
         /// </summary>
         private static void WriteMainPackageFile(string mainPackage, HashSet<string> dependencies)
         {

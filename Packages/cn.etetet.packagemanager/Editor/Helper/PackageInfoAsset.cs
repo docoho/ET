@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 单个包的最新版本号序列化条目
+    /// </summary>
     [Serializable]
     public class PackageLastVersionData
     {
@@ -14,6 +17,9 @@ namespace ET.PackageManager.Editor
         public string Version;
     }
 
+    /// <summary>
+    /// 本地记录所有包远端最新版本号、请求黑名单及更新时间戳的 ScriptableObject 资产
+    /// </summary>
     public class PackageInfoAsset : ScriptableObject
     {
         [SerializeField]

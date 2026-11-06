@@ -4,6 +4,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取当前激活场景中所有根 GameObject 及其指定深度子树层级与组件信息的命令处理器（SceneGetHierarchy）。
+    /// </summary>
     internal sealed class UnityBridgeSceneGetHierarchyHandler : AUnityBridgeHandler<SceneGetHierarchyRequest, SceneGetHierarchyResponse>
     {
         protected override async ETTask<IResponse> Run(SceneGetHierarchyRequest command)

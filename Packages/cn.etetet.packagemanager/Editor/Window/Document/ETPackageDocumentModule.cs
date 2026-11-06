@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 包管理器在线飞书文档快捷入口模块
+    /// </summary>
     [ETPackageMenu("文档", -int.MaxValue)]
     public class ETPackageDocumentModule : BasePackageToolModule
     {

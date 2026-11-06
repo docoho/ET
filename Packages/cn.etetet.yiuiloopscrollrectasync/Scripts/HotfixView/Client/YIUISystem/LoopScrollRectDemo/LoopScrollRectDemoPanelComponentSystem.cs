@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
-
+    /// <summary>
+    /// 循环滚动列表演示主面板组件系统，负责切换横向、纵向及网格演示子视图。
+    /// </summary>
     [FriendOf(typeof(LoopScrollRectDemoPanelComponent))]
     public static partial class LoopScrollRectDemoPanelComponentSystem
     {

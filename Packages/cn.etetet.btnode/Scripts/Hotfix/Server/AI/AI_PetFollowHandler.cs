@@ -1,7 +1,10 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 宠物跟随主人异步协程处理器：持续寻路移动向主人当前位置。
+    /// </summary>
     public class AI_PetFollowHandler: ABTCoroutineHandler<AI_PetFollow>
     {
         protected override async ETTask RunAsync(AI_PetFollow node, BTEnv env)

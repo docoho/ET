@@ -1,8 +1,11 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端在指定地面世界坐标（Pos）处创建一次性表现特效的节点处理器。
+    /// </summary>
     public class BTCreateEffectOnPosHandler: ABTHandler<BTCreateEffectOnPos>
     {
         protected override int Run(BTCreateEffectOnPos node, BTEnv env)

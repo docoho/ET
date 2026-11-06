@@ -2,6 +2,9 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务发现中心（<see cref="SceneType.ServiceDiscovery"/>）处理增量单服务注销请求（<see cref="ServiceUnregisterRequest"/>）的处理器。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscovery)]
     public class ServiceUnregisterRequestHandler : MessageHandler<Scene, ServiceUnregisterRequest, ServiceUnregisterResponse>
     {

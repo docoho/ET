@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端添加 Buff 节点处理器，在目标 Unit 上创建并初始化指定 ConfigId 的子 Buff。
+    /// </summary>
     public class BTAddBuffHandler: ABTHandler<BTAddBuff>
     {
         protected override int Run(BTAddBuff node, BTEnv env)

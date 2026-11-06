@@ -2,6 +2,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取当前 Unity Editor 运行状态（PlayMode、暂停、编译、更新状态及应用路径）的命令处理器（EditorGetState）。
+    /// </summary>
     internal sealed class UnityBridgeEditorGetStateHandler : AUnityBridgeHandler<EditorGetStateRequest, EditorGetStateResponse>
     {
         protected override async ETTask<IResponse> Run(EditorGetStateRequest command)

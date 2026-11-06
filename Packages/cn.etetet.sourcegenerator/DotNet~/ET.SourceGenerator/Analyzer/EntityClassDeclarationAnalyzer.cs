@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -6,6 +6,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ET
 {
      
+     /// <summary>
+     /// 实体类继承层级与泛型声明约束分析器（ET0003 / ET0029）。
+     /// <para>1. 禁止实体类多层继承：所有业务实体或组件必须直接继承自 <c>ET.Entity</c> 或 <c>ET.LSEntity</c>，提倡通过组件组合代替继承复用。</para>
+     /// <para>2. 禁止将 <c>Entity</c> 或 <c>LSEntity</c> 的直接子类声明为泛型类。</para>
+     /// </summary>
      [DiagnosticAnalyzer(LanguageNames.CSharp)]
      public class EntityClassDeclarationAnalyzer: DiagnosticAnalyzer
      {

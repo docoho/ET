@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
@@ -8,17 +8,44 @@ namespace ET.PackageManager.Editor
     /// 另外集成了以groupKey(比如userid)来分组数据
     public struct Prefs<T>
     {
+        /// <summary>
+        /// 内存缓存的当前值
+        /// </summary>
         private T      m_value;
+        /// <summary>
+        /// 最终拼接分组前缀后的完整 PlayerPrefs 键名
+        /// </summary>
         private string m_key;
+        /// <summary>
+        /// 原始未拼接前缀的基础键名
+        /// </summary>
         private string m_valueKey;
+        /// <summary>
+        /// 读写状态标记（防止重复从 PlayerPrefs 读取或重复写入相同值）
+        /// </summary>
         private RwFlag m_rwFlag;
 
+        /// <summary>
+        /// 当前记录的分组键版本号
+        /// </summary>
         private int            m_groupKeyVer;
+        /// <summary>
+        /// 可选的分组键接口（用于按用户/分组隔离配置）
+        /// </summary>
         private IGroupKey      m_groupKey;
+        /// <summary>
+        /// 具体类型的底层 PlayerPrefs 读写访问器
+        /// </summary>
         private IPrefsAccessor m_accessor;
 
+        /// <summary>
+        /// 未设置时的默认值
+        /// </summary>
         private T m_defValue;
 
+        /// <summary>
+        /// 构造一个带缓存与分组支持的 PlayerPrefs 包装器
+        /// </summary>
         public Prefs(string key, IGroupKey groupKey, T defValue, IPrefsAccessor accessor)
         {
             m_defValue    = defValue;
@@ -32,6 +59,9 @@ namespace ET.PackageManager.Editor
             UpdateKey();
         }
 
+        /// <summary>
+        /// 检查分组键版本变化并更新完整键名（如已写入过则迁移旧键值）
+        /// </summary>
         private void UpdateKey(bool notWrite = false)
         {
             if (m_groupKey == null)
@@ -63,6 +93,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 获取或设置配置项的值（首次读取时自动加载并缓存，修改时自动持久化到 PlayerPrefs）
+        /// </summary>
         public T Value
         {
             get
@@ -106,6 +139,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 从 PlayerPrefs 中删除该配置项并重置缓存状态
+        /// </summary>
         public void Delete()
         {
             UpdateKey(true);
@@ -115,6 +151,9 @@ namespace ET.PackageManager.Editor
             PlayerPrefs.DeleteKey(m_key);
         }
 
+        /// <summary>
+        /// 底层偏好设置存取器接口
+        /// </summary>
         public interface IPrefsAccessor
         {
             bool HasKey(string key);
@@ -123,6 +162,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 整型（int）PlayerPrefs 包装结构体
+    /// </summary>
     public struct IntPrefs
     {
         private Prefs<int> m_value;
@@ -149,6 +191,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 浮点型（float）PlayerPrefs 包装结构体
+    /// </summary>
     public struct FloatPrefs
     {
         private Prefs<float> m_value;
@@ -175,6 +220,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 字符串型（string）PlayerPrefs 包装结构体
+    /// </summary>
     public struct StringPrefs
     {
         private Prefs<string> m_value;
@@ -201,6 +249,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 布尔型（bool）PlayerPrefs 包装结构体（底层以 int 0/1 存储）
+    /// </summary>
     public struct BoolPrefs
     {
         private Prefs<int> m_value;
@@ -227,6 +278,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 数组型 PlayerPrefs 包装结构体（底层使用一级分隔符 '|' 拼接为字符串存储）
+    /// </summary>
     public struct ArrPrefs<T> where T : IComparable
     {
         private Prefs<string> m_value;
@@ -271,6 +325,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 枚举型（Enum）PlayerPrefs 包装结构体（底层转换为 int 存储）
+    /// </summary>
     public struct EnumPrefs<T> where T : Enum
     {
         private Prefs<int> m_value;
@@ -297,6 +354,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 整型 PlayerPrefs 读写访问器实现
+    /// </summary>
     public class IntAccessor : Prefs<int>.IPrefsAccessor
     {
         public static readonly IntAccessor Inst = new IntAccessor();
@@ -317,6 +377,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 浮点型 PlayerPrefs 读写访问器实现
+    /// </summary>
     public class FloatAccessor : Prefs<float>.IPrefsAccessor
     {
         public static readonly FloatAccessor Inst = new FloatAccessor();
@@ -337,6 +400,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 字符串型 PlayerPrefs 读写访问器实现
+    /// </summary>
     public class StrAccessor : Prefs<string>.IPrefsAccessor
     {
         public static readonly StrAccessor Inst = new StrAccessor();
@@ -366,6 +432,9 @@ namespace ET.PackageManager.Editor
         string Key     { get; }
     }
 
+    /// <summary>
+    /// 缓存读写状态位标记枚举
+    /// </summary>
     [Flags]
     public enum RwFlag
     {
@@ -375,6 +444,9 @@ namespace ET.PackageManager.Editor
         Full  = Write | Read
     }
 
+    /// <summary>
+    /// RwFlag 位运算扩展辅助类
+    /// </summary>
     public static class RwFlagExt
     {
         public static RwFlag Mark(this RwFlag owner, RwFlag flags)

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 解包场景中的 Prefab 实例（支持最外层或完全解包）的命令处理器（PrefabUnpack）。
+    /// </summary>
     internal sealed class UnityBridgePrefabUnpackHandler : AUnityBridgeHandler<PrefabUnpackRequest, PrefabUnpackResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabUnpackRequest command)

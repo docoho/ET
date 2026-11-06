@@ -1,4 +1,4 @@
-﻿/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
+/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
 * 
 *  This software is provided 'as-is', without any express or implied
 *  warranty.  In no event will the authors be held liable for any damages
@@ -21,7 +21,8 @@ namespace TrueSync
 {
 
     /// <summary>
-    /// 3x3 Matrix.
+    /// 基于定点数 <see cref="FP"/> 的 4x4 确定性齐次变换矩阵结构体（支持平移、旋转与缩放复合变换）。
+    /// <para>3x3 Matrix.</para>
     /// </summary>
     public struct TSMatrix4x4
     {

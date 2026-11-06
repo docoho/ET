@@ -8,15 +8,27 @@ using System.Text.Json;
 
 namespace ET
 {
+    /// <summary>
+    /// 单个 Luban 配置集合（如 <c>Config</c>、<c>Localhost</c> 等）的跨包路径聚合信息。
+    /// </summary>
     public class LubanInfo
     {
+        /// <summary>包含主 <c>luban.conf</c> 和 <c>LubanGen.ps1</c> 的目录路径。</summary>
         public string LubanConfigPath;
 
+        /// <summary>所有包下属于同一配置集合的子目录列表（用于合并各包的 <c>__tables__.xlsx</c>、<c>__beans__.xlsx</c>、<c>__enums__.xlsx</c> 和 <c>Defines</c>）。</summary>
         public List<string> subConfigDir = new List<string>();
     }
 
+    /// <summary>
+    /// Luban 配置表跨包聚合与代码/数据导出驱动器。
+    /// 扫描所有 <c>Packages/cn.etetet.*/Luban/*</c> 目录，按配置集合名聚合 Schema 文件列表写入 <c>luban.conf</c>，并调用各集合下的 <c>LubanGen.ps1</c> 完成导表。
+    /// </summary>
     public static class LubanGen
     {
+        /// <summary>
+        /// 对应 <c>luban.conf</c> 中 <c>schemaFiles</c> 数组的序列化节点结构。
+        /// </summary>
         private class SchemaFile
         {
             public string fileName { get; set; }
@@ -25,6 +37,11 @@ namespace ET
 
         private static Dictionary<string, LubanInfo> lubanInfos = new();
 
+        /// <summary>
+        /// 扫描全工程各包的 <c>Luban</c> 目录，动态更新 <c>luban.conf</c> 的 <c>schemaFiles</c> 并执行 <c>LubanGen.ps1</c> 导出。
+        /// </summary>
+        /// <param name="configType">导出目标类型参数（如 <c>"Code"</c>）。</param>
+        /// <returns>全部配置集合均导出成功返回 true，否则返回 false。</returns>
         public static bool CreateLubanConf(string configType)
         {
             lubanInfos.Clear();
@@ -130,6 +147,9 @@ namespace ET
             return true;
         }
 
+        /// <summary>
+        /// 调用 PowerShell 执行指定配置集合目录下的 <c>LubanGen.ps1</c> 脚本。
+        /// </summary>
         private static int RunLubanGen(string configCollectionPath, string configType)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -142,6 +162,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 在 Unix/macOS 系统下调用 <c>/bin/chmod</c> 修改文件权限。
+        /// </summary>
         public static void ChangePermissions(string filePath, string permissions)
         {
             try
@@ -170,6 +193,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 启动子进程并实时流式打印 Luban 标准输出与错误输出（带 20 秒超时保护）。
+        /// </summary>
         private static int RunProcess(string exe, string arguments, string workingDirectory = ".", bool waitExit = true)
         {
             var redirectStandardOutput = false;

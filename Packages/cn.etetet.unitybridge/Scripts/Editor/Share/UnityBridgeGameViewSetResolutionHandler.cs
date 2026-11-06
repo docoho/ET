@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置 GameView 窗口分辨率（若不存在指定宽高则自动新增自定义分辨率项）的命令处理器（GameViewSetResolution）。
+    /// </summary>
     internal sealed class UnityBridgeGameViewSetResolutionHandler : AUnityBridgeHandler<GameViewSetResolutionRequest, GameViewSetResolutionResponse>
     {
         protected override async ETTask<IResponse> Run(GameViewSetResolutionRequest command)

@@ -9,6 +9,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置当前编辑器选中集合（Selection.objects / activeObject）的命令处理器（SelectionSet）。
+    /// </summary>
     internal sealed class UnityBridgeSelectionSetHandler : AUnityBridgeHandler<SelectionSetRequest, SelectionSetResponse>
     {
         protected override async ETTask<IResponse> Run(SelectionSetRequest command)

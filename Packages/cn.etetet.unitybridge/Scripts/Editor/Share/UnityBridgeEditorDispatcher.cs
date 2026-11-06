@@ -8,6 +8,9 @@ namespace ET
 {
     // Dispatcher resolves bridge commands from the current loaded code domain.
     // Keep this file tiny so Unity refreshes and reloads it quickly during bridge iteration.
+    /// <summary>
+    /// 单个 UnityBridge 命令处理器的注册项元数据。
+    /// </summary>
     internal sealed class UnityBridgeHandlerRegistration
     {
         public Type RequestType { get; set; }
@@ -17,6 +20,9 @@ namespace ET
         public IUnityBridgeHandler Handler { get; set; }
     }
 
+    /// <summary>
+    /// UnityBridge 编辑器端命令分发器，利用 TypeCache 自动发现所有 IUnityBridgeHandler 实现类，负责请求 JSON 规范化反序列化与路由派发。
+    /// </summary>
     internal static class UnityBridgeEditorDispatcher
     {
         private static readonly Dictionary<Type, UnityBridgeHandlerRegistration> Registrations = BuildRegistrations();

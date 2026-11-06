@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// YIUI 3D展示模型点击事件派发辅助类。
+    /// </summary>
     public static class YIUI3DDisplayClickHelper
     {
         /// <summary>

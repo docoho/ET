@@ -1,9 +1,8 @@
-﻿namespace YIUIFramework
+namespace YIUIFramework
 {
     /// <summary>
-    /// 第一个改变的数据
-    /// 在整个修改堆栈中 一个红点数据因为是连锁的 所以
-    /// 这里的第一个改变数据是指 发起改变的红点是谁
+    /// 红点级联传播链中的源头变更记录。
+    /// 在整个修改堆栈中，由于父子红点数据是连锁聚合的，该类专门记录最初发起本次变更的叶子/源头红点快照。
     /// </summary>
     public class FirstRedDotChangeData
     {

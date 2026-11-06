@@ -1,8 +1,8 @@
-﻿#if ET10
+#if ET10
 namespace ET
 {
     /// <summary>
-    /// 特殊情况下使用的 提前检查一个Invoke是否存在
+    /// 特殊情况下使用的：提前检查一个普通结构体Invoke处理器是否已注册。
     /// </summary>
     public static class EventSystemCheck_Invoke
     {

@@ -6,17 +6,27 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET;
 
+/// <summary>
+/// ET 核心生命周期系统与消息/事件处理器源码生成器。
+/// <para>扫描静态分部类中标记了 <c>[EntitySystem]</c>、<c>[LSEntitySystem]</c>、<c>[MessageHandler]</c>、<c>[ActorMessageHandler]</c>、<c>[ActorMessageLocationHandler]</c>、<c>[Event]</c> 的扩展方法或静态方法，结合 <see cref="AttributeTemplate"/> 自动生成对应的嵌套分发类（如 <c>AwakeSystem&lt;T&gt;</c>、<c>AEvent&lt;S, T&gt;</c> 等），从而消除开发者手写样板类的负担。</para>
+/// </summary>
 [Generator(LanguageNames.CSharp)]
 public class ETSystemGenerator : ISourceGenerator
 {
     private AttributeTemplate? templates;
 
+    /// <summary>
+    /// 初始化代码模板并注册语法上下文接收器。
+    /// </summary>
     public void Initialize(GeneratorInitializationContext context)
     {
         this.templates = new AttributeTemplate();
         context.RegisterForSyntaxNotifications(() => SyntaxContextReceiver.Create(this.templates));
     }
 
+    /// <summary>
+    /// 遍历收集到的静态类与方法，生成对应的 <c>*.EntitySystems.g.cs</c> 分部类代码。
+    /// </summary>
     public void Execute(GeneratorExecutionContext context)
     {
         if (context.SyntaxContextReceiver is not SyntaxContextReceiver receiver || receiver.MethodDeclarations.Count == 0)

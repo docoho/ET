@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 /* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
 * 
 *  This software is provided 'as-is', without any express or implied
@@ -21,7 +21,8 @@
 namespace TrueSync {
 
     /// <summary>
-    /// Contains common math operations.
+    /// 定点数通用数学工具类（提供基于 <see cref="FP"/> 的开方、极值、夹逼、插值、三角函数等确定性数学运算）。
+    /// <para>Contains common math operations.</para>
     /// </summary>
     public sealed class TSMath {
 

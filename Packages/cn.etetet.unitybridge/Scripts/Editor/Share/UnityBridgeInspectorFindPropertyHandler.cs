@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 按关键字搜索目标对象或组件上匹配的 SerializedProperty 序列化属性列表的命令处理器（InspectorFindProperty）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorFindPropertyHandler :
             AUnityBridgeInspectorHandler<InspectorFindPropertyRequest, InspectorFindPropertyResponse>
     {

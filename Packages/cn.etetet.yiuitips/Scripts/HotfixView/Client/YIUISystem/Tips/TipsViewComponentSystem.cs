@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using YIUIFramework;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 挂载在Tips子窗口（YIUIWindowComponent）上的生命周期监听系统，窗口关闭或销毁时派发 EventPutTipsView 事件归还至Tips对象池。
+    /// </summary>
     [EntitySystemOf(typeof(TipsViewComponent))]
     [FriendOf(typeof(TipsViewComponent))]
     public static partial class TipsViewComponentSystem

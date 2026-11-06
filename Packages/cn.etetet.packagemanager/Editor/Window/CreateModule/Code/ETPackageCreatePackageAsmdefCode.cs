@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 根据模板生成新包 Runtime 目录下的 `.asmdef` 程序集定义文件
+    /// </summary>
     public class ETPackageCreatePackageAsmdefCode : BaseTemplate
     {
         private readonly string m_EventName = "Asmdef";

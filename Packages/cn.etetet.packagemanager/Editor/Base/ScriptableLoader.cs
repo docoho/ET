@@ -1,10 +1,16 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ScriptableObject 资产全局查找与加载辅助类
+    /// </summary>
     public static class ScriptableLoader
     {
+        /// <summary>
+        /// 在 AssetDatabase 中按类型查找并加载唯一的 ScriptableObject 实例
+        /// </summary>
         public static T Load<T>() where T : ScriptableObject
         {
             var settingType = typeof(T);

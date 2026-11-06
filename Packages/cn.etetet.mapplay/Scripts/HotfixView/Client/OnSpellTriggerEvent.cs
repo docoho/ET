@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端触发技能施放事件处理器：先调用客户端目标选择器（显示范围指示器或锁定目标），选择完成后调用 SpellHelper.Cast 向服务端请求施法。
+    /// </summary>
     [Event(SceneType.Current)]
     public class OnSpellTriggerEvent: AEvent<Scene, OnSpellTrigger>
     {

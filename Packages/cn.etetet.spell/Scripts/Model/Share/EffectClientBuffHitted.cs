@@ -1,7 +1,10 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 客户端 Buff 宿主受击时触发的行为树根节点。
+    /// </summary>
     //[LabelText("Buff被攻击时触发 (客户端)")]
     //[HideReferenceObjectPicker]
     public class EffectClientBuffHitted: EffectNode

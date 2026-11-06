@@ -1,6 +1,9 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// 基于模板生成 ERedDotKeyType.cs 枚举常量源码文件的代码生成器。
+    /// </summary>
     internal class UICreateRedDotKeyCode : BaseTemplate
     {
         public override string EventName => "红点系统 key 枚举自动生成 (注意请编译ET)";

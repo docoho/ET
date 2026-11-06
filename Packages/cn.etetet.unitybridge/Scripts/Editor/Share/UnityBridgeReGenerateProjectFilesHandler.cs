@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 执行 ET/Loader/ReGenerateProjectFiles 重新生成 csproj 工程文件并刷新资源的延迟命令处理器（RegenProject）。
+    /// </summary>
     internal sealed class UnityBridgeReGenerateProjectFilesHandler : AUnityBridgeDeferredHandler<RegenProject, RegenProjectResponse>
     {
         protected override async ETTask<RegenProjectResponse> Run(RegenProject command, UnityBridgeDeferredContext deferred)

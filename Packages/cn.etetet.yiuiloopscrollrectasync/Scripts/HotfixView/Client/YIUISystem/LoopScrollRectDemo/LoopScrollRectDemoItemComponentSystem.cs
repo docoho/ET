@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
-
+    /// <summary>
+    /// 循环滚动列表演示单项UI组件系统。
+    /// </summary>
     [FriendOf(typeof(LoopScrollRectDemoItemComponent))]
     public static partial class LoopScrollRectDemoItemComponentSystem
     {

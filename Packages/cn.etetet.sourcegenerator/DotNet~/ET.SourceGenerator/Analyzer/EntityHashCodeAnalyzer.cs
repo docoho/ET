@@ -9,6 +9,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 实体类名称 BKDR 哈希值唯一性检查分析器（ET0027）。
+    /// <para>在编译期间计算所有 <c>Entity</c> 与 <c>LSEntity</c> 子类全名的 64 位长整型哈希值（LongHashCode），若发现两个不同实体类产生哈希碰撞则立即报错，确保序列化与类型分发标签绝对唯一。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EntityHashCodeAnalyzer : DiagnosticAnalyzer
     {

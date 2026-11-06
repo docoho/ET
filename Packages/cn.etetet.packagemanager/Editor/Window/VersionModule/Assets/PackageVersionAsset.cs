@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -6,6 +6,9 @@ using Sirenix.Serialization;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 本地所有包版本与依赖关系缓存的 ScriptableObject 资产
+    /// </summary>
     [HideLabel]
     public class PackageVersionAsset : SerializedScriptableObject
     {

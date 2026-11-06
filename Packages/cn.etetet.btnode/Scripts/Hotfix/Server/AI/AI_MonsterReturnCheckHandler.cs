@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 怪物脱战返程条件检查处理器：当怪物距离出生点超过 30 米时返回 0（触发返程）。
+    /// </summary>
     public class AI_MonsterReturnCheckHandler: ABTHandler<AI_MonsterReturnCheck>
     {
         protected override int Run(AI_MonsterReturnCheck node, BTEnv env)

@@ -2,6 +2,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 触发编辑器重做（Undo.PerformRedo）操作的命令处理器（EditorRedo）。
+    /// </summary>
     internal sealed class UnityBridgeEditorRedoHandler : AUnityBridgeHandler<EditorRedoRequest, EditorRedoResponse>
     {
         protected override async ETTask<IResponse> Run(EditorRedoRequest command)

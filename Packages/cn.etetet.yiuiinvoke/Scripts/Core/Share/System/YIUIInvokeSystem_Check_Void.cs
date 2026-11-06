@@ -1,7 +1,11 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用系统（无返回值调用的存在性预检查分部类）。
+    /// </summary>
     public partial class YIUIInvokeSystem
     {
+        /// <summary>检查是否存在指定invokeType的无参、无返回值调用处理器。</summary>
         public bool CheckInvoke(string invokeType)
         {
             var invoker = GetInvoker<IYIUIInvokeHandler>(invokeType);

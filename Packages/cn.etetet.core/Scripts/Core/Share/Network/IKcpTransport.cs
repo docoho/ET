@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
@@ -7,26 +7,60 @@ using System.Runtime.InteropServices;
 
 namespace ET
 {
+    /// <summary>
+    /// KCP 协议的底层传输层抽象接口。
+    /// <remarks>
+    /// KCP 本身是一个纯算法协议，不绑定具体的底层传输介质；
+    /// ET 通过此接口允许 <see cref="KService"/> 无缝切换运行在标准 UDP（<see cref="UdpTransport"/>）或伪装为 TCP 承载（<see cref="TcpTransport"/>，用于部分禁用 UDP 的特殊网络环境）之上。
+    /// </remarks>
+    /// </summary>
     public interface IKcpTransport: IDisposable
     {
+        /// <summary>
+        /// 向指定远端地址发送原始 KCP 数据包。
+        /// </summary>
         void Send(byte[] bytes, int index, int length, EndPoint endPoint, ChannelType channelType);
+        /// <summary>
+        /// 从传输层接收一个原始数据包并填充来源地址 <paramref name="endPoint"/>。
+        /// </summary>
         int Recv(byte[] buffer, ref EndPoint endPoint);
+        /// <summary>
+        /// 获取传输层绑定的本地监听地址。
+        /// </summary>
         IPEndPoint GetBindPoint();
+        /// <summary>
+        /// 检查传输层当前是否有可读数据包到达。
+        /// </summary>
         bool Available();
+        /// <summary>
+        /// 驱动传输层自身的状态轮询。
+        /// </summary>
         void Update();
+        /// <summary>
+        /// 当上层 KCP 通道报错或断开时通知传输层清理关联状态。
+        /// </summary>
         void OnError(long id, int error);
     }
 
+    /// <summary>
+    /// 基于无连接 UDP Socket 的标准 KCP 传输层实现。
+    /// </summary>
     public class UdpTransport: IKcpTransport
     {
         private readonly Socket socket;
 
+        /// <summary>
+        /// 创建不绑定固定端口的客户端 UDP 传输层。
+        /// </summary>
         public UdpTransport(AddressFamily addressFamily)
         {
             this.socket = new Socket(addressFamily, SocketType.Dgram, ProtocolType.Udp);
             NetworkHelper.SetSioUdpConnReset(this.socket);
         }
         
+        /// <summary>
+        /// 创建绑定指定本地地址与端口的服务端 UDP 传输层（非 macOS 平台下默认设置 64MB 收发缓冲区以应对高并发吞吐）。
+        /// </summary>
         public UdpTransport(IPEndPoint ipEndPoint)
         {
             this.socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
@@ -82,16 +116,31 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// 基于 <see cref="TService"/>（TCP）模拟数据报收发的 KCP 传输层实现（支持 KCP over TCP）。
+    /// </summary>
     public class TcpTransport: IKcpTransport
     {
         private readonly TService tService;
 
+        /// <summary>
+        /// TCP 通道 Id 与远端 <see cref="EndPoint"/> 的双向映射表。
+        /// </summary>
         private readonly DoubleMap<long, EndPoint> idEndpoints = new();
 
+        /// <summary>
+        /// 已从底层 TCP 通道接收、等待上层 <see cref="KService"/> 读取的数据包队列。
+        /// </summary>
         private readonly Queue<(EndPoint, MemoryBuffer)> channelRecvDatas = new();
 
+        /// <summary>
+        /// 记录每个 TCP 通道最近一次读写活跃时间戳（用于 30 秒空闲超时清理）。
+        /// </summary>
         private readonly Dictionary<long, long> readWriteTime = new();
 
+        /// <summary>
+        /// 待轮询检查超时的 TCP 通道 Id 队列。
+        /// </summary>
         private readonly Queue<long> channelIds = new();
         
         public TcpTransport(AddressFamily addressFamily)

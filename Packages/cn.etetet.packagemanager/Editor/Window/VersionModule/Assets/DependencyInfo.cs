@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
@@ -7,11 +7,17 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 包依赖项数据模型（既可表示“我依赖的包”，也可表示“依赖我的包”）
+    /// </summary>
     [Serializable]
     [HideLabel]
     [HideReferenceObjectPicker]
     public class DependencyInfo
     {
+        /// <summary>
+        /// 关联包的名称
+        /// </summary>
         [OdinSerialize]
         [ReadOnly]
         [LabelText("名称")]
@@ -24,6 +30,9 @@ namespace ET.PackageManager.Editor
         [OnValueChanged("OnVersionChanged")]
         private string version;
 
+        /// <summary>
+        /// 依赖记录的版本号字符串（设置时自动过滤非数字字符并计算长整型版本号）
+        /// </summary>
         public string Version
         {
             get => version;
@@ -34,14 +43,23 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 所属自身包的名称
+        /// </summary>
         [OdinSerialize]
         [HideInInspector]
         public string SelfName;
 
+        /// <summary>
+        /// 是否为反向依赖（true 表示“依赖我的包”，false 表示“我依赖的包”）
+        /// </summary>
         [OdinSerialize]
         [HideInInspector]
         public bool DependenciesSelf;
 
+        /// <summary>
+        /// 转换后的长整型版本号（用于版本大小比较）
+        /// </summary>
         [HideInInspector]
         public long VersionLong;
 

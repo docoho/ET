@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取目标场景对象或 Prefab 节点上挂载的所有组件列表信息的命令处理器（InspectorGetComponents）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorGetComponentsHandler :
             AUnityBridgeInspectorHandler<InspectorGetComponentsRequest, InspectorGetComponentsResponse>
     {

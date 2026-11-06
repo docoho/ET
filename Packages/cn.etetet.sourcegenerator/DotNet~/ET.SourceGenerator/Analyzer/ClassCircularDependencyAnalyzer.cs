@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 #pragma warning disable RS1024 // 使用 SymbolEqualityComparer 比较符号
 using System;
 using System.Collections.Concurrent;
@@ -12,6 +12,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 类间循环依赖调用链静态分析器（CCD001）。
+    /// <para>在编译期间收集所有跨类的方法调用与对象构造有向边，在编译结束时使用 Tarjan 强连通分量算法与 BFS 最短环搜索检测类与类之间的循环调用依赖（标记了 <c>[IgnoreCircularDependency]</c> 的类除外）。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassCircularDependencyAnalyzer : DiagnosticAnalyzer
     {

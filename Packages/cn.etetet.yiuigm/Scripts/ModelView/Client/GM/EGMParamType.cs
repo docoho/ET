@@ -29,8 +29,14 @@ namespace ET.Client
         Enum,
     }
 
+    /// <summary>
+    /// GM参数类型转换扩展方法类。
+    /// </summary>
     public static class GMParamExtend
     {
+        /// <summary>
+        /// 将GMParamInfo中输入的字符串值解析转换为目标EGMParamType对应的强类型对象。
+        /// </summary>
         public static object TryToValue(this EGMParamType self, GMParamInfo info)
         {
             var value = info.Value;

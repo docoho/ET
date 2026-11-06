@@ -6,6 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 受保护组件禁止直接 <c>GetComponent</c> 分析器（ET0037）。
+    /// <para>当某组件类或其基类标记了 <c>[DisableGetComponent]</c> 时，禁止外部直接调用 <c>entity.GetComponent&lt;T&gt;()</c>，除非调用所在的方法显式标记了 <c>[EnableGetComponent(typeof(T))]</c>，用于收拢模块内部组件的访问入口。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DisableGetComponentAnalyzer : DiagnosticAnalyzer
     {

@@ -2,6 +2,9 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 延迟命令（Deferred Command）运行时调度器，负责跨 Domain Reload 持久化挂起命令、轮询恢复执行以及超时收尾。
+    /// </summary>
     internal static class UnityBridgeDeferredRuntime
     {
         private sealed class RequestScope : IDisposable

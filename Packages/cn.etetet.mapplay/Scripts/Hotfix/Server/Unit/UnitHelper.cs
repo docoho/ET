@@ -2,8 +2,14 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端 Unit 信息组装辅助工具类。
+    /// </summary>
     public static partial class UnitHelper
     {
+        /// <summary>
+        /// 将服务端 Unit 的基础信息、当前移动路径点以及全量数值属性打包为网络协议结构 UnitInfo。
+        /// </summary>
         public static UnitInfo CreateUnitInfo(Unit unit)
         {
             UnitInfo unitInfo = UnitInfo.Create();

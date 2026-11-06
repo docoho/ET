@@ -7,6 +7,9 @@ using MongoDB.Bson;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 命令行工具（ET.UnityBridge）主入口，负责将外部 JSON 命令写入本地桥接目录并轮询等待 Unity Editor 返回响应。
+    /// </summary>
     internal static class Program
     {
         private static readonly HashSet<string> TransportOptions = new(StringComparer.OrdinalIgnoreCase)
@@ -20,6 +23,9 @@ namespace ET
         private const int DefaultWaitMs = 15000;
         private const int DefaultDeferredWaitMs = 185000;
 
+        /// <summary>
+        /// 命令行入口，初始化 UnityBridgeAppHost 后解析命令参数并发送请求
+        /// </summary>
         private static int Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;

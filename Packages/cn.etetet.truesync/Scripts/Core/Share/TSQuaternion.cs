@@ -1,4 +1,4 @@
-﻿/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
+/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
 * 
 *  This software is provided 'as-is', without any express or implied
 *  warranty.  In no event will the authors be held liable for any damages
@@ -23,7 +23,8 @@ namespace TrueSync
 {
 
     /// <summary>
-    /// A Quaternion representing an orientation.
+    /// 基于定点数 <see cref="FP"/> 的确定性四元数结构体（用于表示无万向节死锁的 3D 旋转与朝向）。
+    /// <para>A Quaternion representing an orientation.</para>
     /// </summary>
     [Serializable]
     public struct TSQuaternion

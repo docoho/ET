@@ -5,6 +5,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取当前编辑器选中集合中的场景对象与工程资源详情的命令处理器（SelectionGet）。
+    /// </summary>
     internal sealed class UnityBridgeSelectionGetHandler : AUnityBridgeHandler<SelectionGetRequest, SelectionGetResponse>
     {
         protected override async ETTask<IResponse> Run(SelectionGetRequest command)

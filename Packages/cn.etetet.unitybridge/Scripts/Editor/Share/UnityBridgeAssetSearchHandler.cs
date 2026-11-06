@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 按预设资源类型模式（prefab/scene/script/texture/so 等）与关键字搜索工程资源的命令处理器（AssetSearch）。
+    /// </summary>
     internal sealed class UnityBridgeAssetSearchHandler : AUnityBridgeHandler<AssetSearchRequest, AssetSearchResponse>
     {
         protected override async ETTask<IResponse> Run(AssetSearchRequest command)

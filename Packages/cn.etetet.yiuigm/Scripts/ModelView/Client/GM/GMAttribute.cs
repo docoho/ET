@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace ET.Client
 {
@@ -21,6 +21,9 @@ namespace ET.Client
         }
     }
 
+    /// <summary>
+    /// 标记在 EGMType 常量字段上的GM分组页签显示名称特性。
+    /// </summary>
     [EnableClass]
     public class GMGroupAttribute : Attribute
     {

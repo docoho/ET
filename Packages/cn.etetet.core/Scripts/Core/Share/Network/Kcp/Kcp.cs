@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using static ET.IKCP;
 
@@ -14,7 +14,7 @@ using static ET.IKCP;
 namespace ET
 {
     /// <summary>
-    ///     Kcp
+    /// KCP 协议的面向对象 C# 安全封装类，内部持有一个非托管 <see cref="IKCPCB"/> 指针并提供支持 <c>Span&lt;byte&gt;</c> / <c>byte[]</c> 的收发与参数配置接口。
     /// </summary>
     public sealed unsafe partial class Kcp : IDisposable
     {

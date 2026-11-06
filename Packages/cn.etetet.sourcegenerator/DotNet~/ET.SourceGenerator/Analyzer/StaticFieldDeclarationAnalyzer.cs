@@ -1,10 +1,14 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 静态字段与静态属性强制标记 <c>[StaticField]</c> 分析器（ET0015）。
+    /// <para>由于 ET 采用多 Fiber（可能运行在多线程）架构，全局静态变量极易引发跨 Fiber 并发竞争与热重载残留问题；因此强制要求 <c>ET</c> 与 <c>YIUIFramework</c> 命名空间下的所有非 <c>const</c> 静态字段及静态属性必须显式标记 <c>[StaticField]</c> 以示审阅确认。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class StaticFieldDeclarationAnalyzer : DiagnosticAnalyzer
     {

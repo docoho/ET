@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 截取 GameView 画面并编码保存为 PNG/JPG 图片文件的命令处理器（ScreenshotCapture）。
+    /// </summary>
     internal sealed class UnityBridgeScreenshotCaptureHandler : AUnityBridgeHandler<ScreenshotCaptureRequest, ScreenshotCaptureResponse>
     {
         protected override async ETTask<IResponse> Run(ScreenshotCaptureRequest command)

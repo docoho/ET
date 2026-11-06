@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端处理客户端接取任务请求（C2M_AcceptQuest）的 ActorLocation 消息处理器：校验 NPC 存在性、距离、前置条件后创建任务实体。
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_AcceptQuestHandler : MessageLocationHandler<Unit, C2M_AcceptQuest, M2C_AcceptQuest>
     {

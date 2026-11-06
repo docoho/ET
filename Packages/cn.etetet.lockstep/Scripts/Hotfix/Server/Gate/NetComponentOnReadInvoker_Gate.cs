@@ -1,15 +1,26 @@
-﻿using System;
+using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 帧同步模式下网关（Gate）收到客户端网络数据包（<see cref="NetComponentOnRead"/>）的消息分发处理器
+    /// </summary>
     [Invoke(SceneType.Gate)]
     public class NetComponentOnReadInvoker_Gate : AInvokeHandler<NetComponentOnRead>
     {
+        /// <summary>
+        /// 异步处理网关收到的数据包
+        /// </summary>
+        /// <param name="args">网络读取事件参数</param>
         public override void Handle(NetComponentOnRead args)
         {
             HandleAsync(args).Coroutine();
         }
 
+        /// <summary>
+        /// 根据消息实现的接口类型（如 <see cref="ISessionMessage"/>、<see cref="FrameMessage"/>、<see cref="IRoomMessage"/>、<see cref="ILocationMessage"/> 等）将消息路由至对应纤程或 Actor
+        /// </summary>
+        /// <param name="args">网络读取事件参数</param>
         private async ETTask HandleAsync(NetComponentOnRead args)
         {
             Session session = args.Session;

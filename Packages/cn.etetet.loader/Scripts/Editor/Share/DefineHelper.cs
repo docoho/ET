@@ -1,12 +1,20 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// Unity 编辑器编译宏（Scripting Define Symbols）开关辅助类。
+    /// </summary>
     public static class DefineHelper
     {
+        /// <summary>
+        /// 为当前选中的构建目标平台组启用或禁用指定的预处理宏符号。
+        /// </summary>
+        /// <param name="symbols">要添加或移除的编译宏名称（如 <c>ENABLE_VIEW</c>）。</param>
+        /// <param name="enable">true 表示添加该宏，false 表示移除该宏。</param>
         public static void EnableDefineSymbols(string symbols, bool enable)
         {
             Debug.Log($"EnableDefineSymbols {symbols} {enable}");

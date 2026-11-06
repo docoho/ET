@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置指定 Transform 的父节点（Transform.SetParent，支持 Undo）的命令处理器（TransformSetParent）。
+    /// </summary>
     internal sealed class UnityBridgeTransformSetParentHandler : AUnityBridgeHandler<TransformSetParentRequest, TransformSetParentResponse>
     {
         protected override async ETTask<IResponse> Run(TransformSetParentRequest command)

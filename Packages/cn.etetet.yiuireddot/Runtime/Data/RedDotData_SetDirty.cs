@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 红点运行时节点数据 —— 异步脏标暂存与调试调用栈采集分部类。
+    /// </summary>
     public partial class RedDotData
     {
         //已改变的脏标记

@@ -1,13 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET
 {
 
+    /// <summary>
+    /// <see cref="ETSystemGenerator"/> 使用的代码生成字符串模板管理器。
+    /// <para>维护 <c>[EntitySystem]</c>、<c>[LSEntitySystem]</c>、<c>[MessageHandler]</c>、<c>[ActorMessageHandler]</c>、<c>[ActorMessageLocationHandler]</c>、<c>[Event]</c> 等方法特性对应的包装类代码模板。</para>
+    /// </summary>
     public class AttributeTemplate
     {
         private Dictionary<string, string> templates = new Dictionary<string, string>();
 
+        /// <summary>
+        /// 初始化所有受支持的方法级 Attribute 到对应 System/Handler/Event 包装类的代码模板映射。
+        /// </summary>
         public AttributeTemplate()
         {
             this.templates.Add("EntitySystem", 

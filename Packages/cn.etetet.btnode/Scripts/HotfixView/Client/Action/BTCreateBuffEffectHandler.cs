@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端创建与 Buff 生命周期绑定的表现特效节点处理器，特效 GameObject 会存入 BuffGameObjectComponent 并在 Buff 移除时自动销毁。
+    /// </summary>
     public class BTCreateBuffEffectHandler: ABTHandler<BTCreateBuffEffect>
     {
         protected override int Run(BTCreateBuffEffect node, BTEnv env)

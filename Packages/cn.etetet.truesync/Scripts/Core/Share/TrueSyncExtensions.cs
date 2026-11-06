@@ -6,6 +6,9 @@ using UnityEngine;
 /**
 * @brief Extensions added by TrueSync.
 **/
+/// <summary>
+/// TrueSync 定点数类型（<see cref="TSVector"/>、<see cref="TSQuaternion"/>、<see cref="TSMatrix"/>）与 Unity 原生渲染类型（<c>Vector3</c>、<c>Vector2</c>、<c>Quaternion</c>）之间的互转扩展方法类。
+/// </summary>
 public static class TrueSyncExtensions {
 
     public static TSVector ToTSVector(this Vector3 vector) {

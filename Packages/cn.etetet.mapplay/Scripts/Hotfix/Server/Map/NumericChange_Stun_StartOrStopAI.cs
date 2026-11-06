@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端眩晕数值状态（NumericType.Stun）变更监听器：用于在进入或解除眩晕时暂停/恢复 AI 及打断移动。
+    /// </summary>
     [NumericWatcher(SceneType.Map, NumericType.Stun)]
     public class NumericChange_Stun_StartOrStopAI: INumericWatcher
     {

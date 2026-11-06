@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能配置校验器，检查 ID 重复、资产文件名与配置 ID 不一致、主/子技能 ID 规范以及缺失同 ID 主 Buff 等问题。
+    /// </summary>
     public static class SpellEditorValidator
     {
         public static List<SpellEditorIssue> Validate(SpellEditorAssetIndex index, SpellEditorBuildResult buildResult)

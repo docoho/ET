@@ -1,10 +1,19 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace ET
 {
+    /// <summary>
+    /// 自定义 C# 编译器 <c>async ETTask</c> 状态机构建器（MethodBuilder）。
+    /// <para>
+    /// 【核心作用】
+    /// 1. 在异步方法启动时，自动从 <see cref="ETTask"/> 对象池取出任务实例；
+    /// 2. 在遇到未同步完成的 <c>await</c> 挂起点时，通过 <see cref="StateMachineWrap{T}"/> 从对象池借用状态机包装器，避免每次挂起产生闭包 Delegate 分配；
+    /// 3. 在 <c>AwaitUnsafeOnCompleted</c> 中自动维护父子 <see cref="IETTask"/> 的 <c>Context</c> 引用链，实现 <see cref="ETCancellationToken"/> 等上下文的零侵入透传。
+    /// </para>
+    /// </summary>
     public struct ETAsyncTaskMethodBuilder
     {
         private IStateMachineWrap iStateMachineWrap;
@@ -68,12 +77,14 @@ namespace ET
                 return;
             }
 
+            // 如果当前外层任务已经带有 Context，则直接向内层被 await 的子任务传递 Context
             if (this.tcs.TaskType == TaskType.WithContext)
             {
                 task.SetContext(this.tcs.Context);
                 return;
             }
             
+            // 否则先将内层子任务挂载到当前任务的 Context 字段上，构成单向链表，等待更外层调用 SetContext 时顺着链表向下传递
             this.tcs.Context = task;
         }
 
@@ -91,6 +102,9 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// 自定义 C# 编译器 <c>async ETTask&lt;T&gt;</c> 泛型状态机构建器。
+    /// </summary>
     public struct ETAsyncTaskMethodBuilder<T>
     {
         private IStateMachineWrap iStateMachineWrap;

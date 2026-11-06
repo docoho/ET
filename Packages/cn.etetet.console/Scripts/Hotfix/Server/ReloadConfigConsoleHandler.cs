@@ -2,6 +2,10 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 控制台热重载配置表（<c>C ConfigName</c>）命令处理器。
+    /// <para>在服务端运行时通过控制台输入 <c>C UnitConfig</c> 等指令即可触发 <see cref="ConfigLoader"/> 重新加载配置表数据。</para>
+    /// </summary>
     [ConsoleHandler(ConsoleMode.ReloadConfig)]
     public class ReloadConfigConsoleHandler: IConsoleHandler
     {

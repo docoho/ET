@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端添加技能修改器（SpellMod）节点处理器，修改指定技能的参数并记录到 BuffSpellModRecordComponent 中以便 Buff 移除时自动还原。
+    /// </summary>
     public class BTSpellModHandler: ABTHandler<BTSpellMod>
     {
         protected override int Run(BTSpellMod node, BTEnv env)

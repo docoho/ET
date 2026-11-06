@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -8,7 +8,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（多目标模式数据缓存部分）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public partial class YIUI3DDisplayChild

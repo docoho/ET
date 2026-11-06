@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -6,31 +6,66 @@ using System.Net.Sockets;
 namespace ET
 {
 	/// <summary>
-	/// 封装Socket,将回调push到主线程处理
+	/// 封装Socket,将回调push到主线程处理。
+	/// <remarks>
+	/// 基于 .NET 高性能异步套接字（<see cref="SocketAsyncEventArgs"/>）实现的 TCP 传输通道：
+	/// 1. 底层 IOCP / epoll 异步完成回调 <see cref="OnComplete"/> 仅将事件推入 <see cref="TService.Queue"/> 并发队列，由所属 Fiber 线程在 <c>TService.Update</c> 中统一出队处理，彻底消除多线程竞态；
+	/// 2. 结合 <see cref="CircularBuffer"/> 分块环形缓冲与 <see cref="PacketParser"/> 状态机，高效完成 TCP 流式收发与粘包拆包。
+	/// </remarks>
 	/// </summary>
 	public sealed class TChannel: AChannel
 	{
 		private readonly TService Service;
 		private Socket socket;
+		/// <summary>
+		/// 用于异步接收（<c>ReceiveAsync</c>）的 <see cref="SocketAsyncEventArgs"/>。
+		/// </summary>
 		private SocketAsyncEventArgs innArgs = new();
+		/// <summary>
+		/// 用于异步连接（<c>ConnectAsync</c>）与异步发送（<c>SendAsync</c>）的 <see cref="SocketAsyncEventArgs"/>。
+		/// </summary>
 		private SocketAsyncEventArgs outArgs = new();
 
+		/// <summary>
+		/// 接收环形字节流缓冲区。
+		/// </summary>
 		private readonly CircularBuffer recvBuffer = new();
+		/// <summary>
+		/// 发送环形字节流缓冲区。
+		/// </summary>
 		private readonly CircularBuffer sendBuffer = new();
 
+		/// <summary>
+		/// 标记当前通道是否正在执行异步发送操作（防止并发重复调用 <c>SendAsync</c>）。
+		/// </summary>
 		private bool isSending;
 
+		/// <summary>
+		/// 标记当前 TCP 连接是否已成功建立。
+		/// </summary>
 		private bool isConnected;
 
+		/// <summary>
+		/// 粘包/半包流式解析器。
+		/// </summary>
 		private readonly PacketParser parser;
 
+		/// <summary>
+		/// 写入包长前缀时使用的临时字节数组缓存。
+		/// </summary>
 		private readonly byte[] sendCache = new byte[Packet.OpcodeLength + Packet.FiberInstanceIdLength];
 		
+		/// <summary>
+		/// Socket 异步操作在系统 IO 线程完成时的回调，将事件封装为 <see cref="TArgs"/> 入队交由 Fiber 线程处理。
+		/// </summary>
 		private void OnComplete(object sender, SocketAsyncEventArgs e)
 		{
 			this.Service.Queue.Enqueue(new TArgs() {ChannelId = this.Id, SocketAsyncEventArgs = e});
 		}
 		
+		/// <summary>
+		/// 构造主动发起连接的客户端 TCP 通道。
+		/// </summary>
 		public TChannel(long id, IPEndPoint ipEndPoint, TService service)
 		{
 			this.Service = service;
@@ -49,6 +84,9 @@ namespace ET
 			this.Service.Queue.Enqueue(new TArgs(){Op = TcpOp.Connect,ChannelId = this.Id});
 		}
 		
+		/// <summary>
+		/// 构造服务端 Accept 接受的客户端 TCP 通道，并入队启动异步收发。
+		/// </summary>
 		public TChannel(long id, Socket socket, TService service)
 		{
 			this.Service = service;

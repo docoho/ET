@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 通用飘字提示视图组件系统，打开时播放飘字Animation并在动画时长结束后自动关闭回收。
+    /// </summary>
     [FriendOf(typeof(TipsTextViewComponent))]
     public static partial class TipsTextViewComponentSystem
     {

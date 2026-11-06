@@ -6,6 +6,14 @@ using System.Runtime.Serialization;
 
 namespace ET
 {
+    /// <summary>
+    /// ET 定制的有序字典（基于 <see cref="TreeSet{T}"/> / <see cref="SortedSet{T}"/> 红黑树实现）。
+    /// <remarks>
+    /// 相比 .NET 标准库的 <c>System.Collections.Generic.SortedDictionary</c>，
+    /// ET 定制版底层红黑树复用了节点对象池（<c>nodePool</c>）与遍历栈对象池（<c>stackPool</c>），
+    /// 从而在高频增删和 <c>foreach</c> 遍历（例如 <see cref="TimerComponent"/> 每帧遍历到期时间）时实现零 GC 分配。
+    /// </remarks>
+    /// </summary>
     [DebuggerDisplay("Count = {Count}")]
     [Serializable]
     public class SortedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary, IReadOnlyDictionary<TKey, TValue> where TKey : notnull

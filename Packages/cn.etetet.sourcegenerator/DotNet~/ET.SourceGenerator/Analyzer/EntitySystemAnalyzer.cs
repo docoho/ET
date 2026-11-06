@@ -7,6 +7,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET;
 
+/// <summary>
+/// 实体生命周期系统（EntitySystem / LSEntitySystem）完整性与合法性分析器（ET0024 / ET0025）。
+/// <para>1. 检查标记了 <c>[EntitySystemOf(typeof(TEntity))]</c> 的静态 System 类是否完整实现了 <c>TEntity</c> 所声明的所有生命周期接口方法（如 <c>IAwake</c> -> <c>Awake</c>、<c>IUpdate</c> -> <c>Update</c>、<c>IDestroy</c> -> <c>Destroy</c> 等），若缺失则报告 ET0024 诊断并附带元数据供 <see cref="EntitySystemCodeFixProvider"/> 自动生成方法。</para>
+/// <para>2. 检查所有标记了 <c>[EntitySystem]</c> 或 <c>[LSEntitySystem]</c> 的方法，确保其所在的静态类正确标记了对应的 <c>[EntitySystemOf]</c> 且首参数类型一致（ET0025）。</para>
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class EntitySystemAnalyzer: DiagnosticAnalyzer
 {

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 加载指定路径主资源并返回资源元数据与 InstanceId 的命令处理器（AssetLoad）。
+    /// </summary>
     internal sealed class UnityBridgeAssetLoadHandler : AUnityBridgeHandler<AssetLoadRequest, AssetLoadResponse>
     {
         protected override async ETTask<IResponse> Run(AssetLoadRequest command)

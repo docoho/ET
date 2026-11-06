@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 通过反射访问 UnityEditor.LogEntries 读取 Unity 控制台日志列表的命令处理器（ConsoleGetLogs）。
+    /// </summary>
     internal sealed class UnityBridgeConsoleGetLogsHandler : AUnityBridgeHandler<ConsoleGetLogsRequest, ConsoleGetLogsResponse>
     {
         protected override async ETTask<IResponse> Run(ConsoleGetLogsRequest command)

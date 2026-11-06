@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 克隆复制场景中指定 GameObject（支持 Undo）的命令处理器（GameObjectDuplicate）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectDuplicateHandler : AUnityBridgeHandler<GameObjectDuplicateRequest, GameObjectDuplicateResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectDuplicateRequest command)

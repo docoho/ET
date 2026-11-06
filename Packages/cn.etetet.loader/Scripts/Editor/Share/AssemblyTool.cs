@@ -8,6 +8,10 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// Unity 编辑器下的程序集编译与热重载工具类。
+    /// 提供快捷键 <c>F6</c>（编译热更 DLL 并复制到 <see cref="Define.CodeDir"/>）与 <c>F7</c>（运行期热重载 <c>ET.Hotfix</c> / <c>ET.HotfixView</c>）。
+    /// </summary>
     public static class AssemblyTool
     {
         /// <summary>
@@ -20,6 +24,9 @@ namespace ET
         /// </summary>
         public static readonly string[] DllNames = { "ET.Config", "ET.Hotfix", "ET.HotfixView", "ET.Model", "ET.ModelView" };
 
+        /// <summary>
+        /// 在编辑器加载时记录 Unity 主线程的 <see cref="SynchronizationContext"/>，以便在 PlayMode 下调用编译 API 时临时切换回主线程同步上下文。
+        /// </summary>
         [InitializeOnLoadMethod]
         static void Initialize()
         {
@@ -27,7 +34,7 @@ namespace ET
         }
 
         /// <summary>
-        /// 菜单和快捷键编译按钮
+        /// 菜单和快捷键编译按钮（快捷键 <c>F6</c>）。
         /// </summary>
         [MenuItem("ET/Scripts/Compile _F6", false)]
         static void MenuItemOfCompile()
@@ -39,7 +46,7 @@ namespace ET
         }
 
         /// <summary>
-        /// 菜单和快捷键热重载按钮
+        /// 菜单和快捷键热重载按钮（快捷键 <c>F7</c>）：在编辑器运行状态下调用 <see cref="CodeLoader.Reload"/> 热更逻辑代码。
         /// </summary>
         [MenuItem("ET/Scripts/Reload _F7", false)]
         static void MenuItemOfReload()
@@ -51,7 +58,11 @@ namespace ET
         }
 
         /// <summary>
-        /// 执行编译代码流程
+        /// 执行编译代码流程：
+        /// 1. 强制刷新 AssetDatabase；
+        /// 2. 执行 <c>ET.CodeMode.dll</c> 更新各包 <c>.asmref</c>；
+        /// 3. 调用 Unity 内部脚本编译器编译 Player/Editor 脚本；
+        /// 4. 将生成的 DLL/PDB 拷贝为 <c>.bytes</c> 资源文件放入 <see cref="Define.CodeDir"/>。
         /// </summary>
         public static void DoCompile()
         {
@@ -74,7 +85,7 @@ namespace ET
         }
 
         /// <summary>
-        /// 编译成dll
+        /// 调用 Unity 内部 <c>PlayerBuildInterface.CompilePlayerScriptsInternal</c> 将工程脚本编译成 DLL 输出至 <see cref="Define.BuildOutputDir"/>。
         /// </summary>
         static bool CompileDlls(bool editorScript = false)
         {
@@ -127,7 +138,7 @@ namespace ET
         }
 
         /// <summary>
-        /// 将dll文件复制到加载目录
+        /// 将编译生成的 DLL 与 PDB 文件加上 <c>.bytes</c> 后缀复制到 <see cref="Define.CodeDir"/> 目录，供 YooAsset 打包或 Reload 热重载读取。
         /// </summary>
         static void CopyHotUpdateDlls()
         {

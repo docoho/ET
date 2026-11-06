@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端逻辑层 Unit 旋转朝向变更事件的表现层处理器：同步更新角色 GameObject 的 rotation。
+    /// </summary>
     [Event(SceneType.Current)]
     public class ChangeRotation_SyncGameObjectRotation: AEvent<Scene, ChangeRotation>
     {

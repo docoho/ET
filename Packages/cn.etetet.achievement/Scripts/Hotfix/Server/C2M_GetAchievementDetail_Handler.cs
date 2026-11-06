@@ -1,8 +1,17 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 客户端请求获取指定成就详情（<see cref="C2M_GetAchievementDetail"/>）的 Location RPC 处理器
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_GetAchievementDetail_Handler : MessageLocationHandler<Unit, C2M_GetAchievementDetail, M2C_GetAchievementDetail>
     {
+        /// <summary>
+        /// 处理获取单个成就详情请求，组装成就名称、描述、图标、最大进度与点数等信息返回
+        /// </summary>
+        /// <param name="unit">玩家角色单位</param>
+        /// <param name="request">获取成就详情请求消息</param>
+        /// <param name="response">获取成就详情响应消息</param>
         protected override async ETTask Run(Unit unit, C2M_GetAchievementDetail request, M2C_GetAchievementDetail response)
         {
             try

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Sirenix.OdinInspector;
@@ -6,6 +6,9 @@ using Sirenix.Utilities;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 红点枚举Key反射扫描与编辑器分组下拉菜单构建辅助类。
+    /// </summary>
     public static class RedDotKeyHelper
     {
         private static List<int> m_AllRedDotKey;

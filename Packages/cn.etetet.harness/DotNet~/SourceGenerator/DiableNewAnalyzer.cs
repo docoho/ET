@@ -7,6 +7,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 禁止使用 new 关键字直接实例化标记了 [DisableNew] 特性的类型（如 Entity 子类）的 Roslyn 诊断分析器。
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DiableNewAnalyzer : DiagnosticAnalyzer
     {

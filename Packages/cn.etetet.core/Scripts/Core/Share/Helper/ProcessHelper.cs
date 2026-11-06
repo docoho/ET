@@ -6,8 +6,17 @@ using Path = System.IO.Path;
 
 namespace ET
 {
+    /// <summary>
+    /// 跨平台外部子进程（<see cref="Process"/>）启动辅助工具类，封装了 PowerShell（<c>pwsh</c>）与 <c>dotnet</c> CLI 的路径探测与标准输出重定向。
+    /// </summary>
     public static class ProcessHelper
     {
+        /// <summary>
+        /// 跨平台启动 PowerShell 7（<c>pwsh</c>）进程并执行传入的参数命令。
+        /// </summary>
+        /// <param name="arguments">传递给 pwsh 的命令行参数</param>
+        /// <param name="workingDirectory">工作目录（默认为当前目录）</param>
+        /// <param name="waitExit">是否重定向标准输出与错误流以便异步监听日志</param>
         public static Process PowerShell(string arguments, string workingDirectory = ".", bool waitExit = false)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -31,6 +40,9 @@ namespace ET
             return Run(pwsh, arguments, workingDirectory, waitExit);
         }
         
+        /// <summary>
+        /// 跨平台启动 .NET SDK（<c>dotnet</c>）进程并执行传入的参数命令。
+        /// </summary>
         public static Process DotNet(string arguments, string workingDirectory = ".", bool waitExit = false)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -54,6 +66,9 @@ namespace ET
             return Run(dotnet, arguments, workingDirectory, waitExit);
         }
 
+        /// <summary>
+        /// 启动指定的可执行程序进程，并根据 <paramref name="waitExit"/> 配置 UTF-8 标准输出/错误流异步转发到 <see cref="Log"/>。
+        /// </summary>
         public static Process Run(string exe, string arguments, string workingDirectory = ".", bool waitExit = false)
         {
             //Log.Debug($"Process Run exe:{exe} ,arguments:{arguments} ,workingDirectory:{workingDirectory}");

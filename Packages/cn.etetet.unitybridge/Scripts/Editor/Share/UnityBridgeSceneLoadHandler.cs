@@ -5,6 +5,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 在编辑器下打开指定路径场景（支持 Single 或 Additive 模式）的命令处理器（SceneLoad）。
+    /// </summary>
     internal sealed class UnityBridgeSceneLoadHandler : AUnityBridgeHandler<SceneLoadRequest, SceneLoadResponse>
     {
         protected override async ETTask<IResponse> Run(SceneLoadRequest command)

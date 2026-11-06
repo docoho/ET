@@ -1,10 +1,13 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// RedDotConfigAsset 在 Unity Editor 下的增删改与脏标记（SetDirty）扩展方法。
+    /// </summary>
     public static class RedDotConfigAsset_Extend
     {
         internal static void SetAllRedDotConfigList(this RedDotConfigAsset self, List<RedDotConfigData> dataList)

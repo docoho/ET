@@ -1,8 +1,16 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 状态同步服务端启动初始化事件处理器（<see cref="EntryEvent2"/>），负责初始化内网通信纤程、服务发现代理及当前进程配置的所有业务场景纤程
+    /// </summary>
     [Event(SceneType.StateSync)]
     public class EntryEvent2_InitServer: AEvent<Scene, EntryEvent2>
     {
+        /// <summary>
+        /// 执行状态同步服务端进程级初始化逻辑
+        /// </summary>
+        /// <param name="root">主纤程根场景</param>
+        /// <param name="args">服务端启动事件参数</param>
         protected override async ETTask Run(Scene root, EntryEvent2 args)
         {
             LogMsg.Instance.AddIgnore(typeof(ServiceHeartbeatRequest));

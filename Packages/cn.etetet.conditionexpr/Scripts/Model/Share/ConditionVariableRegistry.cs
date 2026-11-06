@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 条件表达式变量注册中心单例，在启动时自动将所有 NumericType 枚举名注册为 BTNumericCompare，并扫描所有标记了 [ConditionVariable] 的自定义 BTCondition 节点类型。
+    /// </summary>
     [CodeProcess]
     [AllowInstance]
     public class ConditionVariableRegistry : Singleton<ConditionVariableRegistry>, ISingletonAwake

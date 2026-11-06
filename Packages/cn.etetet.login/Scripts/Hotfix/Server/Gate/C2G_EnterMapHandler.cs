@@ -1,5 +1,8 @@
 namespace ET.Server
 {
+	/// <summary>
+	/// 客户端请求从网关（Gate）进入地图场景（C2G_EnterMap）的消息处理器。
+	/// </summary>
 	[MessageSessionHandler(SceneType.Gate)]
 	public class C2G_EnterMapHandler : MessageSessionHandler<C2G_EnterMap, G2C_EnterMap>
 	{
@@ -7,6 +10,7 @@ namespace ET.Server
 		{
 			Player player = session.GetComponent<SessionPlayerComponent>().Player;
 			EntityRef<Player> playerRef = player;
+			// 为玩家创建一个临时中转用的 GateMap 纤程
 			GateMapComponent gateMapComponent = player.AddComponent<GateMapComponent>();
 			EntityRef<GateMapComponent> gateMapComponentRef = gateMapComponent;
 			await gateMapComponent.Create(player.Id);
@@ -19,6 +23,9 @@ namespace ET.Server
 			EnterMapAtFrameFinish(player, gateMapComponent, player.GetComponent<PlayerSessionComponent>().GetActorId(), "Map2", 0, 1001).Coroutine();
 		}
 
+		/// <summary>
+		/// 在当前帧末尾向临时 GateMap 纤程发起进图 RPC，传送完成后清理临时 GateMap 纤程。
+		/// </summary>
 		private static async ETTask EnterMapAtFrameFinish(Player player, GateMapComponent gateMapComponent, ActorId gateActorId, string mapName, int mapId, int unitConfigId)
 		{
 			EntityRef<Player> playerRef = player;

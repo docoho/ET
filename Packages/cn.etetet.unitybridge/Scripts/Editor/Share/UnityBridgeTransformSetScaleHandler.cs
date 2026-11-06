@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置指定 Transform 的局部缩放（支持等比缩放或三轴独立缩放，支持 Undo）的命令处理器（TransformSetScale）。
+    /// </summary>
     internal sealed class UnityBridgeTransformSetScaleHandler : AUnityBridgeHandler<TransformSetScaleRequest, TransformSetScaleResponse>
     {
         protected override async ETTask<IResponse> Run(TransformSetScaleRequest command)

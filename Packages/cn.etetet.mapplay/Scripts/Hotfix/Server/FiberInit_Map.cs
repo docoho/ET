@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 地图场景（SceneType.Map）纤程初始化回调：挂载 AOI、Unit、ActorLocation 组件，加载 NavMesh 寻路网格，按配置表刷出初始地图怪物/NPC，并订阅 Location 与 MapManager 服务。
+    /// </summary>
     [Invoke(SceneType.Map)]
     public class FiberInit_Map: AInvokeHandler<FiberInit, ETTask>
     {
@@ -35,6 +38,7 @@ namespace ET.Server
             root = rootRef;
             unitComponent = unitComponentRef;
 
+            // 遍历地图预设单位表（MapUnitConfigCategory），生成属于当前地图的怪物、NPC 等初始单位
             foreach (var kv in root.Fiber().GetSingleton<MapUnitConfigCategory>().GetAll())
             {
                 if (mapName != kv.Value.MapName)

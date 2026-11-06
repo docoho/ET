@@ -3,8 +3,18 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端技能施放核心辅助类。
+    /// <remarks>
+    /// ET10 的技能（Spell）在底层设计为“技能即 Buff”：
+    /// 施放一个技能本质上是校验 CD -> 创建与该技能同配置 ID 的主 Buff -> 执行 <see cref="TargetSelector"/> 选敌行为树 -> 执行 <see cref="CostNode"/> 消耗检查与扣除 -> 更新 CD -> 初始化该技能 Buff。
+    /// </remarks>
+    /// </summary>
     public static class SpellHelper
     {
+        /// <summary>
+        /// 单位施放指定配置 ID 的技能（通过 <see cref="TargetSelector"/> 行为树选敌）。
+        /// </summary>
         public static int Cast(Unit unit, int spellConfigId, Buff parent = null)
         {
             SpellConfig spellConfig = unit.Fiber().GetSingleton<SpellConfigCategory>().Get(spellConfigId);
@@ -77,6 +87,9 @@ namespace ET.Server
             return castRet;
         }
 
+        /// <summary>
+        /// 技能施放内部流水线：打断旧主技能 -> 执行 <see cref="TargetSelector"/> 目标选择器 -> 执行 <see cref="CostNode"/> 消耗检查与扣除 -> 更新 CD -> 初始化技能 Buff。
+        /// </summary>
         private static int SpellCasting(Unit unit, Buff buff, SpellConfig spellConfig, Buff parent)
         {
             SpellComponent spellComponent = unit.GetComponent<SpellComponent>();
@@ -163,6 +176,9 @@ namespace ET.Server
             return 0;
         }
 
+        /// <summary>
+        /// 停止并移除单位当前正在施放的主技能 Buff。
+        /// </summary>
         public static void Stop(Unit unit, BuffFlags buffFlags)
         {
             Buff buff = unit.GetComponent<SpellComponent>().Current;
@@ -173,6 +189,9 @@ namespace ET.Server
             BuffHelper.RemoveBuff(buff, buffFlags);
         }
 
+        /// <summary>
+        /// 更新单位指定技能的冷却时间戳，若是玩家单位则同步下发 <see cref="M2C_UpdateCD"/> 消息给客户端。
+        /// </summary>
         public static void UpdateCD(Unit unit, int spellConfigId, long time)
         {
             SpellComponent spellComponent = unit.GetComponent<SpellComponent>();

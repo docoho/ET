@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,6 +96,13 @@ namespace ET
     }
 #endif
     
+    /// <summary>
+    /// ET 定制的红黑树有序集合（源自 .NET Runtime 源码，增加了节点池 <see cref="nodePool"/> 与遍历栈池 <see cref="stackPool"/> 优化）。
+    /// <remarks>
+    /// 标准库 <c>SortedSet&lt;T&gt;</c> 在每次 <c>Add</c> 时都会 <c>new Node</c>，在每次 <c>GetEnumerator()</c> 遍历时都会 <c>new Stack&lt;Node&gt;</c>；
+    /// ET 对这两处进行了池化改造，消除了高频定时器和排序集合操作中的 GC 分配。
+    /// </remarks>
+    /// </summary>
     [DebuggerDisplay("Count = {Count}")]
     [Serializable]
     public partial class SortedSet<T> : ISet<T>, ICollection<T>, ICollection, IReadOnlyCollection<T>, IReadOnlySet<T>, ISerializable, IDeserializationCallback

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MemoryPack;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -7,6 +7,10 @@ namespace TrueSync {
     /**
      *  @brief Generates random numbers based on a deterministic approach.
      **/
+    /// <summary>
+    /// 基于梅森旋转算法（Mersenne Twister）的确定性伪随机数生成器。
+    /// <para>支持通过 <c>MemoryPack</c> 和 <c>MongoDB.Bson</c> 完整序列化内部状态数组，从而在帧同步回滚与状态快照恢复时保持随机数序列完全一致。</para>
+    /// </summary>
     [MemoryPackable]
     public partial class TSRandom {
         // From http://www.codeproject.com/Articles/164087/Random-Number-Generation

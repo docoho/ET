@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置指定 Transform 的世界欧拉角或局部欧拉角旋转（支持 Undo）的命令处理器（TransformSetRotation）。
+    /// </summary>
     internal sealed class UnityBridgeTransformSetRotationHandler : AUnityBridgeHandler<TransformSetRotationRequest, TransformSetRotationResponse>
     {
         protected override async ETTask<IResponse> Run(TransformSetRotationRequest command)

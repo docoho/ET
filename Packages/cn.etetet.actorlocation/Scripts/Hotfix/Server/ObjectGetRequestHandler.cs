@@ -2,6 +2,9 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// Location 场景处理查询实体位置请求（<see cref="ObjectGetRequest"/>）的处理器。
+    /// </summary>
     [MessageHandler(SceneType.Location)]
     public class ObjectGetRequestHandler: MessageHandler<Scene, ObjectGetRequest, ObjectGetResponse>
     {

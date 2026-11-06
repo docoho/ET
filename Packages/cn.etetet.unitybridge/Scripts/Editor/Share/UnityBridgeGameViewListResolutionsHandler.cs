@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 枚举当前平台 GameView 所有可用分辨率列表及当前选中索引的命令处理器（GameViewListResolutions）。
+    /// </summary>
     internal sealed class UnityBridgeGameViewListResolutionsHandler : AUnityBridgeHandler<GameViewListResolutionsRequest, GameViewListResolutionsResponse>
     {
         protected override async ETTask<IResponse> Run(GameViewListResolutionsRequest command)

@@ -1,5 +1,8 @@
 namespace ET
 {
+    /// <summary>
+    /// 条件表达式词法单元（Token）类型枚举。
+    /// </summary>
     public enum ConditionTokenType
     {
         End = 0,
@@ -20,6 +23,9 @@ namespace ET
         Comma = 15,
     }
 
+    /// <summary>
+    /// 条件表达式词法单元只读结构体，保存 Token 类型、原始文本及解析出的整型数值。
+    /// </summary>
     public readonly struct ConditionToken
     {
         public ConditionToken(ConditionTokenType type, string text, long number)

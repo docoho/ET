@@ -1,10 +1,13 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using System.Text;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// 将 RedDotKeyData 列表拼接为 C# 常量字段定义代码片段的辅助类。
+    /// </summary>
     internal static class UICreateRedDotKeyGet
     {
         public static string Get(List<RedDotKeyData> dataList)

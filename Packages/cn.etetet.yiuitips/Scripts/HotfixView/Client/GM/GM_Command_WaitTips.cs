@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 测试异步可等待确认弹窗（OpenWait）及其取消（Cancel）、超时（TimeoutAsync）机制的GM命令集。
+    /// </summary>
     [GM(EGMType.Tips, 0, "等待窗口测试 不关闭会一直等待逻辑 Success")]
     public class GM_TipsTest0 : IGMCommand
     {

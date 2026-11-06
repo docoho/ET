@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 模板字符串切分片段结构体（表示纯文本片段或形如 {key1} 的占位符片段）
+    /// </summary>
     [Serializable]
     public struct StrChunk
     {

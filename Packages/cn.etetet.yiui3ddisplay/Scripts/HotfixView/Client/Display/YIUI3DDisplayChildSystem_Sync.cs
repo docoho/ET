@@ -1,4 +1,4 @@
-﻿#if !YIUIMACRO_SYNCLOAD_CLOSE
+#if !YIUIMACRO_SYNCLOAD_CLOSE
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（同步加载与展示模型部分，优先推荐使用ShowAsync异步接口）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
@@ -15,6 +15,9 @@ namespace ET.Client
         //同步显示对象
         //尽量使用异步方式 ShowAsync
         //已知如果同步与异步同时调用加载相同资源的情况会报错 等等特殊情况 请自行处理
+        /// <summary>
+        /// 同步加载并展示指定资源名称的3D模型及观察摄像机。
+        /// </summary>
         public static GameObject ShowSync(this YIUI3DDisplayChild self, string resName, string cameraName = "")
         {
             if (self.UI3DDisplay == null)

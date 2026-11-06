@@ -5,6 +5,12 @@ using System.Runtime.InteropServices;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 软路由核心转发组件（<see cref="RouterComponent"/>）的系统类。
+    /// <para>工作在传输层字节流级别（零反序列化开销），负责客户端（Outer）与后端 Gate/Realm（Inner）之间的双向透明报文转发及 KCP 握手/无感重连协议协调：</para>
+    /// <para>1. 新连接握手：客户端发来 <c>RouterSYN</c>（携带目标 Gate 内网地址） -> Router 创建 <see cref="RouterNode"/> 并回传 <c>RouterACK</c> -> 客户端发来 <c>SYN</c> -> Router 附带客户端真实 IP 转发给内网 Gate -> Gate 回传 <c>ACK</c>（分配 <c>innerConn</c>） -> Router 记录 <c>InnerConn</c> 并进入 <see cref="RouterStatus.Msg"/> 状态。</para>
+    /// <para>2. 断线重连/切换路由：客户端发来 <c>RouterReconnectSYN</c> -> Router 校验 <c>outerConn</c>/<c>innerConn</c> 并向内网 Gate 转发 -> Gate 校验通过回传 <c>RouterReconnectACK</c> -> 恢复双向转发。</para>
+    /// </summary>
     [EntitySystemOf(typeof(RouterComponent))]
     public static partial class RouterComponentSystem
     {

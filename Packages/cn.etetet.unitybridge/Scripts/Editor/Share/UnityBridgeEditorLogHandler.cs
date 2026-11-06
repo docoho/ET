@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 向 Unity 编辑器控制台输出指定级别（Log / Warning / Error）日志的命令处理器（EditorLog）。
+    /// </summary>
     internal sealed class UnityBridgeEditorLogHandler : AUnityBridgeHandler<EditorLogRequest, EditorLogResponse>
     {
         protected override async ETTask<IResponse> Run(EditorLogRequest command)

@@ -4,13 +4,20 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     /// <summary>
-    /// 服务发现组件系统
+    /// 服务发现中心核心组件系统（<see cref="ServiceDiscovery"/>）。
+    /// 负责：
+    /// 1. 主备高可用选举与租约续期（基于 MongoDB `FindOneAndReplace` 原子 CAS 与单调递增 Fencing Epoch）；
+    /// 2. 接收各进程 <see cref="ServiceDiscoveryAgent"/> 的全量注册、增量服务增删与聚合心跳；
+    /// 3. 将全网服务变更通过去重缓冲队列（<see cref="ServiceDiscoveryNotificationBufferComponent"/>）按批次推送给所有在线 Agent。
     /// </summary>
     [EntitySystemOf(typeof(ServiceDiscovery))]
     public static partial class ServiceDiscoverySystem
     {
+        /// <summary>主节点租约抢占结果：失败</summary>
         private const int MasterLeaseAcquireFailed = 0;
+        /// <summary>主节点租约抢占结果：当前主节点成功续租</summary>
         private const int MasterLeaseAcquireRenewed = 1;
+        /// <summary>主节点租约抢占结果：新节点成功接管（Takeover，Epoch + 1）</summary>
         private const int MasterLeaseAcquireTakeover = 2;
 
         [EntitySystem]
@@ -35,6 +42,9 @@ namespace ET.Server
             self.RemoveComponent<ServiceDiscoveryHeartbeatChecker>();
         }
 
+        /// <summary>
+        /// 每帧驱动：同步心跳检查器挂载状态、刷出到期的服务变更通知批次，并在非单机模式下定期执行 MongoDB 主节点租约续期/接管检查。
+        /// </summary>
         [EntitySystem]
         private static void Update(this ServiceDiscovery self)
         {
@@ -129,6 +139,11 @@ namespace ET.Server
             return await self.EnsureActiveMasterCoreAsync(true);
         }
 
+        /// <summary>
+        /// 在协程锁保护下校验或抢占主节点租约的核心实现。
+        /// </summary>
+        /// <param name="self">当前服务发现组件</param>
+        /// <param name="enforceFenceRenew">是否强制执行一次 CAS 续租以提供 Fencing 强隔离保证</param>
         private static async ETTask<bool> EnsureActiveMasterCoreAsync(this ServiceDiscovery self, bool enforceFenceRenew)
         {
             if (self == null)
@@ -382,6 +397,9 @@ namespace ET.Server
             self.NotifyServiceChange(changeType, serviceInfo.SceneName, serviceInfo.ActorId, serviceInfo.Metadata);
         }
 
+        /// <summary>
+        /// 将指定服务的变更事件放入所有已注册进程 Agent 的待发送通知队列。
+        /// </summary>
         private static void NotifyServiceChange(this ServiceDiscovery self, int changeType, string sceneName, ActorId actorId,
             StringKV metadata)
         {
@@ -401,6 +419,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 将服务变更加入指定订阅者的待发送缓冲字典（按 `changeType:sceneName` 去重合并）。
+        /// </summary>
         private static void EnqueuePendingServiceChange(this ServiceDiscovery self, ActorId subscriberActorId, int changeType,
             ServiceInfo serviceInfo)
         {
@@ -432,6 +453,9 @@ namespace ET.Server
             pending[dedupeKey] = (changeType, sceneName, actorId, ServiceDiscoveryHelper.CloneMetadata(metadata));
         }
 
+        /// <summary>
+        /// 达到防抖间隔（或强制刷出）时，将缓冲队列中的服务变更按 <see cref="ServiceDiscoveryNotificationBufferComponent.NotificationBatchMaxItems"/> 拆批发送给各进程 Agent。
+        /// </summary>
         private static void FlushPendingServiceChangeNotifications(this ServiceDiscovery self, bool force)
         {
             if (self.GetOrAddNotificationBuffer().PendingNotifications.Count == 0)
@@ -519,6 +543,9 @@ namespace ET.Server
             self.GetOrAddNotificationBuffer().LastNotificationFlushTime = now;
         }
 
+        /// <summary>
+        /// 清空待发送的服务变更缓冲队列。
+        /// </summary>
         private static void ClearPendingServiceChangeBuffer(this ServiceDiscovery self)
         {
             if (self.GetOrAddNotificationBuffer().PendingNotifications.Count == 0)
@@ -529,6 +556,9 @@ namespace ET.Server
             self.GetOrAddNotificationBuffer().PendingNotifications.Clear();
         }
 
+        /// <summary>
+        /// 根据当前节点是否为活跃 Master 动态添加或移除 <see cref="ServiceDiscoveryHeartbeatChecker"/> 组件。
+        /// </summary>
         private static void SyncHeartbeatCheckerComponent(this ServiceDiscovery self)
         {
             ServiceDiscoveryHeartbeatChecker checker = self.GetComponent<ServiceDiscoveryHeartbeatChecker>();
@@ -550,6 +580,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 周期性执行主节点租约维护：若当前为主节点则尝试续租，若无活跃主节点则尝试晋升接管。
+        /// </summary>
         private static async ETTask TickMasterLeaseAsync(this ServiceDiscovery self)
         {
             if (self.GetOrAddLease().LeaseTickRunning)
@@ -633,6 +666,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 更新主租约巡检结果与熔断退避状态。
+        /// </summary>
         private static void OnLeaseTickCompleted(this ServiceDiscovery self, bool success)
         {
             ServiceDiscoveryLeaseComponent lease = self.GetOrAddLease();
@@ -655,11 +691,17 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 判断主租约访问 MongoDB 的熔断器是否处于打开状态。
+        /// </summary>
         private static bool IsLeaseCircuitOpen(this ServiceDiscovery self, long now)
         {
             return self.GetOrAddLease().LeaseCircuitOpenUntil > now;
         }
 
+        /// <summary>
+        /// 尝试通过 MongoDB `FindOneAndReplace` 原子 CAS 续期当前主节点租约。
+        /// </summary>
         private static async ETTask<bool> TryRenewMasterLeaseAsync(this ServiceDiscovery self)
         {
             EntityRef<ServiceDiscovery> selfRef = self;
@@ -745,6 +787,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 尝试通过 MongoDB `FindOneAndReplace` 原子 CAS 抢占或接管已过期的主节点租约（接管时将 Epoch + 1）。
+        /// </summary>
         private static async ETTask<int> TryAcquireMasterLeaseAsync(this ServiceDiscovery self)
         {
             EntityRef<ServiceDiscovery> selfRef = self;
@@ -874,6 +919,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 将 MongoDB 中的主节点租约记录应用到本地 <see cref="ServiceDiscoveryLeaseComponent"/> 状态，并同步心跳检查器。
+        /// </summary>
         private static void ApplyMasterRecordToLocal(this ServiceDiscovery self, ServiceDiscoveryMaster masterRecord)
         {
             self.GetOrAddLease().CurrentMasterSceneName = masterRecord.SceneName;
@@ -889,6 +937,9 @@ namespace ET.Server
             self.SyncHeartbeatCheckerComponent();
         }
 
+        /// <summary>
+        /// 在内存中新增或更新 <see cref="ServiceInfo"/> 实体，并在发生变更时按需入队通知。
+        /// </summary>
         private static ServiceInfo UpsertServiceInMemory(this ServiceDiscovery self, string sceneName, ActorId actorId, StringKV metadata,
             bool notify, long registerTime, long lastHeartbeatTime, out bool changed)
         {
@@ -933,6 +984,9 @@ namespace ET.Server
             return serviceInfo;
         }
 
+        /// <summary>
+        /// 清空内存中的所有 <see cref="ServiceInfo"/> 实体。
+        /// </summary>
         private static void ClearServicesInMemory(this ServiceDiscovery self)
         {
             using ListComponent<string> sceneNames = ListComponent<string>.Create();
@@ -947,6 +1001,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 清空主节点的所有内存易失态（在刚晋升为新 Master 时调用，等待各进程 Agent 重新全量注册上报）。
+        /// </summary>
         private static void ClearEphemeralState(this ServiceDiscovery self)
         {
             self.ClearServicesInMemory();
@@ -956,6 +1013,9 @@ namespace ET.Server
             self.ClearPendingServiceChangeBuffer();
         }
 
+        /// <summary>
+        /// 应用指定进程 Agent 全量注册上报的本进程服务列表：先清理该进程之前登记但本次已不存在的陈旧服务，再逐一 Upsert 本次上报的服务。
+        /// </summary>
         private static async ETTask ApplyAgentLocalServicesAsync(this ServiceDiscovery self, ActorId agentActorId,
             List<ServiceInfoProto> localServices, long now)
         {
@@ -1012,6 +1072,9 @@ namespace ET.Server
             self.SetTrackedOwnedScenes(agentActorId.Address, incomingServices.Keys);
         }
 
+        /// <summary>
+        /// 获取当前区服用于主节点租约持久化的 <see cref="DBComponent"/>。
+        /// </summary>
         private static DBComponent GetPersistenceDB(this ServiceDiscovery self)
         {
             Scene root = self.Root();
@@ -1024,16 +1087,25 @@ namespace ET.Server
             return dbManagerComponent.GetZoneDB(root.Fiber.Zone);
         }
 
+        /// <summary>
+        /// 判断是否处于禁用 MongoDB 的本地单机 Bootstrap 模式。
+        /// </summary>
         private static bool IsMongoDisabled(this ServiceDiscovery self)
         {
             return self.GetServiceDiscoveryBootstrap() != null;
         }
 
+        /// <summary>
+        /// 获取进程内单机直连引导单例（若未启用则返回 null）。
+        /// </summary>
         private static ServiceDiscoveryBootstrapSingleton GetServiceDiscoveryBootstrap(this ServiceDiscovery self)
         {
             return self.Fiber().GetSingleton<ServiceDiscoveryBootstrapSingleton>();
         }
 
+        /// <summary>
+        /// 在按场景名哈希分片的协程锁保护下更新或新增服务，并在同名服务元数据变化时先广播旧快照移除通知、再广播新快照新增通知。
+        /// </summary>
         private static async ETTask<ServiceInfo> UpsertServiceAsync(this ServiceDiscovery self, string sceneName, ActorId actorId,
             StringKV metadata, bool notify, long now = 0)
         {
@@ -1084,6 +1156,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 在按场景名哈希分片的协程锁保护下移除指定服务。
+        /// </summary>
         private static async ETTask<bool> RemoveServiceAsync(this ServiceDiscovery self, string sceneName, bool notify)
         {
             EntityRef<ServiceDiscovery> selfRef = self;
@@ -1100,6 +1175,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 从内存中移除并销毁指定名称的 <see cref="ServiceInfo"/>，并按需入队下线通知。
+        /// </summary>
         private static bool RemoveServiceInMemory(this ServiceDiscovery self, string sceneName, bool notify)
         {
             if (!self.Services.TryGetValue(sceneName, out EntityRef<ServiceInfo> serviceRef))
@@ -1124,6 +1202,9 @@ namespace ET.Server
             return serviceInfo != null;
         }
 
+        /// <summary>
+        /// 刷新指定进程地址（<see cref="Address"/>）的最后心跳时间戳。
+        /// </summary>
         private static void TouchAgentHeartbeat(this ServiceDiscovery self, Address address, long heartbeatTime)
         {
             if (address == default)
@@ -1134,6 +1215,9 @@ namespace ET.Server
             self.GetOrAddAgentHeartbeat().AgentHeartbeatTimes[address] = heartbeatTime;
         }
 
+        /// <summary>
+        /// 获取当前 ServiceDiscovery 节点的单调递增服务端毫秒时间戳。
+        /// </summary>
         public static long GetMonotonicServerNow(this ServiceDiscovery self)
         {
             ServiceDiscoveryRuntimeStateComponent runtimeState = self.GetOrAddRuntimeState();
@@ -1141,11 +1225,17 @@ namespace ET.Server
                 ref runtimeState.MonotonicNow);
         }
 
+        /// <summary>
+        /// 计算服务增删协程锁的 Key。
+        /// </summary>
         private static long GetServiceMutationLockKey(string sceneName)
         {
             return sceneName.GetLongHashCode();
         }
 
+        /// <summary>
+        /// 记录指定进程地址所拥有的全部服务场景名称集合。
+        /// </summary>
         private static void SetTrackedOwnedScenes(this ServiceDiscovery self, Address address, IEnumerable<string> sceneNames)
         {
             if (address == default)
@@ -1177,6 +1267,9 @@ namespace ET.Server
             self.AgentOwnedSceneNames[address] = trackedSceneNames;
         }
 
+        /// <summary>
+        /// 从进程地址拥有的服务集合中移除单个已注销的场景名。
+        /// </summary>
         private static void UntrackOwnedScene(this ServiceDiscovery self, Address address, string sceneName)
         {
             if (address == default || string.IsNullOrEmpty(sceneName))
@@ -1196,6 +1289,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 创建或复用用于写入 MongoDB 的 <see cref="ServiceDiscoveryMaster"/> 租约实体记录。
+        /// </summary>
         private static ServiceDiscoveryMaster CreateMasterRecordForPersistence(this ServiceDiscovery self, long recordId,
             string sceneName, ActorId actorId, long epoch, long leaseExpireTime, long leaseTimeout, long updateTime)
         {

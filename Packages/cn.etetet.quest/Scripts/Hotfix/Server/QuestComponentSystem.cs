@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端玩家任务组件系统：管理玩家已接取任务、已完成任务集合以及按目标类型索引的活跃任务目标（QuestObjectives）。
+    /// </summary>
     [EntitySystemOf(typeof(QuestComponent))]
     public static partial class QuestComponentSystem
     {
@@ -16,6 +19,9 @@ namespace ET.Server
         {
         }
 
+        /// <summary>
+        /// 获取指定目标类型（如击杀怪物、收集物品）下正在追踪的所有任务目标集合。
+        /// </summary>
         public static HashSet<EntityRef<QuestObjective>> GetQuestObjectiveByType(this QuestComponent self, QuestObjectiveType questObjectiveType)
         {
             HashSet<EntityRef<QuestObjective>> questObjectives;
@@ -43,6 +49,9 @@ namespace ET.Server
             return true;
         }
         
+        /// <summary>
+        /// 为玩家添加指定 ID 的新任务，并将其下属的所有任务目标注册到类型索引表（QuestObjectives）中。
+        /// </summary>
         public static Quest AddQuest(this QuestComponent self, long questId)
         {
             Quest quest = self.AddChildWithId<Quest>(questId);

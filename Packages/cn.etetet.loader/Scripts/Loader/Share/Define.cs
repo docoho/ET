@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// 加载器层路径常量定义类。
+    /// </summary>
     public static class Define
     {
         /// <summary>

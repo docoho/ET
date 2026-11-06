@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
 
@@ -7,6 +7,9 @@ namespace ET.Client
     //主要用于在GM包上测试功能
     //当前包没有强制引用GM包
     //如果没有引用GM包  请删除这个文件
+    /// <summary>
+    /// 打开LoopScrollRect演示面板的测试GM命令。
+    /// </summary>
     [GM(EGMType.LoopDemo, 1, "LoopDemo")]
     public class GM_LoopDemo_1 : IGMCommand
     {

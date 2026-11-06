@@ -2,9 +2,17 @@ using System;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端接收服务端广播的单帧权威输入集合（<see cref="OneFrameInputs"/>）处理器
+    /// </summary>
     [MessageHandler(SceneType.LockStep)]
     public class OneFrameInputsHandler: MessageHandler<Scene, OneFrameInputs>
     {
+        /// <summary>
+        /// 推进客户端权威帧号，将服务端权威帧输入与本地预测帧输入对比；若存在差异则触发 <see cref="LSClientHelper.Rollback"/> 回滚重演，若一致则记录录像并上报状态哈希
+        /// </summary>
+        /// <param name="root">客户端根场景</param>
+        /// <param name="input">服务端广播的单帧全员权威输入</param>
         protected override async ETTask Run(Scene root, OneFrameInputs input)
         {
             using var _ = input ; // 方法结束时回收消息

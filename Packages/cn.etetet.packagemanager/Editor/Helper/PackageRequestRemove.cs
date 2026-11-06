@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -7,12 +7,18 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 封装 Unity PackageManager `Client.Remove` 移除指定包的异步请求器（移除前先检查反向依赖并删除本地 Packages 目录）
+    /// </summary>
     public class PackageRequestRemove
     {
         private string        m_Name;
         private RemoveRequest m_Request;
         private Action<bool>  m_RequestCallback;
 
+        /// <summary>
+        /// 校验反向依赖、清理本地包目录并发起 UPM 移除请求
+        /// </summary>
         public PackageRequestRemove(string name, Action<bool> callback)
         {
             if (string.IsNullOrEmpty(name))

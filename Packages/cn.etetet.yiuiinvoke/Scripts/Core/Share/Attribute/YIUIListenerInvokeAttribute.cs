@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 
 namespace ET
 {
     //文档 https://lib9kmxvq7k.feishu.cn/wiki/XXzrwRGgti52s4kYdqFccswAnXe
+    /// <summary>
+    /// YIUI调用AOP切面监听特性（支持通过Priority设置小于0在主调用前执行，或大于等于0在主调用后执行）。
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class YIUIListenerInvokeAttribute : BaseAttribute
     {

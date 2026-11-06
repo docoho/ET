@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端造成伤害节点处理器，调用 DamageHelper.Damage 执行伤害结算与仇恨/受击触发。
+    /// </summary>
     public class BTDamageHandler: ABTHandler<BTDamage>
     {
         protected override int Run(BTDamage node, BTEnv env)

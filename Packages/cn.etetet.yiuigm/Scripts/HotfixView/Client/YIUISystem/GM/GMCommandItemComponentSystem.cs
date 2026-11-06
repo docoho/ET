@@ -1,13 +1,19 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM命令列表项UI组件系统，负责绑定命令名称、描述、参数循环列表以及触发命令执行。
+    /// </summary>
     [FriendOf(typeof(GMCommandItemComponent))]
     public static partial class GMCommandItemComponentSystem
     {
+        /// <summary>
+        /// YIUI初始化生命周期，创建参数横向/纵向循环滚动列表子组件。
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this GMCommandItemComponent self)
         {

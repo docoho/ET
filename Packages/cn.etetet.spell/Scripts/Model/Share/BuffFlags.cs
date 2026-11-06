@@ -1,7 +1,10 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// Buff 移除条件与移除原因枚举，既可配置在 BuffConfig.Flags 中作为打断触发条件，也可在移除时记录到 BuffRemoveTypeComponent 中。
+    /// </summary>
     public enum BuffFlags
     {
         [LabelText("无")]

@@ -10,10 +10,16 @@ namespace ET.PackageManager.Editor
     [HideReferenceObjectPicker]
     public abstract class BaseCreateModule
     {
+        /// <summary>
+        /// 模块初始化生命周期钩子
+        /// </summary>
         public virtual void Initialize()
         {
         }
 
+        /// <summary>
+        /// 模块销毁生命周期钩子
+        /// </summary>
         public virtual void OnDestroy()
         {
         }

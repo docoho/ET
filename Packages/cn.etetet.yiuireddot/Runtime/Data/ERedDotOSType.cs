@@ -1,9 +1,9 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 操作类型
+    /// 红点变更操作类型枚举（用于调试堆栈记录是由修改数量还是修改提示开关触发）。
     /// </summary>
     public enum ERedDotOSType
     {

@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// YIUI通用多参数（0~5个参数，支持无返回值与有返回值）调用处理器抽象基类，通过可变参数数组统一转发。
+    /// </summary>
     public abstract class YIUIInvokeCommonHandler<T, P1, P2, P3, P4, P5, R> :
             IYIUIInvokeHandler,
             IYIUIInvokeHandler<P1>,

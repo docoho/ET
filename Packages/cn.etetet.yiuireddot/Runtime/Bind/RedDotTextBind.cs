@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 携带UGUI Text数字显示的红点绑定组件。
+    /// </summary>
     [AddComponentMenu("YIUIFramework/红点/红点Text绑定 【RedDotTextBind】")]
     public class RedDotTextBind : RedDotBind
     {

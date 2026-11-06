@@ -2,10 +2,16 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 进程级代理（<see cref="ServiceDiscoveryAgent"/>）处理同进程业务场景（<see cref="ServiceDiscoveryProxy"/>）取消服务变更订阅请求的处理器。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscoveryAgent)]
     public class ServiceDiscoveryAgent_UnsubscribeForwardHandler :
         MessageHandler<Scene, ServiceUnsubscribeRequest, ServiceUnsubscribeResponse>
     {
+        /// <summary>
+        /// 处理同进程业务场景取消订阅请求。
+        /// </summary>
         protected override async ETTask Run(Scene scene, ServiceUnsubscribeRequest request, ServiceUnsubscribeResponse response)
         {
             if (!ServiceDiscoveryHelper.TryValidateRequiredText(request.SceneName, nameof(ServiceUnsubscribeRequest),
@@ -25,6 +31,7 @@ namespace ET.Server
                     return;
                 }
 
+                // 清理该场景在 Agent 侧登记的所有订阅过滤条件与 ActorId
                 agent.UnsubscribeProxyServiceChange(request.SceneName);
                 await ETTask.CompletedTask;
             }

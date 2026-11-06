@@ -1,8 +1,17 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 客户端请求领取成就奖励（<see cref="C2M_ClaimAchievement"/>）的 Location RPC 处理器
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_ClaimAchievement_Handler : MessageLocationHandler<Unit, C2M_ClaimAchievement, M2C_ClaimAchievement>
     {
+        /// <summary>
+        /// 处理成就奖励领取请求，校验完成状态并返回发放的奖励列表
+        /// </summary>
+        /// <param name="unit">玩家角色单位</param>
+        /// <param name="request">领取成就请求消息</param>
+        /// <param name="response">领取成就响应消息</param>
         protected override async ETTask Run(Unit unit, C2M_ClaimAchievement request, M2C_ClaimAchievement response)
         {
             try

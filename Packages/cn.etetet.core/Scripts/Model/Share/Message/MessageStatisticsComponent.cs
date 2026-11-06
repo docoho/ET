@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ET
 {
     /// <summary>
-    /// 消息统计组件
+    /// 消息统计组件（通常挂载在服务端接受的客户端 <see cref="Session"/> 上，用于防恶意刷包限流检测）。
     /// 统计当前秒内的消息数量，超过1秒后清空重新统计
     /// </summary>
     [ComponentOf]

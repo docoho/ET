@@ -17,6 +17,10 @@ using Microsoft.CodeAnalysis.Simplification;
 
 namespace ET;
 
+/// <summary>
+/// 针对 <see cref="EntitySystemAnalyzer"/>（ET0024）的 IDE 快速修复提供器（CodeFixProvider）。
+/// <para>当检测到标记了 <c>[EntitySystemOf(typeof(TEntity))]</c> 的 System 类缺少 <c>TEntity</c> 所声明生命周期接口（如 <c>IAwake</c>、<c>IDestroy</c>）对应的扩展方法时，提供一键自动生成生命周期方法骨架的修复操作。</para>
+/// </summary>
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(EntitySystemCodeFixProvider)), Shared]
 public class EntitySystemCodeFixProvider:CodeFixProvider
 {

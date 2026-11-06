@@ -6,14 +6,24 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET;
 
+/// <summary>
+/// 对象池显式清理接口（<c>void IPool.Clear()</c>）源码生成器。
+/// <para>扫描直接实现了 <c>ET.IPool</c> 接口且声明为 <c>partial</c> 的非抽象类，自动生成字段与可写属性重置为 <c>default</c>（或对集合类型调用 <c>?.Clear()</c>）的显式接口实现，防止对象回池复用时残留旧状态。</para>
+/// </summary>
 [Generator(LanguageNames.CSharp)]
 public class IPoolClearGenerator: ISourceGenerator
 {
+    /// <summary>
+    /// 注册语法接收器，收集所有类声明语法节点。
+    /// </summary>
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications(() => new SyntaxContextReceiver());
     }
 
+    /// <summary>
+    /// 分析实现了 <c>IPool</c> 的分部类成员，生成 <c>void global::ET.IPool.Clear()</c> 方法实现。
+    /// </summary>
     public void Execute(GeneratorExecutionContext context)
     {
         if (context.SyntaxReceiver is not SyntaxContextReceiver receiver || receiver.ClassDeclarations.Count == 0)

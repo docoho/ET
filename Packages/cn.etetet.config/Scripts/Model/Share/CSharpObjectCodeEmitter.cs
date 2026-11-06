@@ -10,8 +10,14 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
 {
+    /// <summary>
+    /// C# 对象图代码发射器（Object-to-C#-Expression Emitter）。
+    /// 用于将内存中的任意配置数据对象（包括嵌套类、结构体、<see cref="List{T}"/>、<see cref="HashSet{T}"/>、<see cref="Dictionary{TKey,TValue}"/>、数组、只读构造函数属性等）
+    /// 递归格式化输出为确定性的 C# 对象初始化表达式源码字符串，供 ET10 的“代码化配置（<see cref="ConfigType.Code"/>）”生成直接硬编码在 <c>ET.Config</c> 中的高性能配置工厂。
+    /// </summary>
     public sealed class CSharpObjectCodeEmitter : Object
     {
+        /// <summary>从运行时程序集（Core/Model/Hotfix）加载的真实类型字典，用于过滤掉仅存在于编辑器下而不属于运行时的成员。</summary>
         private readonly Dictionary<string, Type> runtimeTypes;
 
         public CSharpObjectCodeEmitter()
@@ -19,12 +25,20 @@ namespace ET
             this.runtimeTypes = this.LoadRuntimeTypes();
         }
 
+        /// <summary>
+        /// 将给定的对象实例序列化生成为一段合法的 C# 构造/初始化表达式代码。
+        /// </summary>
+        /// <param name="value">要生成代码的根对象实例。</param>
+        /// <returns>格式化后的 C# 表达式字符串。</returns>
         public string Emit(object value)
         {
             EmitterContext context = new();
             return this.EmitValue(value, 0, context);
         }
 
+        /// <summary>
+        /// 递归发射任意值或引用类型对象的 C# 表达式，内置循环引用检测（<see cref="EmitterContext"/>）。
+        /// </summary>
         private string EmitValue(object value, int indentLevel, EmitterContext context)
         {
             if (value == null)
@@ -38,6 +52,7 @@ namespace ET
                 throw new NotSupportedException($"不支持导出 UnityEngine.Object 类型: {runtimeType.FullName}");
             }
 
+            // 如果是基础标量类型、字符串或枚举，直接内联格式化返回
             if (this.TryFormatInlineValue(runtimeType, value, out string inlineValue))
             {
                 return inlineValue;
@@ -81,6 +96,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 发射复合对象（class / struct）的构造函数调用与对象初始化器（<c>new T(...) { Prop = ... }</c>）代码。
+        /// </summary>
         private string EmitObject(Type runtimeType, object value, int indentLevel, EmitterContext context)
         {
             List<SerializableMember> members = this.EnumerateSerializableMembers(runtimeType)
@@ -92,6 +110,7 @@ namespace ET
                 return $"new {this.ToCSharpTypeName(runtimeType)}()";
             }
 
+            // 筛选出无法通过对象初始化器赋值（如 readonly 字段或无 public setter 属性）、必须通过构造函数传入的成员
             List<SerializableMember> ctorMembers = members.Where(member => member.RequiresConstructor).ToList();
             ConstructorMatch constructorMatch = this.ResolveConstructor(runtimeType, ctorMembers);
 
@@ -116,6 +135,9 @@ $@"{ctorExpression}
 {this.Indent(indentLevel)}}}";
         }
 
+        /// <summary>
+        /// 发射 <see cref="List{T}"/> 集合初始化器代码。
+        /// </summary>
         private string EmitList(Type listType, Type elementType, IEnumerable values, int indentLevel, EmitterContext context)
         {
             List<object> items = values.Cast<object>().ToList();
@@ -135,6 +157,9 @@ $@"new {this.ToCSharpTypeName(listType)}
 {this.Indent(indentLevel)}}}";
         }
 
+        /// <summary>
+        /// 发射 <see cref="HashSet{T}"/> 集合初始化器代码（元素按稳定排序键排序以保证生成结果幂等一致）。
+        /// </summary>
         private string EmitHashSet(Type hashSetType, Type elementType, IEnumerable values, int indentLevel, EmitterContext context)
         {
             List<object> items = values.Cast<object>().OrderBy(this.GetStableOrderKey).ToList();
@@ -154,6 +179,9 @@ $@"new {this.ToCSharpTypeName(hashSetType)}
 {this.Indent(indentLevel)}}}";
         }
 
+        /// <summary>
+        /// 发射一维数组（<c>T[]</c>）初始化器代码。
+        /// </summary>
         private string EmitArray(Type elementType, IEnumerable values, int indentLevel, EmitterContext context)
         {
             List<object> items = values.Cast<object>().ToList();
@@ -173,6 +201,9 @@ $@"new {this.ToCSharpTypeName(elementType)}[]
 {this.Indent(indentLevel)}}}";
         }
 
+        /// <summary>
+        /// 发射字典（<see cref="IDictionary"/> / <see cref="IDictionary{TKey,TValue}"/>）集合初始化器代码（按 Key 稳定排序）。
+        /// </summary>
         private string EmitDictionary(Type dictionaryType, DictionaryInfo dictionaryInfo, object value, int indentLevel, EmitterContext context)
         {
             List<DictionaryEntryData> entries = dictionaryInfo.GetEntries(value)
@@ -201,6 +232,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return this.EmitValue(memberValue, indentLevel, context);
         }
 
+        /// <summary>
+        /// 按继承链从基类到派生类、按 MetadataToken 声明顺序枚举指定类型的所有可序列化字段与属性。
+        /// </summary>
         private IEnumerable<SerializableMember> EnumerateSerializableMembers(Type type)
         {
             if (type.BaseType != null && type.BaseType != typeof(object) && type.BaseType != typeof(ValueType))
@@ -253,6 +287,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             }
         }
 
+        /// <summary>
+        /// 判断字段是否应参与代码化导出（排除 static、const、<see cref="NonSerializedAttribute"/>、<see cref="BsonIgnoreAttribute"/>；允许 public 字段或带有 <see cref="BsonElementAttribute"/>/<see cref="BsonIdAttribute"/> 的私有字段）。
+        /// </summary>
         private bool ShouldSerializeField(FieldInfo field)
         {
             if (field.IsStatic || field.IsLiteral)
@@ -278,6 +315,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return this.HasForceIncludeAttribute(field);
         }
 
+        /// <summary>
+        /// 判断属性是否应参与代码化导出。
+        /// </summary>
         private bool ShouldSerializeProperty(PropertyInfo property)
         {
             if (property.GetIndexParameters().Length > 0)
@@ -350,6 +390,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return member.Name;
         }
 
+        /// <summary>
+        /// 根据 <see cref="BsonIgnoreIfNullAttribute"/> 与 <see cref="BsonIgnoreIfDefaultAttribute"/> 判断当前成员值是否可以省略不输出。
+        /// </summary>
         private bool ShouldIgnoreValue(SerializableMember member, object owner)
         {
             object value = member.GetValue(owner);
@@ -381,6 +424,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// 为包含只读/私有成员的类型解析匹配的公共构造函数（优先匹配标记了 <see cref="BsonConstructorAttribute"/> 的构造函数）。
+        /// </summary>
         private ConstructorMatch ResolveConstructor(Type runtimeType, List<SerializableMember> ctorMembers)
         {
             if (ctorMembers.Count == 0)
@@ -559,6 +605,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             throw new NotSupportedException($"无法为类型 {type.FullName} 生成稳定排序键");
         }
 
+        /// <summary>
+        /// 尝试将基础类型（字符串、布尔、字符、整数、浮点数、decimal、枚举等）格式化为单行 C# 字面量表达式。
+        /// </summary>
         private bool TryFormatInlineValue(Type type, object value, out string code)
         {
             code = null;
@@ -705,6 +754,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             };
         }
 
+        /// <summary>
+        /// 将 <see cref="Type"/> 转换为带 <c>global::</c> 限定符的合法 C# 类型名称（支持泛型、数组和嵌套类）。
+        /// </summary>
         private string ToCSharpTypeName(Type type)
         {
             if (type == typeof(void)) return "void";
@@ -759,6 +811,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return type.IsValueType ? Activator.CreateInstance(type) : null;
         }
 
+        /// <summary>
+        /// 检查某个字段或属性在纯运行时程序集（<c>ET.Core</c> / <c>ET.Model</c> / <c>ET.Hotfix</c>）中是否真实存在（排除 <c>#if UNITY_EDITOR</c> 专属成员）。
+        /// </summary>
         private bool RuntimeMemberExists(Type declaringType, string memberName, MemberKind kind)
         {
             if (!this.runtimeTypes.TryGetValue(declaringType.FullName ?? string.Empty, out Type runtimeType))
@@ -888,6 +943,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             return new string(' ', level * 4);
         }
 
+        /// <summary>
+        /// 代码发射上下文：通过引用相等比较器跟踪当前递归调用栈上已访问的引用类型对象，防止对象图存在环路时无限递归。
+        /// </summary>
         [EnableClass]
         private sealed class EmitterContext
         {
@@ -907,6 +965,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             }
         }
 
+        /// <summary>
+        /// 基于对象内存引用同一性（<see cref="object.ReferenceEquals"/>）的相等比较器。
+        /// </summary>
         [EnableClass]
         private sealed class ObjectReferenceComparer : IEqualityComparer<object>
         {
@@ -921,6 +982,9 @@ $@"new {this.ToCSharpTypeName(dictionaryType)}
             }
         }
 
+        /// <summary>
+        /// 封装单个可序列化字段或属性的元数据及取值委托。
+        /// </summary>
         [EnableClass]
         private sealed class SerializableMember
         {

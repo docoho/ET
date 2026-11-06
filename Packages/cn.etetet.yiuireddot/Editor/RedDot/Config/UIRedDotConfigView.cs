@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI自动化工具中的红点父子关系配置子视图（支持增删改查、一键DAG环路检查与同步至RedDotConfigAsset）。
+    /// </summary>
     [HideLabel]
     [HideReferenceObjectPicker]
     internal class UIRedDotConfigView : BaseCreateModule

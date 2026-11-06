@@ -5,6 +5,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 禁止在业务层直接访问未标记 [AllowInstance] 的 Singleton.Instance 或 World.Instance.GetSingleton&lt;T&gt;() 的静态诊断分析器。
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DisableSingletonInstanceAccessAnalyzer : DiagnosticAnalyzer
     {

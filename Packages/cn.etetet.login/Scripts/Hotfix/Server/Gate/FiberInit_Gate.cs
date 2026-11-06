@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 网关服（SceneType.Gate）纤程初始化回调：挂载基础网络、玩家管理、ActorLocation 组件并向服务发现注册。
+    /// </summary>
     [Invoke(SceneType.Gate)]
     public class FiberInit_Gate: AInvokeHandler<FiberInit, ETTask>
     {
@@ -20,6 +23,7 @@ namespace ET.Server
             root.AddComponent<LocationProxyComponent>();
             root.AddComponent<MessageLocationSenderComponent>();
 
+            // 绑定供 Router 转发客户端流量的 UDP 外网端口
             AddressSingleton addressSingleton = root.GetSingleton<AddressSingleton>();
             int outerPort = AddressHelper.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
 

@@ -5,8 +5,17 @@ using System.Threading;
 
 namespace ET
 {
+    /// <summary>
+    /// 跨端 HTTP 客户端请求辅助类。
+    /// 在 WebGL 平台下自动使用 <c>UnityWebRequest</c>，而在常规客户端/服务端（包括非主线程的 NetClient 纤程）下使用标准 .NET <see cref="HttpClient"/>。
+    /// </summary>
     public static partial class HttpClientHelper
     {
+        /// <summary>
+        /// 异步发送 HTTP GET 请求并返回响应的字符串内容。
+        /// </summary>
+        /// <param name="link">请求的完整 URL 地址。</param>
+        /// <returns>HTTP 响应正文字符串。</returns>
         public static async ETTask<string> Get(string link)
         {
             try

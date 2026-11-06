@@ -4,6 +4,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 保存当前打开的场景或另存为指定路径（EditorSceneManager.SaveOpenScenes / SaveScene）的命令处理器（SceneSave）。
+    /// </summary>
     internal sealed class UnityBridgeSceneSaveHandler : AUnityBridgeHandler<SceneSaveRequest, SceneSaveResponse>
     {
         protected override async ETTask<IResponse> Run(SceneSaveRequest command)

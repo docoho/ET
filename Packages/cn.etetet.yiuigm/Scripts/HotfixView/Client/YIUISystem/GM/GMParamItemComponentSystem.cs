@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Reflection;
 using Sirenix.OdinInspector;
@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM命令单个参数输入项UI组件系统。
+    /// 根据参数类型（字符串/布尔/小数/整数/枚举）动态切换输入框、开关（Toggle）或下拉框（Dropdown）控件。
+    /// </summary>
     [FriendOf(typeof(GMParamItemComponent))]
     public static partial class GMParamItemComponentSystem
     {
@@ -20,6 +24,9 @@ namespace ET.Client
         {
         }
 
+        /// <summary>
+        /// 根据GMParamInfo刷新参数输入控件的显示类型与默认值。
+        /// </summary>
         public static void ResetItem(this GMParamItemComponent self, GMParamInfo info)
         {
             self.ParamInfo = info;

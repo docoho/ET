@@ -2,6 +2,10 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务发现中心（<see cref="SceneType.ServiceDiscovery"/>）处理增量单服务注册请求（<see cref="ServiceRegisterRequest"/>）的处理器。
+    /// 校验当前节点为活跃 Master（带 Fencing 续租校验）后，注册该服务并向全网 Agent 广播变更通知。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscovery)]
     public class ServiceRegisterRequestHandler : MessageHandler<Scene, ServiceRegisterRequest, ServiceRegisterResponse>
     {

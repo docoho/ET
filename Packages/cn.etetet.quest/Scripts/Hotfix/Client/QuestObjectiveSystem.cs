@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端任务目标（QuestObjective）系统：提供目标完成判定、进度百分比及进度文本格式化方法。
+    /// </summary>
     [EntitySystemOf(typeof(QuestObjective))]
     public static partial class QuestObjectiveSystem
     {
@@ -15,6 +18,9 @@ namespace ET.Client
 
         }
 
+        /// <summary>
+        /// 判断该任务目标在客户端记录的数量是否已达到需求数量。
+        /// </summary>
         public static bool IsFinished(this QuestObjective self)
         {
             return self.Count >= self.NeedCount;

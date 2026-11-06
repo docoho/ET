@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -7,12 +7,18 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 封装 Unity PackageManager `Client.AddAndRemove` 批量添加/更新多个包的异步请求器
+    /// </summary>
     public class PackageRequestAddAndRemove
     {
         private string[]                                             m_packagesToAdd;
         private AddAndRemoveRequest                                  m_Request;
         private Action<List<UnityEditor.PackageManager.PackageInfo>> m_RequestCallback;
 
+        /// <summary>
+        /// 发起批量添加/更新包列表的异步请求并在完成时触发回调
+        /// </summary>
         public PackageRequestAddAndRemove(List<string> addList, Action<List<UnityEditor.PackageManager.PackageInfo>> callback)
         {
             if (addList == null || addList.Count <= 0)

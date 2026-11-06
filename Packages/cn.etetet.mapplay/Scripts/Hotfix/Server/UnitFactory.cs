@@ -2,8 +2,14 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端地图单位（Unit）创建工厂类：负责根据配置表初始化数值属性、位置朝向、移动/AOI/技能/Buff/背包/任务/寻路等组件，并启动初始 AI Buff。
+    /// </summary>
     public static partial class UnitFactory
     {
+        /// <summary>
+        /// 在指定场景中创建并初始化一个服务端 Unit 实体。
+        /// </summary>
         public static Unit Create(Scene scene, long id, int configId)
         {
             UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
@@ -75,6 +81,9 @@ namespace ET.Server
             return unit;
         }
 
+        /// <summary>
+        /// 为指定主人（owner）创建宠物单位，并双向绑定 PetComponent 与 UnitPetComponent。
+        /// </summary>
         public static Unit CreatePet(Scene scene, Unit owner, long id, int configId)
         {
             Unit pet = Create(scene, id, configId);

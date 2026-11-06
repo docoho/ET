@@ -1,11 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ET.Client
 {
+	/// <summary>
+	/// 帧同步战斗相机跟随组件系统，负责在 LateUpdate 中跟随本地玩家单位视图，并在录像回放模式下支持按 Tab 键切换观察目标
+	/// </summary>
 	[EntitySystemOf(typeof(LSCameraComponent))]
 	[FriendOf(typeof(LSCameraComponent))]
 	public static partial class LSCameraComponentSystem
 	{
+		/// <summary>
+		/// 初始化主摄像机引用并设置固定俯视角（绕 X 轴旋转 20 度）
+		/// </summary>
 		[EntitySystem]
 		private static void Awake(this LSCameraComponent self)
 		{
@@ -13,6 +19,9 @@ namespace ET.Client
 			self.Camera.transform.rotation = Quaternion.Euler(new Vector3(20, 0, 0));
 		}
 		
+		/// <summary>
+		/// 每帧在所有单位视图位置更新后，将摄像机保持在观察目标后上方固定偏移处
+		/// </summary>
 		[EntitySystem]
 		private static void LateUpdate(this LSCameraComponent self)
 		{

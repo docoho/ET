@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace ET
 {
+    /// <summary>
+    /// Unity 环境下的日志创建回调处理器：响应 <see cref="LogInvoker"/> 请求，为每个纤程创建带有对应场景名称前缀的 <see cref="UnityLogger"/> 实例。
+    /// </summary>
     [Invoke]
     public class LogInvoker_Unity: AInvokeHandler<LogInvoker, ILog>
     {
@@ -12,8 +15,13 @@ namespace ET
         }
     }
     
+    /// <summary>
+    /// 基于 <see cref="UnityEngine.Debug"/> 的客户端/编辑器日志实现类。
+    /// 在 Unity 编辑器下支持将异常堆栈中的文件与行号转换为可点击跳转的超链接格式（<c>&lt;a href="..." line="..."&gt;</c>）。
+    /// </summary>
     public class UnityLogger: ILog
     {
+        /// <summary>当前日志所属的纤程/场景名称前缀。</summary>
         private string sceneName;
 
         public UnityLogger(string sceneName)
@@ -51,6 +59,9 @@ namespace ET
             UnityEngine.Debug.LogError(msg);
         }
         
+        /// <summary>
+        /// 将堆栈字符串中的 <c>at Method in File.cs:line</c> 替换为 Unity Console 支持点击跳转的 HTML 超链接标签。
+        /// </summary>
         private static string Msg2LinkStackMsg(string msg)
         {
             msg = Regex.Replace(msg,@"at (.*?) in (.*?\.cs):(\w+)", match =>

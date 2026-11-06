@@ -11,6 +11,7 @@ namespace ET.Server
     public partial class ServiceDiscoveryProxy : Entity, IAwake, IDestroy
     {
         // 这里可以指定索引
+        /// <summary>Proxy 本地缓存建立二级索引的元数据字段名列表</summary>
         public readonly string[] Indexs = { ServiceMetaKey.SceneType };
         
         /// <summary>
@@ -19,10 +20,11 @@ namespace ET.Server
         public FiberInstanceId AgentFiberInstanceId;
 
         /// <summary>
-        /// 缓存的服务列表，Key为SceneType，Value为该类型的服务SceneName列表
+        /// 缓存的服务列表，Key为SceneName，Value为对应的ServiceInfo实体引用
         /// </summary>
         public Dictionary<string, EntityRef<ServiceInfo>> SceneNameServices = new();
         //  索引,key1例如"SceneType",  key2 是值，例如SceneType的值，  HashSet中是ServiceCacheInfo的SceneName
+        /// <summary>Proxy 本地服务二级倒排索引表</summary>
         public Dictionary<string, MultiMapSet<string, string>> ServicesIndexs = new();
 
         /// <summary>
@@ -32,12 +34,16 @@ namespace ET.Server
 
         private EntityRef<ProcessInnerSender> processInnerSender;
 
+        /// <summary>当前 Proxy 所属根 Scene 的名称（缓存供 Destroy 阶段发送注销消息使用）</summary>
         public string RootName;
 
+        /// <summary>按 SceneType 解析目标服务时的最大重试次数</summary>
         public int ServiceResolveRetryTimes;
 
+        /// <summary>按 SceneType 解析目标服务重试时的等待间隔（毫秒）</summary>
         public int ServiceResolveRetryIntervalMs;
 
+        /// <summary>同进程内通信发送器组件引用</summary>
         public ProcessInnerSender ProcessInnerSender
         {
             get

@@ -1,9 +1,12 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI 3D展示组件Hierarchy右键创建菜单项。
+    /// </summary>
     internal static class YIUI3DDisplayMenuItem
     {
         [MenuItem("GameObject/YIUI/3DDisplay", false, 20001)]

@@ -2,6 +2,9 @@ using System;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端心跳与时间同步组件系统：每 2 秒向网关发送一次 C2G_Ping，计算网络延迟（Ping）并校准服务器与客户端的时间差（ServerMinusClientTime）。
+    /// </summary>
     [EntitySystemOf(typeof(PingComponent))]
     public static partial class PingComponentSystem
     {
@@ -17,6 +20,9 @@ namespace ET.Client
             self.Ping = 0;
         }
         
+        /// <summary>
+        /// 周期性发送心跳请求并更新 RTT 与服务器时间偏移量。
+        /// </summary>
         private static async ETTask PingAsync(this PingComponent self)
         {
             Session session = self.GetParent<Session>();

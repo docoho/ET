@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -10,6 +10,10 @@ using Exception = System.Exception;
 
 namespace ET
 {
+    /// <summary>
+    /// Roslyn 语法树（SyntaxNode）与语义符号（ISymbol）分析辅助工具类。
+    /// <para>提供查找父子节点、判断 Attribute 标记、接口实现、命名空间提取、控制流图构建等扩展方法，供各 Analyzer 和 SourceGenerator 复用。</para>
+    /// </summary>
     public static class AnalyzerHelper
     {
         /// <summary>
@@ -31,6 +35,9 @@ namespace ET
             return null;
         }
 
+        /// <summary>
+        /// 获取语法树节点的第一个子节点（不限具体语法类型）。
+        /// </summary>
         public static SyntaxNode? GetFirstChild(this SyntaxNode syntaxNode)
         {
             var childNodes = syntaxNode.ChildNodes();
@@ -96,6 +103,9 @@ namespace ET
             return false;
         }
 
+        /// <summary>
+        /// 判断指定类型或其继承链上的任意基类是否标记了指定的 Attribute。
+        /// </summary>
         public static bool HasAttributeInTypeAndBaseTyes(this ITypeSymbol typeSymbol, string AttributeName)
         {
             if (typeSymbol.HasAttribute(AttributeName))
@@ -113,6 +123,9 @@ namespace ET
             return false;
         }
 
+        /// <summary>
+        /// 枚举获取指定类型的所有基类符号（自底向上遍历继承链）。
+        /// </summary>
         public static IEnumerable<ITypeSymbol> BaseTypes(this ITypeSymbol typeSymbol)
         {
             ITypeSymbol? baseType = typeSymbol.BaseType;
@@ -413,6 +426,9 @@ namespace ET
             return false;
         }
 
+        /// <summary>
+        /// 获取指定命名类型符号的完整命名空间字符串（如 "ET.Client"）。
+        /// </summary>
         public static string? GetNameSpace(this INamedTypeSymbol namedTypeSymbol)
         {
             INamespaceSymbol? namespaceSymbol = namedTypeSymbol.ContainingNamespace;

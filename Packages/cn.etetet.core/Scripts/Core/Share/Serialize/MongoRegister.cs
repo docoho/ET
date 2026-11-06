@@ -7,13 +7,22 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace ET
 {
+    /// <summary>
+    /// MongoDB BSON 序列化类型映射与约定注册器。
+    /// </summary>
     public static class MongoRegister
     {
+        /// <summary>
+        /// 为指定结构体类型 <typeparamref name="T"/> 注册通用反射 BSON 序列化器 <see cref="StructBsonSerialize{TValue}"/>。
+        /// </summary>
         public static void RegisterStruct<T>() where T : struct
         {
             BsonSerializer.RegisterSerializer(typeof (T), new StructBsonSerialize<T>());
         }
         
+        /// <summary>
+        /// 初始化 MongoDB BSON 序列化注册表：重置旧注册表、注册核心集合序列化器、设置忽略多余字段约定，并自动映射所有继承自 <see cref="Object"/> 的类。
+        /// </summary>
         public static void Init()
         {
             // 清理老的数据
@@ -59,6 +68,9 @@ namespace ET
 #endif
         }
 
+        /// <summary>
+        /// 将继承自 <see cref="Object"/> 的非泛型类注册到 <see cref="BsonClassMap"/>，并以 <see cref="Type.FullName"/> 作为多态鉴别器（Discriminator）。
+        /// </summary>
         private static void RegisterClass(Type type)
         {
             if (!type.IsSubclassOf(typeof(Object)))

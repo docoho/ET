@@ -8,14 +8,24 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET;
 
+/// <summary>
+/// Entity 多态序列化格式化器（MemoryPackFormatter&lt;Entity&gt;）源码生成器。
+/// <para>扫描所有标记了 <c>[MemoryPackable]</c> 的 <c>Entity</c> / <c>LSEntity</c> 子类，自动生成基于类名 LongHashCode 作为 Union Tag 的序列化与反序列化 switch 分发代码，并注入到 <c>EntitySerializeRegister.Register()</c> 分部方法中。</para>
+/// </summary>
 [Generator(LanguageNames.CSharp)]
 public class ETEntitySerializeFormatterGenerator : ISourceGenerator
 {
+    /// <summary>
+    /// 注册语法上下文接收器，用于在编译期收集所有可序列化的实体类。
+    /// </summary>
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications((() => ETEntitySerializeFormatterSyntaxContextReceiver.Create()));
     }
 
+    /// <summary>
+    /// 根据收集到的实体类集合生成 <c>ETEntitySerializeFormatter</c> 和 <c>EntitySerializeRegister</c> 源码文件。
+    /// </summary>
     public void Execute(GeneratorExecutionContext context)
     {
         

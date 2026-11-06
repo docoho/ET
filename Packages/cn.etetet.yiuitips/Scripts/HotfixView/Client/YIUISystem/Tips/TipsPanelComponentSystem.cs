@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using YIUIFramework;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityTime = UnityEngine.Time;
 namespace ET.Client
 {
     /// <summary>
-    /// 公共弹窗界面
+    /// 公共弹窗容器面板组件系统，管理所有Tips子窗口的异步对象池复用、引用计数自动关闭及超时闲置缓存清理。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/OdNgwu0KsiyJ6NkK8vCcwbjbn1g
     /// </summary>
     [FriendOf(typeof(TipsPanelComponent))]

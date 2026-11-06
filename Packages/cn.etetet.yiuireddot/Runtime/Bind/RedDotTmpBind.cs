@@ -5,6 +5,9 @@ using Sirenix.OdinInspector;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 携带TextMeshProUGUI数字显示的红点绑定组件。
+    /// </summary>
     [AddComponentMenu("YIUIFramework/红点/红点TMP绑定 【RedDotTextBind】")]
     public class RedDotTmpBind : RedDotBind
     {

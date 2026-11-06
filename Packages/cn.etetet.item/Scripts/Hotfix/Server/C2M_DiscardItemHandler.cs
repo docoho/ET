@@ -1,5 +1,8 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端处理客户端丢弃背包物品请求（C2M_DiscardItem）的 ActorLocation 消息处理器。
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_DiscardItemHandler : MessageLocationHandler<Unit, C2M_DiscardItem, M2C_DiscardItem>
     {

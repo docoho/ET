@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +9,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
+    /// GM命令管理组件系统，负责扫描所有带 [GM] 特性的命令类、按分类组织并在点击时转换参数执行。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/NYADwMydliVmQ7kWXOuc0yxGn7p
     /// </summary>
     [FriendOf(typeof(GMCommandComponent))]

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,6 +7,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 网络消息成员规范分析器，禁止未实现 IEntityMessage 接口的普通网络消息类（IMessage）包含 Entity 类型的字段或属性。
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NetMessageAnalyzer : DiagnosticAnalyzer
     {

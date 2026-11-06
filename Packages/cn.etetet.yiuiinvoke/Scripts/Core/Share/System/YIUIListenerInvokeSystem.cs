@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI调用AOP切面监听单例系统。
+    /// 负责收集所有 [YIUIListenerInvokeSystem] 处理器，按Priority划分为Before（&lt;0）和After（&gt;=0）两个有序队列并在主调用前后触发。
+    /// </summary>
     [CodeProcess]
     public partial class YIUIListenerInvokeSystem : Singleton<YIUIListenerInvokeSystem>, ISingletonAwake
     {

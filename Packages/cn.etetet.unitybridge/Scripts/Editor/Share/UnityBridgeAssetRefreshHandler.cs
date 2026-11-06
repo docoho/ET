@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 触发 AssetDatabase.Refresh 并等待资源刷新及潜在脚本编译完成的延迟命令处理器（AssetRefresh）。
+    /// </summary>
     internal sealed class UnityBridgeAssetRefreshHandler : AUnityBridgeDeferredHandler<AssetRefreshRequest, AssetRefreshResponse>
     {
         protected override async ETTask<AssetRefreshResponse> Run(AssetRefreshRequest command, UnityBridgeDeferredContext deferred)

@@ -13,6 +13,9 @@ namespace ET.Test
     [ConsoleHandler(ConsoleMode.Test)]
     public class TestConsoleHandler : IConsoleHandler
     {
+        /// <summary>
+        /// 解析 TestArgs 命令行参数，筛选匹配的测试用例并调用 TestRunHelper 批量执行，最后输出汇总报告并以对应退出码退出进程
+        /// </summary>
         public async ETTask Run(Fiber fiber, ModeContex contex, string content)
         {
             EntityRef<ModeContex> modeContexRef = contex;

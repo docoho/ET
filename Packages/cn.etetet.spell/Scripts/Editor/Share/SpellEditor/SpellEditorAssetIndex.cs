@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能编辑器资产索引，扫描指定目录下的所有 SpellScriptableObject 和 BuffScriptableObject，并记录重复 ID 冲突路径。
+    /// </summary>
     public sealed class SpellEditorAssetIndex
     {
         public readonly Dictionary<int, SpellScriptableObject> Spells = new();
@@ -13,6 +16,9 @@ namespace ET
         public readonly Dictionary<int, List<string>> DuplicateBuffPaths = new();
         public readonly Dictionary<UnityEngine.Object, string> AssetPaths = new();
 
+        /// <summary>
+        /// 扫描资产库并构建完整的 Spell 与 Buff 索引。
+        /// </summary>
         public static SpellEditorAssetIndex Build()
         {
             SpellEditorAssetIndex index = new();

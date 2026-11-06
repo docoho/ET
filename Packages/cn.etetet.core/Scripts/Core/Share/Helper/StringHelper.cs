@@ -1,12 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
 namespace ET
 {
+	/// <summary>
+	/// 字符串与集合格式化辅助扩展工具类。
+	/// </summary>
 	public static class StringHelper
 	{
+		/// <summary>
+		/// 将字符串的首字母转换为大写并返回新字符串。
+		/// </summary>
 		public static string CapitalizeFirstLetter(string input)
 		{
 			if (string.IsNullOrEmpty(input))
@@ -17,24 +23,36 @@ namespace ET
 			return s1.ToUpper() + s2;
 		}
 		
+		/// <summary>
+		/// 使用系统默认编码将字符串编码为字节序列。
+		/// </summary>
 		public static IEnumerable<byte> ToBytes(this string str)
 		{
 			byte[] byteArray = Encoding.Default.GetBytes(str);
 			return byteArray;
 		}
 
+		/// <summary>
+		/// 使用系统默认编码将字符串编码为字节数组。
+		/// </summary>
 		public static byte[] ToByteArray(this string str)
 		{
 			byte[] byteArray = Encoding.Default.GetBytes(str);
 			return byteArray;
 		}
 
+		/// <summary>
+		/// 使用 UTF-8 编码将字符串编码为字节数组。
+		/// </summary>
 	    public static byte[] ToUtf8(this string str)
 	    {
             byte[] byteArray = Encoding.UTF8.GetBytes(str);
             return byteArray;
         }
 
+		/// <summary>
+		/// 将偶数长度的十六进制字符串（如 <c>"0A1F"</c>）还原为对应的字节数组。
+		/// </summary>
 		public static byte[] HexToBytes(this string hexString)
 		{
 			if (hexString.Length % 2 != 0)
@@ -53,11 +71,17 @@ namespace ET
 			return hexAsBytes;
 		}
 
+		/// <summary>
+		/// <see cref="string.Format(string, object[])"/> 的链式扩展方法简写。
+		/// </summary>
 		public static string Fmt(this string text, params object[] args)
 		{
 			return string.Format(text, args);
 		}
 
+		/// <summary>
+		/// 将列表中的所有元素用英文逗号拼接为字符串。
+		/// </summary>
 		public static string ListToString<T>(this List<T> list)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -69,6 +93,9 @@ namespace ET
 			return sb.ToString();
 		}
 		
+		/// <summary>
+		/// 将数组格式化为形如 <c>" [a, b, c]"</c> 的可读字符串。
+		/// </summary>
 		public static string ArrayToString<T>(this T[] args)
 		{
 			if (args == null)
@@ -90,6 +117,9 @@ namespace ET
 			return argStr;
 		}
         
+		/// <summary>
+		/// 将数组的指定切片范围格式化为形如 <c>" [a, b, c]"</c> 的可读字符串。
+		/// </summary>
 		public static string ArrayToString<T>(this T[] args, int index, int count)
 		{
 			if (args == null)

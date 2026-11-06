@@ -4,9 +4,15 @@ using CommandLine;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 控制台移除指定账号机器人命令（<see cref="ConsoleMode.RemoveRobot"/>）处理器
+    /// </summary>
     [ConsoleHandler(ConsoleMode.RemoveRobot)]
     public class RemoveRobotConsoleHandler: IConsoleHandler
     {
+        /// <summary>
+        /// 解析命令行参数 <see cref="RemoveRobotArgs"/>，查找目标机器人纤程并发送 <see cref="Console2Robot_LogoutRequest"/> 使其登出下线
+        /// </summary>
         public async ETTask Run(Fiber fiber, ModeContex contex, string content)
         {
             EntityRef<ModeContex> contexRef = contex;

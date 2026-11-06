@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 登录服（SceneType.Realm）纤程初始化回调：启动外网监听端口、注册服务发现并订阅同区（Zone）的 Gate 服务列表。
+    /// </summary>
     [Invoke(SceneType.Realm)]
     public class FiberInit_Realm: AInvokeHandler<FiberInit, ETTask>
     {

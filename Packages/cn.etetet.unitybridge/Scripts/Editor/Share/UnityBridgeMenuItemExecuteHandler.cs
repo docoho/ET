@@ -2,6 +2,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 执行指定路径 Unity Editor 菜单项（EditorApplication.ExecuteMenuItem）的命令处理器（MenuItemExecute）。
+    /// </summary>
     internal sealed class UnityBridgeMenuItemExecuteHandler : AUnityBridgeHandler<MenuItemExecuteRequest, MenuItemExecuteResponse>
     {
         protected override async ETTask<IResponse> Run(MenuItemExecuteRequest command)

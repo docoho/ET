@@ -5,8 +5,14 @@ using ET.Server;
 
 namespace ET.Test
 {
+    /// <summary>
+    /// 测试专用隔离 Fiber 作用域（实现 IAsyncDisposable），为每个测试用例自动分配独立 Zone 与数据库配置，并在 await using 结束时自动销毁测试 Fiber。
+    /// </summary>
     public struct TestFiberScope : IAsyncDisposable
     {
+        /// <summary>
+        /// 当前测试用例创建的隔离 Fiber 实例
+        /// </summary>
         public Fiber TestFiber { get; private set; }
         private readonly Fiber fiber;
 
@@ -16,6 +22,9 @@ namespace ET.Test
             this.TestFiber = null;
         }
 
+        /// <summary>
+        /// 分配独立测试区服（Zone）、准备 StartZoneConfig 模板，并异步创建指定场景类型的隔离测试 Fiber
+        /// </summary>
         public static async ETTask<TestFiberScope> Create(Fiber fiber, int sceneType, string testName)
         {
             TestFiberScope scope = new(fiber);

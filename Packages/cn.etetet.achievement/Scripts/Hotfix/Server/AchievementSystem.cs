@@ -2,9 +2,17 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端单个成就实体系统，负责成就实体的初始化、状态查询、进度增减及前置成就检查
+    /// </summary>
     [EntitySystemOf(typeof(Achievement))]
     public static partial class AchievementSystem
     {
+        /// <summary>
+        /// 初始化成就实体，设置配置 ID 并将状态置为进行中
+        /// </summary>
+        /// <param name="self">成就实体实例</param>
+        /// <param name="configId">成就配置 ID</param>
         [EntitySystem]
         private static void Awake(this Achievement self, int configId)
         {

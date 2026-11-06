@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 行为树配置代码导出器，将编辑器中的 SpellConfigCategory 和 BuffConfigCategory 直接生成为纯 C# 字典工厂代码（CodeMode），避免运行时反序列化开销。
+    /// </summary>
     public static class BTConfigCodeExporter
     {
         private const string DefaultConfigGroup = ConfigGroupNames.Config;

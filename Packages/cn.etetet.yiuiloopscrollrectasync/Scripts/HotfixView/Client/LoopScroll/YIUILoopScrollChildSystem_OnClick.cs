@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +7,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— 列表项单选/复选点击逻辑、自动取消旧选中及点击前校验（OnClickCheck）分部类。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     [FriendOf(typeof(YIUILoopScrollChild))]

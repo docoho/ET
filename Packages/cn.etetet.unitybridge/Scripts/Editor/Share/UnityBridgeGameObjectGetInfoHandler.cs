@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取场景中指定 GameObject 的详细属性、Transform、组件列表及直接子节点名称的命令处理器（GameObjectGetInfo）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectGetInfoHandler : AUnityBridgeHandler<GameObjectGetInfoRequest, GameObjectGetInfoResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectGetInfoRequest command)

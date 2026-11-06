@@ -1,14 +1,31 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace ET
 {
+	/// <summary>
+	/// TCP 流式数据包解析状态机枚举。
+	/// </summary>
 	public enum ParserState
 	{
+		/// <summary>
+		/// 等待读取包头长度字段（外网 2 字节，内网 4 字节）。
+		/// </summary>
 		PacketSize,
+		/// <summary>
+		/// 已读出包长，正在等待接收完整的包体载荷字节。
+		/// </summary>
 		PacketBody
 	}
 
+	/// <summary>
+	/// TCP 粘包与半包流式解析器，配合 <see cref="CircularBuffer"/> 将连续的 TCP 字节流切分为一个个完整的 <see cref="MemoryBuffer"/> 消息包。
+	/// <remarks>
+	/// 长度前缀规则：
+	/// - 内网（<see cref="ServiceType.Inner"/>）：4 字节 <see cref="int"/> 包长前缀（最大允许 <c>ushort.MaxValue * 16</c> 即约 1MB）；
+	/// - 外网（<see cref="ServiceType.Outer"/>）：2 字节 <see cref="ushort"/> 包长前缀（最大允许 65535 字节）。
+	/// </remarks>
+	/// </summary>
 	public class PacketParser
 	{
 		private readonly CircularBuffer buffer;
@@ -16,7 +33,13 @@ namespace ET
 		private ParserState state;
 		private readonly AService service;
 		private readonly byte[] cache = new byte[8];
+		/// <summary>
+		/// 内网 TCP 消息包头长度字段字节数（4 字节 int）。
+		/// </summary>
 		public const int InnerPacketSizeLength = 4;
+		/// <summary>
+		/// 外网 TCP 消息包头长度字段字节数（2 字节 ushort）。
+		/// </summary>
 		public const int OuterPacketSizeLength = 2;
 		public MemoryBuffer MemoryBuffer;
 
@@ -26,6 +49,9 @@ namespace ET
 			this.service = service;
 		}
 
+		/// <summary>
+		/// 尝试从 <see cref="CircularBuffer"/> 中解析出一个完整的数据包；若当前可读字节不足以构成完整包则返回 <c>false</c> 等待后续数据到达。
+		/// </summary>
 		public bool Parse(out MemoryBuffer memoryBuffer)
 		{
 			while (true)

@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 怪物追击与攻击异步协程处理器：每 200ms 锁定最高仇恨目标，根据技能施法距离自动追击或后退，并在进入射程后自动释放技能。
+    /// </summary>
     public class AI_MonsterZhuiJiHandler: ABTCoroutineHandler<AI_MonsterZhuiJi>
     {
         protected override async ETTask RunAsync(AI_MonsterZhuiJi node, BTEnv env)

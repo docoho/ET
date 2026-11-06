@@ -1,7 +1,7 @@
 namespace ET
 {
     /// <summary>
-    /// 装备槽位类型
+    /// 装备穿戴部位槽位类型枚举
     /// </summary>
     public enum EquipmentSlotType
     {

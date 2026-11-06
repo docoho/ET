@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -9,10 +9,16 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 单个包的版本管理视图数据模型（包含当前版本、远端最新版本、大中小版本号调节按钮及正反向依赖列表）
+    /// </summary>
     [Serializable]
     [HideReferenceObjectPicker]
     public class PackageVersionData
     {
+        /// <summary>
+        /// 包名称（如 cn.etetet.core）
+        /// </summary>
         [ReadOnly]
         [HideLabel]
         [VerticalGroup("信息")]

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using YIUIFramework;
 
 namespace ET.Client
 {
     /// <summary>
+    /// 红点运行时可视化调试面板实体，持有节点搜索滚动列表与变更堆栈滚动列表引用。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/XzyawmryHitNVNk9QVtcDAftn5O
     /// </summary>
     public partial class RedDotPanelComponent : Entity,

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 导入指定路径资源的延迟命令处理器（AssetImport），支持跨脚本编译重导入并等待导入完成。
+    /// </summary>
     internal sealed class UnityBridgeAssetImportHandler : AUnityBridgeDeferredHandler<AssetImportRequest, AssetImportResponse>
     {
         protected override async ETTask<AssetImportResponse> Run(AssetImportRequest command, UnityBridgeDeferredContext deferred)

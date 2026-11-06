@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 条件表达式词法分析器，将原始表达式字符串切分为标识符、数字（含负数）、比较符、逻辑运算符（&&、||、!）及括号/冒号/逗号 Token 流。
+    /// </summary>
     [EnableClass]
     public class ConditionExprLexer
     {
@@ -15,6 +18,9 @@ namespace ET
             this.expr = expr ?? string.Empty;
         }
 
+        /// <summary>
+        /// 扫描整个表达式字符串并生成以 ConditionTokenType.End 结尾的词法单元列表。
+        /// </summary>
         public List<ConditionToken> Tokenize()
         {
             while (this.index < this.expr.Length)

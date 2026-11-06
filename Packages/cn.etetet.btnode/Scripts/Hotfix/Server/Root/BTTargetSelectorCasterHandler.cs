@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端选择施法者自身作为唯一技能目标的目标选择器处理器。
+    /// </summary>
     public class BTTargetSelectorCasterHandler: ABTHandler<TargetSelectorCaster>
     {
         protected override int Run(TargetSelectorCaster node, BTEnv env)

@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// Odin 菜单树节点包装抽象基类（支持首次选中时延迟初始化模块）
+    /// </summary>
     [HideReferenceObjectPicker]
     public abstract class BaseTreeMenuItem : BasePackageToolModule
     {
@@ -37,6 +40,9 @@ namespace ET.PackageManager.Editor
         protected abstract void Select();
     }
 
+    /// <summary>
+    /// 泛型 Odin 菜单树节点实现类（负责在首次点击菜单时按需实例化并初始化对应的功能模块 T）
+    /// </summary>
     [HideReferenceObjectPicker]
     public class TreeMenuItem<T> : BaseTreeMenuItem where T : BasePackageToolModule, new()
     {

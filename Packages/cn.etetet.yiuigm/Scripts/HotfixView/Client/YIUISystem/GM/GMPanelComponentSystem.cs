@@ -6,9 +6,15 @@ using UnityEngine.EventSystems;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM主悬浮面板组件系统，负责悬浮按钮拖拽限位、坐标持久化及快捷键开关GM主视图。
+    /// </summary>
     [FriendOf(typeof(GMPanelComponent))]
     public static partial class GMPanelComponentSystem
     {
+        /// <summary>
+        /// YIUI初始化生命周期，读取配置的GM面板呼出快捷键。
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this GMPanelComponent self)
         {

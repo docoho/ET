@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 遍历目标单位列表装饰节点处理器，依次从黑板的 Units 集合中取出每个 Unit 实体写入黑板并驱动所有子节点执行。
+    /// </summary>
     public class BTForeachUnitHandler: ABTHandler<BTForeachUnit>
     {
         protected override int Run(BTForeachUnit node, BTEnv env)

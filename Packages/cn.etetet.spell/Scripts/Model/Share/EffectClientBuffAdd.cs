@@ -1,7 +1,10 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 客户端 Buff 添加时触发的行为树根节点，通常用于播放技能动作、受击特效或音效。
+    /// </summary>
     //[LabelText("添加Buff效果 (客户端)")]
     //[HideReferenceObjectPicker]
     public class EffectClientBuffAdd: EffectNode

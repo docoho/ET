@@ -6,6 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// Model / ModelView 程序集禁止声明普通非实体类分析器（ET0032）。
+    /// <para>在数据模型层程序集中，要求所有非静态类必须继承自带有 <c>[EnableClass]</c> 的框架基类（如 <c>Object</c>、<c>Entity</c>、<c>ASingleton</c> 等）或自身显式标记 <c>[EnableClass]</c>，以保证 ECS 架构纯粹性。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DisableNormalClassDeclaratonInModelAssemblyAnalyzer : DiagnosticAnalyzer
     {

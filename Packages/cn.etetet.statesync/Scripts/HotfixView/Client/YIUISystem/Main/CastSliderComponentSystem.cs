@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.8
-    /// Desc
+    /// Desc    技能施法/引导读条（CastSlider）UI 组件系统，监听 <see cref="BTEvent_ShowCastSlider"/> 事件并在每帧刷新读条进度
     /// </summary>
     public static partial class CastSliderComponentSystem
     {
+        /// <summary>
+        /// 初始化读条组件，绑定本地玩家单位并默认隐藏读条
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this CastSliderComponent self)
         {

@@ -8,11 +8,17 @@ namespace ET.Server
     /// </summary>
     public static class ServiceDiscoveryHelper
     {
+        /// <summary>
+        /// 深拷贝一份元数据键值字典（<see cref="StringKV"/>）。
+        /// </summary>
         public static StringKV CloneMetadata(StringKV metadata)
         {
             return metadata == null ? new StringKV() : new StringKV(metadata);
         }
 
+        /// <summary>
+        /// 将源元数据字典中的所有键值对复制到目标字典中（先清空目标字典）。
+        /// </summary>
         public static void CopyMetadata(StringKV source, StringKV target)
         {
             if (target == null)
@@ -32,6 +38,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 创建并填充一个网络传输用的 <see cref="ServiceInfoProto"/> 对象。
+        /// </summary>
         public static ServiceInfoProto CreateServiceInfoProto(string sceneName, ActorId actorId, StringKV metadata)
         {
             ServiceInfoProto proto = ServiceInfoProto.Create();
@@ -41,11 +50,17 @@ namespace ET.Server
             return proto;
         }
 
+        /// <summary>
+        /// 判断已有 <see cref="ServiceInfo"/> 实体与给定的 ActorId 及元数据是否完全一致。
+        /// </summary>
         public static bool IsSameService(ServiceInfo serviceInfo, ActorId actorId, StringKV metadata)
         {
             return serviceInfo != null && IsSameService(serviceInfo.ActorId, serviceInfo.Metadata, actorId, metadata);
         }
 
+        /// <summary>
+        /// 判断两组服务的 ActorId 与元数据键值对集合是否完全相等。
+        /// </summary>
         public static bool IsSameService(ActorId oldActorId, StringKV oldMetadata, ActorId newActorId, StringKV newMetadata)
         {
             if (oldActorId != newActorId)
@@ -81,6 +96,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 校验必填字符串参数是否非空白。
+        /// </summary>
         public static bool TryValidateRequiredText(string value, string requestName, string fieldName, out string errorMessage)
         {
             errorMessage = null;
@@ -93,6 +111,9 @@ namespace ET.Server
             return false;
         }
 
+        /// <summary>
+        /// 校验必填 <see cref="ActorId"/> 参数是否非默认值。
+        /// </summary>
         public static bool TryValidateRequiredActorId(ActorId actorId, string requestName, string fieldName, out string errorMessage)
         {
             errorMessage = null;
@@ -105,6 +126,9 @@ namespace ET.Server
             return false;
         }
 
+        /// <summary>
+        /// 校验元数据字典中是否不包含空 Key 或 null Value。
+        /// </summary>
         public static bool TryValidateMetadataMap(StringKV metadata, string requestName, string fieldName, out string errorMessage)
         {
             errorMessage = null;
@@ -131,6 +155,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 校验 Agent 全量注册上报的本进程服务列表是否合法（SceneName 与 ActorId 非空，且服务进程地址与 Agent 进程地址一致）。
+        /// </summary>
         public static bool TryValidateAgentLocalServices(List<ServiceInfoProto> localServices, ActorId agentActorId,
             string requestName, out string errorMessage)
         {
@@ -163,6 +190,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 判断目标服务的元数据是否满足过滤条件（支持逗号分隔的多值或匹配，所有 Key 之间为与关系）。
+        /// </summary>
         public static bool MatchesMetadataFilter(StringKV metadata, StringKV filterMetadata)
         {
             if (filterMetadata == null || filterMetadata.Count == 0)
@@ -196,6 +226,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 重置重试计数、熔断截止时间与下次重试时间。
+        /// </summary>
         public static void ResetRetryState(ref int failureCount, ref long circuitOpenUntil, ref long nextRetryTime)
         {
             failureCount = 0;
@@ -203,6 +236,9 @@ namespace ET.Server
             nextRetryTime = 0;
         }
 
+        /// <summary>
+        /// 记录一次失败重试，计算下次指数退避时间，并在连续失败达到阈值时开启熔断器。
+        /// </summary>
         public static bool RecordRetryFailure(ref int failureCount, ref long circuitOpenUntil, ref long nextRetryTime,
             int circuitThreshold, long circuitOpenDuration, long baseBackoff, long maxBackoff, long now)
         {
@@ -218,6 +254,9 @@ namespace ET.Server
             return false;
         }
 
+        /// <summary>
+        /// 根据失败次数计算指数退避时长（不超过 <paramref name="maxBackoff"/>）。
+        /// </summary>
         public static long GetRetryBackoff(int failureCount, long baseBackoff, long maxBackoff)
         {
             baseBackoff = baseBackoff > 0 ? baseBackoff : 100;
@@ -239,6 +278,9 @@ namespace ET.Server
             return backoff > maxBackoff ? maxBackoff : backoff;
         }
 
+        /// <summary>
+        /// 获取单调递增的服务端时间戳（防止系统时钟回拨导致租约、心跳或重试计时器倒退）。
+        /// </summary>
         public static long GetMonotonicNow(Scene scene, string traceName, ref long lastRawNow, ref long monotonicNow)
         {
             long rawNow = scene.GetSingleton<TimeInfo>().ServerNow();
@@ -261,6 +303,9 @@ namespace ET.Server
             return monotonicNow;
         }
 
+        /// <summary>
+        /// 将服务的指定索引字段（如 SceneType、Zone）加入二级倒排索引表。
+        /// </summary>
         public static void AddToIndexes(Dictionary<string, MultiMapSet<string, string>> servicesIndexs, string[] indexs, string sceneName,
             StringKV metadata)
         {
@@ -286,6 +331,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 将服务从二级倒排索引表中移除。
+        /// </summary>
         public static void RemoveFromIndexes(Dictionary<string, MultiMapSet<string, string>> servicesIndexs, string[] indexs,
             string sceneName, StringKV metadata)
         {
@@ -308,6 +356,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 从本地服务字典与二级索引表中移除并销毁指定名称的 <see cref="ServiceInfo"/> 实体。
+        /// </summary>
         public static bool RemoveLocalServiceCache(Dictionary<string, EntityRef<ServiceInfo>> sceneNameServices,
             Dictionary<string, MultiMapSet<string, string>> servicesIndexs, string[] indexs, string sceneName)
         {
@@ -461,6 +512,9 @@ namespace ET.Server
             return serviceInfos;
         }
 
+        /// <summary>
+        /// 判断单个元数据字段的实际值是否匹配期望值（支持逗号分隔的多值或匹配）。
+        /// </summary>
         private static bool IsMetadataValueMatched(string actualValue, string expectValue)
         {
             if (!expectValue.Contains(','))
@@ -480,6 +534,9 @@ namespace ET.Server
             return false;
         }
 
+        /// <summary>
+        /// 判断指定的元数据 Key 是否配置在二级索引字段数组中。
+        /// </summary>
         private static bool ShouldIndex(string[] indexs, string key)
         {
             return !string.IsNullOrEmpty(key) && Array.IndexOf(indexs, key) >= 0;

@@ -16,6 +16,9 @@ namespace ET
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class CoroutineLockAnalyzer : DiagnosticAnalyzer
     {
+        /// <summary>
+        /// 支持的诊断规则列表：禁止 using CoroutineLock（ET0034）与禁止手动调用 CoroutineLock.Dispose（ET0035）。
+        /// </summary>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 CoroutineLockUsingAnalyzerRule.Rule,

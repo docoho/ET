@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// Odin编辑器中单条红点关系配置的视图模型（负责实时校验自引用、重复父节点及间接递归环路）。
+    /// </summary>
     [Serializable]
     [HideLabel]
     [HideReferenceObjectPicker]

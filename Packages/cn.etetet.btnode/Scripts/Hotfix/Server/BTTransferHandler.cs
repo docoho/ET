@@ -1,5 +1,8 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端跨地图传送节点处理器，根据配置的 TransferId 查询传送规则并触发目标 Unit 的异步跨服/跨场景传送。
+    /// </summary>
     public class BTTransferHandler: ABTHandler<BTTransfer>
     {
         protected override int Run(BTTransfer node, BTEnv env)

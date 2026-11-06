@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -6,18 +6,42 @@ using System.Net.Sockets;
 
 namespace ET
 {
+	/// <summary>
+	/// 基于 KCP 可靠 UDP 协议的网络通道实现。
+	/// <remarks>
+	/// 核心职责：
+	/// 1. 维护单条 KCP 连接的握手（每 300ms 重发 <c>SYN</c> 直至收到 <c>ACK</c> 或超时）、状态机更新（<see cref="Kcp.Update"/> / <see cref="Kcp.Check"/>）与断开通知（<c>FIN</c>）；
+	/// 2. 支持针对外网（<see cref="ServiceType.Outer"/>，较小窗口与 MTU=470 降低丢包重传代价）与内网（<see cref="ServiceType.Inner"/>，大窗口 1024 与 MTU=1400 提升吞吐）差异化调优 KCP 参数；
+	/// 3. 实现超过 <see cref="MaxKcpMessageSize"/>（10000 字节）的超大消息应用层自动分片发送与接收重组。
+	/// </remarks>
+	/// </summary>
 	public class KChannel : AChannel
 	{
+		/// <summary>
+		/// 单次送入底层 KCP 的最大消息分片字节数（超出此大小时由 <see cref="KChannel"/> 先发送 8 字节分片头再分段写入 KCP）。
+		/// </summary>
 		private const int MaxKcpMessageSize = 10000;
 		
 		private readonly KService Service;
 
+		/// <summary>
+		/// 底层纯 C# KCP 协议状态机实例。
+		/// </summary>
 		private Kcp kcp { get; set; }
 
+		/// <summary>
+		/// 连接握手尚未完成（<see cref="IsConnected"/> == false）期间暂存的待发送消息队列。
+		/// </summary>
 		private readonly Queue<MemoryBuffer> waitSendMessages = new();
 		
+		/// <summary>
+		/// 通道创建时的相对时间戳（毫秒，相对于 <see cref="KService.TimeNow"/>）。
+		/// </summary>
 		public readonly uint CreateTime;
 
+		/// <summary>
+		/// 本端 KCP 连接号（即 <c>(uint)this.Id</c>）。
+		/// </summary>
 		public uint LocalConn
 		{
 			get
@@ -30,17 +54,35 @@ namespace ET
 			}
 		}
 		
+		/// <summary>
+		/// 远端 KCP 连接号（握手成功后确定，用于防伪造包校验及底层 KCP 会话标识）。
+		/// </summary>
 		public uint RemoteConn { get; set; }
 
 		private readonly byte[] sendCache = new byte[2 * 1024];
 		
+		/// <summary>
+		/// 标记当前 KCP 通道是否已完成握手并建立连接。
+		/// </summary>
 		public bool IsConnected { get; set; }
 
+		/// <summary>
+		/// 客户端真实 IP 地址字符串（经过 Router 转发时由 SYN 包携带透传）。
+		/// </summary>
 		public string RealAddress { get; set; }
 		
+		/// <summary>
+		/// 正在接收组装中的消息内存缓冲区（大包分片接收时跨多次 Receive 持续写入）。
+		/// </summary>
 		private MemoryBuffer readMemory;
+		/// <summary>
+		/// 当前大包分片还剩余多少字节尚未接收完毕（0 表示当前未处于分片重组状态）。
+		/// </summary>
 		private int needReadSplitCount;
 
+		/// <summary>
+		/// 根据内网/外网服务类型初始化 KCP 的极速模式、窗口大小、MTU 和最小 RTO。
+		/// </summary>
 		private void InitKcp()
 		{
 			switch (this.Service.ServiceType)
@@ -62,6 +104,9 @@ namespace ET
 		}
 		
 		// connect
+		/// <summary>
+		/// 构造主动发起连接的客户端 KCP 通道，并立即发送首包 SYN 握手请求。
+		/// </summary>
 		public KChannel(uint localConn, IPEndPoint remoteEndPoint, KService kService)
 		{
 			this.Service = kService;
@@ -79,6 +124,9 @@ namespace ET
 		}
 
 		// accept
+		/// <summary>
+		/// 构造服务端收到 SYN 后被动接受的 KCP 通道。
+		/// </summary>
 		public KChannel(uint localConn, uint remoteConn, IPEndPoint remoteEndPoint, KService kService)
 		{
 			this.Service = kService;

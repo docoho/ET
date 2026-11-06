@@ -1,5 +1,8 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 判断单位当前是否存在仇恨目标的条件节点处理器。
+    /// </summary>
     public class BTHasThreatHandler: ABTHandler<BTHasThreat>
     {
         protected override int Run(BTHasThreat node, BTEnv env)

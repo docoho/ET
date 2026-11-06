@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端全局按键操作组件系统：支持按下 R 键触发热更代码重载（CodeLoader.Instance.Reload）。
+    /// </summary>
     [EntitySystemOf(typeof(OperaComponent))]
     public static partial class OperaComponentSystem
     {

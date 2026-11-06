@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,8 +7,14 @@ namespace ET.PackageManager.Editor
     //为了防止其他包的按钮可能改名字等操作 这里需要使用前深度检查
     //因为这个管理包 不可能每次其他包更新都去检查一下 万一哪天没检查到不就BUG了
     //所以这哪里必须要做好防护措施
+    /// <summary>
+    /// 集中调用 ET 各模块菜单项命令的辅助类（用于在安装/移除/更新/创建包后自动触发依赖修复、工程文件与程序集引用重生成、Proto 导出等流程）
+    /// </summary>
     public static class PackageExecuteMenuItemHelper
     {
+        /// <summary>
+        /// 按固定顺序依次执行所有包变更后的刷新与重生成菜单命令
+        /// </summary>
         public static void ETAll()
         {
             //有顺序的 别乱动

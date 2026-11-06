@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 按名称、Tag、挂载组件类型及激活状态检索场景中 GameObject 列表的命令处理器（GameObjectFind）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectFindHandler : AUnityBridgeHandler<GameObjectFindRequest, GameObjectFindResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectFindRequest command)

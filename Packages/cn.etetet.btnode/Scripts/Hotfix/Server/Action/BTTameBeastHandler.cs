@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端驯服野兽节点处理器：将目标怪物转为施法者的宠物（UnitType.Pet），清空其仇恨与目标，并为其挂载宠物 AI Buff。
+    /// </summary>
     public class BTTameBeastHandler: ABTHandler<BTTameBeast>
     {
         protected override int Run(BTTameBeast node, BTEnv env)

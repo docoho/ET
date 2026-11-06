@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.IO;
 using Sirenix.OdinInspector;
@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 包更新模块面板
+    /// </summary>
     [ETPackageMenu("更新")]
     public class ETPackageUpdateModule : BasePackageToolModule
     {

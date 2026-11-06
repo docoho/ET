@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 新包 Runtime 程序集被哪些 ET 核心程序集（Hotfix / HotfixView / Model / ModelView）引用的位枚举
+    /// </summary>
     [Flags]
     public enum EPackageRuntimeRefType
     {

@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端主纤程处理网络纤程（NetClient）发来的 Session 断开通知。
+    /// </summary>
     [MessageHandler(SceneType.All)]
     public class NetClient2Main_SessionDisposeHandler: MessageHandler<Scene, NetClient2Main_SessionDispose>
     {

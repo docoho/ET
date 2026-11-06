@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务发现中心（<see cref="SceneType.ServiceDiscovery"/>）处理进程级 Agent 全量注册请求（<see cref="ServiceAgentRegisterRequest"/>）的处理器。
+    /// 先执行带 Fencing 强校验的主节点续租确认，再将该进程的所有本地服务合并写入内存，并返回全网服务快照。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscovery)]
     public class ServiceAgentRegisterRequestHandler : MessageHandler<Scene, ServiceAgentRegisterRequest, ServiceAgentRegisterResponse>
     {
@@ -68,6 +72,9 @@ namespace ET.Server
         }
     }
 
+    /// <summary>
+    /// 服务发现中心（<see cref="SceneType.ServiceDiscovery"/>）处理进程级 Agent 心跳请求（<see cref="ServiceHeartbeatRequest"/>）的处理器。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscovery)]
     public class ServiceHeartbeatRequestHandler : MessageHandler<Scene, ServiceHeartbeatRequest, ServiceHeartbeatResponse>
     {

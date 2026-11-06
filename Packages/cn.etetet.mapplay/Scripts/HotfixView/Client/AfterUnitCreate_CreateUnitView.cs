@@ -1,8 +1,11 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端 Unit 逻辑实体创建完成后的表现层事件处理器：异步加载并实例化角色 GameObject，挂载动画组件；若为主角则挂载相机与输入控制组件，否则创建头顶血条 UI。
+    /// </summary>
     [Event(SceneType.Current)]
     public class AfterUnitCreate_CreateUnitView: AEvent<Scene, AfterUnitCreate>
     {

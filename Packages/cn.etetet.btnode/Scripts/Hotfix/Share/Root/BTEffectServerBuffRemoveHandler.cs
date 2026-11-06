@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// 服务端 Buff 移除效果根节点（EffectServerBuffRemove）处理器，顺序驱动其子节点执行。
+    /// </summary>
     public class BTEffectServerBuffRemoveHandler: ABTHandler<EffectServerBuffRemove>
     {
         protected override int Run(EffectServerBuffRemove node, BTEnv env)

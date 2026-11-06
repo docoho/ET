@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// Unity 生成 C# 项目文件（<c>.csproj</c>）与解决方案文件（<c>.sln</c>）时的自定义后处理器。
+    /// 负责为 <c>ET.Model</c>、<c>ET.Config</c>、<c>ET.Hotfix</c>、<c>ET.ModelView</c>、<c>ET.HotfixView</c> 注入编译后自动拷贝（<c>AfterBuild</c> Target）逻辑，
+    /// 使开发者在 IDE 中直接点击构建后就能自动更新 <see cref="Define.CodeDir"/> 和 <see cref="Define.BuildOutputDir"/> 下的热更程序集。
+    /// </summary>
     public class OnGenerateCSProjectProcessor: AssetPostprocessor
     {
         /// <summary>

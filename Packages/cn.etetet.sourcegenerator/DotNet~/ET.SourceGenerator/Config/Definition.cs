@@ -1,19 +1,28 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// Roslyn 分析器与代码生成器中使用的类型全名、特性（Attribute）名称、接口名称及方法名称常量定义。
+    /// </summary>
     public static class Definition
     {
+        /// <summary>实体基类全名。</summary>
         public const string EntityType = "ET.Entity";
 
+        /// <summary>帧同步实体基类全名。</summary>
         public const string LSEntityType = "ET.LSEntity";
         
+        /// <summary>ET 异步任务类型简名。</summary>
         public const string ETTask = "ETTask";
 
+        /// <summary>ET 异步任务类型全名。</summary>
         public const string ETTaskFullName = "ET.ETTask";
 
+        /// <summary>实体添加子实体的标准方法名集合。</summary>
         public static readonly string[] AddChildMethods = { "AddChild", "AddChildWithId" };
 
+        /// <summary>实体添加或获取组件的标准方法名集合。</summary>
         public static readonly string[] ComponentMethod = {"AddComponent","GetComponent"};
 
         public const string ISystemType = "ET.ISystemType";

@@ -193,6 +193,9 @@ namespace ET.Server
             return null;
         }
 
+        /// <summary>
+        /// 校验槽位索引是否在合法容量范围内（[0, Capacity)）。
+        /// </summary>
         private static void EnsureSlotIndex(ItemComponent self, int slotIndex)
         {
             if (slotIndex < 0)
@@ -206,6 +209,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 确保 SlotItems 列表长度至少达到指定容量大小（不足时补齐空位）。
+        /// </summary>
         private static void EnsureSlotContainerSize(ItemComponent self, int size)
         {
             if (size <= 0)

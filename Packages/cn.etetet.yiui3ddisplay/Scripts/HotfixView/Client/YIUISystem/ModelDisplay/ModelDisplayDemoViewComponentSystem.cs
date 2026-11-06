@@ -1,12 +1,18 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 3D模型展示示例视图组件系统，演示如何初始化YIUI3DDisplayChild、异步加载模型及监听模型点击事件。
+    /// </summary>
     [FriendOf(typeof(ModelDisplayDemoViewComponent))]
     public static partial class ModelDisplayDemoViewComponentSystem
     {
+        /// <summary>
+        /// YIUI初始化生命周期，挂载YIUI3DDisplayChild扩展子实体。
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this ModelDisplayDemoViewComponent self)
         {

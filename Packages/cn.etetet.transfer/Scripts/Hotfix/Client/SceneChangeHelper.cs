@@ -1,7 +1,13 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端场景切换辅助类（负责销毁旧 CurrentScene、等待主角 Unit 创建、加载 Navmesh 数据以及派发切场景事件）。
+    /// </summary>
     public static partial class SceneChangeHelper
     {
+        /// <summary>
+        /// 客户端执行场景切换的主协程。
+        /// </summary>
         // 场景切换协程
         public static async ETTask SceneChangeTo(Scene root, long sceneId, string sceneName)
         {
@@ -35,6 +41,9 @@
             currentScenesComponent.Progress = 100;
         }
 
+        /// <summary>
+        /// 等待服务端发来 <see cref="M2C_CreateMyUnit"/> 消息并在新的 CurrentScene 中创建主角 Unit。
+        /// </summary>
         private static async ETTask WaitUnitCreateFinish(Scene root, Scene currentScene)
         {
             EntityRef<Scene> currentSceneRef = currentScene;

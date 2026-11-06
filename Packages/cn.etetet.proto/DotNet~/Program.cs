@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace ET
 {
+    /// <summary>
+    /// <c>ET.Proto2CS.dll</c> 协议导出命令行工具入口类。
+    /// 读取工程根目录下的 <c>MainPackage.txt</c>，调用 <see cref="Proto2CS.Export"/> 将目标包中的 <c>*.proto</c> 协议定义文件转换为 C# 消息类代码。
+    /// </summary>
     internal static class Program
     {
         private static int Main()
@@ -18,6 +22,7 @@ namespace ET
                     return 0;
                 }
 
+                // 读取主包与依赖包列表
                 string[] lines = File.ReadAllLines(mainPackagePath);
                 HashSet<string> packages = new HashSet<string>();
                 foreach (string line in lines)

@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// EventSystem面向指定Entity的YIUI快捷Invoke扩展方法（封装Sync/Async常用调用类型）。
+    /// </summary>
     public static class EventSystem_InvokeEntity_YIUIExtension
     {
         public static void YIUIInvokeEntity<A>(this EventSystem self, Entity entity, long invokeType, A args) where A : struct

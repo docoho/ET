@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace ET
 {
+    /// <summary>
+    /// 仅供内部 <see cref="ETVoid"/> 使用的编译器状态机构建器。
+    /// 当顶层 <c>.Coroutine()</c> 链条中抛出未捕获异常时，在此处的 <see cref="SetException"/> 统一转交给 <see cref="ETTask.ExceptionHandler"/> 打印错误日志。
+    /// </summary>
     internal struct AsyncETVoidMethodBuilder
     {
         private IStateMachineWrap iStateMachineWrap;

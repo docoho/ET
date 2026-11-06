@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端处理地图服广播的单位数值属性变更消息（M2C_NumericChange）。
+    /// </summary>
     [MessageHandler(SceneType.Current)]
     public class M2C_NumericChangeHandler: MessageHandler<Scene, M2C_NumericChange>
     {

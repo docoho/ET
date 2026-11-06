@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
 
@@ -7,6 +7,9 @@ namespace ET.Client
     //主要用于在GM包上测试功能
     //当前包没有强制引用GM包
     //如果没有引用GM包  请删除这个文件
+    /// <summary>
+    /// 测试普通消息弹窗的GM命令。
+    /// </summary>
     [GM(EGMType.Tips, 1, "弹窗测试-消息弹窗")]
     public class GM_TipsTest1 : IGMCommand
     {

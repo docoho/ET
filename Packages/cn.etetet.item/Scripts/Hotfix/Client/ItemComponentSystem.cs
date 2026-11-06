@@ -192,6 +192,9 @@ namespace ET.Client
 
         #region 私有方法
 
+        /// <summary>
+        /// 校验客户端背包槽位索引是否在合法容量范围内。
+        /// </summary>
         private static void EnsureSlotIndex(ItemComponent self, int slotIndex)
         {
             if (slotIndex < 0)
@@ -205,6 +208,9 @@ namespace ET.Client
             }
         }
 
+        /// <summary>
+        /// 确保客户端 SlotItems 列表长度至少达到指定容量大小。
+        /// </summary>
         private static void EnsureSlotContainerSize(ItemComponent self, int size)
         {
             if (size <= 0)

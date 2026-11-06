@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// 从当前 Buff（或其父技能 Buff）的 SpellTargetComponent 中获取首个选中的目标 Unit 并写入黑板的节点处理器。
+    /// </summary>
     public class BTGetSpellTargetUnitHandler: ABTHandler<BTGetSpellTargetUnit>
     {
         protected override int Run(BTGetSpellTargetUnit node, BTEnv env)

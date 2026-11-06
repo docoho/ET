@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Author: 亦亦
 // Mail: 379338943@qq.com
 // Data: 2023年2月12日
@@ -13,7 +13,7 @@ using UnityObject = UnityEngine.Object;
 namespace YIUIFramework
 {
     /// <summary>
-    /// 红点 管理器
+    /// 红点管理器（YIUISingleton核心实现，负责加载RedDotConfigAsset并构建完整红点DAG父子传播图）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/XzyawmryHitNVNk9QVtcDAftn5O
     /// </summary>
     [YIUISingleton(1000)]

@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 服务端启动运行模式枚举。
+    /// </summary>
     public enum DevelopMode
     {
         正式 = 0,
@@ -17,8 +20,16 @@ namespace ET
         压测 = 2,
     }
 
+    /// <summary>
+    /// 服务端命令行控制工具窗口（菜单项：<c>ET/Loader/ServerTools</c>）。
+    /// 提供在 Unity 编辑器内实时监控游戏服务端（<c>ET.App.dll</c>）与 MongoDB 运行状态、
+    /// 选择 <c>StartConfig</c> 环境配置、一键启动/停止单进程服务端或守护进程（Watcher），以及打开/清理服务端日志等功能。
+    /// </summary>
     public class ServerCommandLineEditor: EditorWindow
     {
+        /// <summary>
+        /// 打开服务端控制工具窗口。
+        /// </summary>
         [MenuItem("ET/Loader/ServerTools", false)]
         public static void ShowWindow()
         {
@@ -36,6 +47,9 @@ namespace ET
         private List<int> serverPids = new();
         private bool isMongoRunning;
 
+        /// <summary>
+        /// 窗口启用时扫描 <c>Packages/cn.etetet.startconfig/Luban</c> 下的所有启动配置子目录名称，并初始化服务运行状态检测。
+        /// </summary>
         public void OnEnable()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo("Packages/cn.etetet.startconfig/Luban");
@@ -55,11 +69,17 @@ namespace ET
             RefreshStatus();
         }
 
+        /// <summary>
+        /// 窗口关闭时保存“是否在独立终端窗口中启动”的用户偏好设置。
+        /// </summary>
         private void OnDisable()
         {
             EditorPrefs.SetBool("ET_ServerTools_OpenInTerminal", this.openInTerminal);
         }
 
+        /// <summary>
+        /// 编辑器每帧回调：每隔 1 秒自动刷新一次服务端进程与 MongoDB 端口存活状态。
+        /// </summary>
         private void Update()
         {
             if (EditorApplication.timeSinceStartup - lastCheckTime > 1.0f)
@@ -70,12 +90,18 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 刷新 MongoDB 与游戏服务端进程的运行状态。
+        /// </summary>
         private void RefreshStatus()
         {
             isMongoRunning = CheckMongoRunning();
             isServerRunning = CheckServerRunning(out serverPids);
         }
 
+        /// <summary>
+        /// 绘制服务端控制面板 GUI。
+        /// </summary>
         public void OnGUI()
         {
             GlobalConfig globalConfig = Resources.Load<GlobalConfig>("GlobalConfig");
@@ -162,6 +188,9 @@ namespace ET
             EditorGUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// 绘制顶部的游戏服务端与 MongoDB 运行状态指示区域。
+        /// </summary>
         private void DrawStatusSection()
         {
             EditorGUILayout.LabelField("服务运行状态", EditorStyles.boldLabel);
@@ -204,6 +233,9 @@ namespace ET
             EditorGUILayout.EndVertical();
         }
 
+        /// <summary>
+        /// 检测当前机器上是否有正在运行的 <c>Bin/ET.App.dll</c> 服务端进程，并返回其进程 PID 列表。
+        /// </summary>
         public static bool CheckServerRunning(out List<int> pids)
         {
             pids = new List<int>();
@@ -255,6 +287,9 @@ namespace ET
             return pids.Count > 0;
         }
 
+        /// <summary>
+        /// 停止所有正在运行的 <c>ET.App.dll</c> 服务端进程。
+        /// </summary>
         public static void StopServer()
         {
             try
@@ -287,6 +322,12 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 启动 <c>Bin/ET.App.dll</c> 服务端进程（支持在独立终端窗口或后台启动）。
+        /// </summary>
+        /// <param name="sceneName">启动场景名称（如 <c>AllServer</c> 或 <c>Watcher</c>）。</param>
+        /// <param name="startConfig">启动配置目录名称（如 <c>Localhost</c>）。</param>
+        /// <param name="openInTerminal">是否在操作系统独立终端窗口中运行。</param>
         private static void StartServer(string sceneName, string startConfig, bool openInTerminal)
         {
             if (CheckServerRunning(out var existingPids))
@@ -350,6 +391,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 获取 macOS / Linux 下 <c>dotnet</c> 可执行文件的绝对路径。
+        /// </summary>
         private static string GetDotNetPath()
         {
             if (File.Exists("/opt/homebrew/bin/dotnet"))
@@ -367,6 +411,9 @@ namespace ET
             return "dotnet";
         }
 
+        /// <summary>
+        /// 清空 <c>Logs/</c> 目录下的所有 <c>*.log</c> 服务端日志文件。
+        /// </summary>
         private static void ClearLogs()
         {
             if (!EditorUtility.DisplayDialog("确认", "确定要清空 Logs/ 目录下的日志文件吗？", "确定", "取消"))
@@ -399,6 +446,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 通过尝试建立 TCP 连接检测本地 MongoDB（默认 <c>127.0.0.1:27017</c>）是否正在运行。
+        /// </summary>
         private static bool CheckMongoRunning(string host = "127.0.0.1", int port = 27017)
         {
             try
@@ -418,6 +468,9 @@ namespace ET
             return false;
         }
 
+        /// <summary>
+        /// 启动本地 MongoDB 数据库服务。
+        /// </summary>
         private static void StartMongo()
         {
             if (CheckMongoRunning())

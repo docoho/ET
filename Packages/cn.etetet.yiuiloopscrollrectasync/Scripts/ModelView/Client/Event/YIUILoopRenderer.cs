@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// YIUI循环列表项数据渲染非泛型基础接口。
+    /// </summary>
     public interface IYIUILoopRenderer
     {
         /// <summary>
@@ -15,10 +18,16 @@ namespace ET.Client
         void Renderer(Entity self, Entity item, object data, int index, bool select);
     }
 
+    /// <summary>
+    /// YIUI循环列表项数据渲染泛型系统接口（T1:宿主UI组件，T2:列表项UI组件，T3:数据类型）。
+    /// </summary>
     public interface IYIUILoopRenderer<in T1, in T2, in T3> : ISystemType, IYIUILoopRenderer
     {
     }
 
+    /// <summary>
+    /// YIUI循环列表项数据渲染EntitySystem抽象基类。
+    /// </summary>
     [EntitySystem]
     public abstract class YIUILoopRendererSystem<T1, T2, T3, T4, T5> : SystemObject, IYIUILoopRenderer<T1, T2, T3>
             where T1 : Entity, IYIUIBind, IYIUIInitialize

@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
     //GM实例信息
+    /// <summary>
+    /// 单条GM命令的运行时描述与实例封装。
+    /// </summary>
     [EnableClass]
     public class GMCommandInfo
     {

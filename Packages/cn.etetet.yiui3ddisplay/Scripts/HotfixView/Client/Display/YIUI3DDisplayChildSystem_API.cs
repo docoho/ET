@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
@@ -6,12 +6,14 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（对外常用控制API部分：清除、旋转、位移、缩放、分辨率与相机获取）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
     {
-        //清除显示的对象
+        /// <summary>
+        /// 清除当前正在显示的3D对象并回收至隐藏状态。
+        /// </summary>
         public static void ClearShow(this YIUI3DDisplayChild self)
         {
             if (self.UI3DDisplay == null) return;

@@ -11,6 +11,9 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 技能与 Buff ScriptableObject 导出工具（快捷键 F3 导出 / F4 热重载），负责确保全局 TreeId 唯一、校验所有行为树节点的 [BTInput] 合法性，并调用 BTConfigCodeExporter 生成配置代码。
+    /// </summary>
     public static class ExportScriptableObjectEditor
     {
         [MenuItem("ET/Map/ExportScriptableObject _F3")]

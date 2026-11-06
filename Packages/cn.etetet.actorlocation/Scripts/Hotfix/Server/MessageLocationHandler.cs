@@ -2,8 +2,17 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 单向（实质带底层 ACK 确认）ActorLocation 消息处理器抽象基类（处理实现 <see cref="ILocationMessage"/> 的消息）。
+    /// 注意：虽然业务层以 Send 语义调用，但底层仍然继承自 <see cref="ILocationRequest"/> 并立即回复一个空的 <see cref="MessageResponse"/>，以便发送方确认目标实体确实存在（若不存在则可感知 <see cref="ErrorCode.ERR_NotFoundActor"/> 并重查 Location 重试）。
+    /// </summary>
+    /// <typeparam name="E">接收消息的目标实体类型（如 Unit）</typeparam>
+    /// <typeparam name="Message">消息类型</typeparam>
     public abstract class MessageLocationHandler<E, Message>: HandlerObject, IMHandler where E : Entity where Message : class, ILocationMessage
     {
+        /// <summary>
+        /// 供子类实现的业务逻辑处理方法。
+        /// </summary>
         protected abstract ETTask Run(E entity, Message message);
 
         public async ETTask Handle(Entity entity, long fromFiber, MessageObject actorMessage)
@@ -41,8 +50,18 @@ namespace ET.Server
     
     
     
+    /// <summary>
+    /// 双向 RPC ActorLocation 请求-响应处理器抽象基类（处理实现 <see cref="ILocationRequest"/> / <see cref="ILocationResponse"/> 的消息）。
+    /// 在执行完子类的 <see cref="Run"/> 方法后自动将 <typeparamref name="Response"/> 回发给调用方。
+    /// </summary>
+    /// <typeparam name="E">接收请求的目标实体类型</typeparam>
+    /// <typeparam name="Request">请求消息类型</typeparam>
+    /// <typeparam name="Response">响应消息类型</typeparam>
     public abstract class MessageLocationHandler<E, Request, Response>: HandlerObject, IMHandler where E : Entity where Request : MessageObject, ILocationRequest where Response : MessageObject, ILocationResponse
     {
+        /// <summary>
+        /// 供子类实现的业务请求处理方法。
+        /// </summary>
         protected abstract ETTask Run(E unit, Request request, Response response);
 
         public async ETTask Handle(Entity entity, long fromFiber, MessageObject actorMessage)

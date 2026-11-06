@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -6,15 +6,25 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET.Generator;
 
+/// <summary>
+/// 组件快捷获取扩展方法（<c>GetXxxComponent(this ParentEntity self)</c>）源码生成器。
+/// <para>扫描标记了 <c>[ComponentOf(typeof(ParentEntity))]</c> 的组件类，为对应的父实体生成强类型的 <c>Get{ComponentName}()</c> 扩展方法。</para>
+/// </summary>
 [Generator(LanguageNames.CSharp)]
 public class ETGetComponentGenerator : ISourceGenerator
 {
     
+    /// <summary>
+    /// 初始化源码生成器（当前默认未注册通知）。
+    /// </summary>
     public void Initialize(GeneratorInitializationContext context)
     {
         //context.RegisterForSyntaxNotifications(SyntaxContextReceiver.Create);
     }
 
+    /// <summary>
+    /// 根据按命名空间分组的 <c>[ComponentOf]</c> 元数据生成扩展方法源码文件。
+    /// </summary>
     public void Execute(GeneratorExecutionContext context)
     {
         if (context.SyntaxContextReceiver is not SyntaxContextReceiver receiver || receiver.ComponentOfDatas.Count==0 )

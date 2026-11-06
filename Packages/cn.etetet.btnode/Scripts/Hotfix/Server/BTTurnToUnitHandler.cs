@@ -1,7 +1,10 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端朝向目标单位节点处理器，使施法者水平旋转朝向目标 Unit 的当前位置。
+    /// </summary>
     public class BTTurnToUnitHandler: ABTHandler<BTTurnToUnit>
     {
         protected override int Run(BTTurnToUnit node, BTEnv env)

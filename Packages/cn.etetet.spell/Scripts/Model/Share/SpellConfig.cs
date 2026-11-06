@@ -6,6 +6,9 @@ using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能配置表管理单例，存储并管理所有通过 BSON 反序列化加载的 SpellConfig。
+    /// </summary>
     [ConfigProcess(ConfigType.Code)]
     public partial class SpellConfigCategory : Singleton<SpellConfigCategory>, IConfig
     {
@@ -64,6 +67,10 @@ namespace ET
         Channeling,
     }
 
+    /// <summary>
+    /// 单个主动技能的配置数据，包含技能基础信息、消耗行为树（CostNode）和目标选择行为树（TargetSelector）。
+    /// 技能释放成功后的具体效果由同 ID 的 BuffConfig 承载。
+    /// </summary>
     [Serializable]
     [HideReferenceObjectPicker]
     public partial class SpellConfig: Object

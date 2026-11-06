@@ -3,13 +3,16 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     /// <summary>
-    /// 成就帮助类
+    /// 服务端成就业务辅助类，提供直接推进各类成就进度、校验前置条件及计算完成率的工具方法
     /// </summary>
     public static class AchievementHelper
     {
         /// <summary>
         /// 直接处理击杀怪物成就逻辑
         /// </summary>
+        /// <param name="unit">玩家单位</param>
+        /// <param name="monsterId">被击杀怪物配置 ID</param>
+        /// <param name="count">击杀数量</param>
         public static void ProcessKillMonsterAchievement(Unit unit, int monsterId, int count = 1)
         {
             AchievementComponent achievementComponent = unit.GetComponent<AchievementComponent>();

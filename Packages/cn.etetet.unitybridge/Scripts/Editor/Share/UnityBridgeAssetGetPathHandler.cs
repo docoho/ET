@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 根据资源 GUID 查询工程路径及元数据的命令处理器（AssetGetPath）。
+    /// </summary>
     internal sealed class UnityBridgeAssetGetPathHandler : AUnityBridgeHandler<AssetGetPathRequest, AssetGetPathResponse>
     {
         protected override async ETTask<IResponse> Run(AssetGetPathRequest command)

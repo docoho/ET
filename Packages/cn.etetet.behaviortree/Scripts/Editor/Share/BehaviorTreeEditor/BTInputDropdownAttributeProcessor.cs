@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// [BTInput] 特性的 Odin 自定义属性绘制器，在行为树编辑器中收集上游节点提供的匹配类型的 [BTOutput] 键名并渲染为可搜索下拉框。
+    /// </summary>
     public sealed class BTInputDropdownAttributeProcessor : OdinAttributeDrawer<BTInput, string>
     {
         protected override void DrawPropertyLayout(GUIContent label)

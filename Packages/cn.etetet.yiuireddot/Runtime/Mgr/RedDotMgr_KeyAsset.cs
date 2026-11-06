@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 红点管理器 —— 红点枚举描述资产（RedDotKeyAsset）加载与查询分部类。
+    /// </summary>
     public partial class RedDotMgr
     {
         private const string RedDotKeyAssetName = "RedDotKeyAsset";

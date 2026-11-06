@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端指定点圆形范围目标选择器处理器，以 TargetComponent.Position 为圆心筛选半径内的目标单位并写入 SpellTargetComponent。
+    /// </summary>
     public class BTTargetSelectorCircleHandler : ABTHandler<TargetSelectorCircle>
     {
         protected override int Run(TargetSelectorCircle node, BTEnv env)

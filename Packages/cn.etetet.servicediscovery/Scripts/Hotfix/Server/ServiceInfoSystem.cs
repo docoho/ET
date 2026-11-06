@@ -4,11 +4,17 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     /// <summary>
-    /// 服务信息系统
+    /// 服务信息系统（管理单条已注册服务的场景名、ActorId、元数据及注册/心跳时间戳）。
     /// </summary>
     [EntitySystemOf(typeof(ServiceInfo))]
     public static partial class ServiceInfoSystem
     {
+        /// <summary>
+        /// 初始化服务信息实体。
+        /// </summary>
+        /// <param name="self">当前服务信息实体</param>
+        /// <param name="sceneName">服务场景名称</param>
+        /// <param name="actorId">服务场景的 ActorId</param>
         [EntitySystem]
         private static void Awake(this ServiceInfo self, string sceneName, ActorId actorId)
         {

@@ -1,7 +1,10 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 怪物脱战返程异步协程处理器：清空仇恨列表并寻路移动回出生点坐标。
+    /// </summary>
     public class AI_MonsterReturnHandler: ABTCoroutineHandler<AI_MonsterReturn>
     {
         protected override async ETTask RunAsync(AI_MonsterReturn node, BTEnv env)

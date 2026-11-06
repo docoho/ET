@@ -1,4 +1,4 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
 	/// <summary>
 	/// 客户端监视speed数值变化，改变血条值
@@ -6,6 +6,9 @@
 	[NumericWatcher(SceneType.Current, NumericType.Speed)]
 	public class NumericWatcher_Speed_ChangeMoveSpeed : INumericWatcher
 	{
+		/// <summary>
+		/// 当单位的 <see cref="NumericType.Speed"/> 变化时，实时更新 <see cref="MoveComponent"/> 的移动速度。
+		/// </summary>
 		public void Run(Unit unit, NumbericChange args)
 		{
 			unit.GetComponent<MoveComponent>().ChangeSpeed(args.New / 1000f);

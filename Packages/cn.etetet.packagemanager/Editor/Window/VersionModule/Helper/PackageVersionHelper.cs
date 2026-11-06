@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +7,21 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 包版本资产（PackageVersionAsset）加载、保存与正反向依赖图构建辅助类
+    /// </summary>
     public static class PackageVersionHelper
     {
+        /// <summary>
+        /// PackageVersionAsset 资源在项目中的存放路径
+        /// </summary>
         public const string ETPackageVersionAssetPath = PackageHelper.ETPackageAssetsFolderPath + "/PackageVersionAsset.asset";
 
         private static PackageVersionAsset m_PackageVersionAsset;
 
+        /// <summary>
+        /// 获取当前加载的包版本配置资产（未加载时自动加载或创建）
+        /// </summary>
         public static PackageVersionAsset PackageVersionAsset
         {
             get

@@ -2,6 +2,9 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// Location 场景处理实体位置移除请求（<see cref="ObjectRemoveRequest"/>）的处理器。
+    /// </summary>
     [MessageHandler(SceneType.Location)]
     public class ObjectRemoveRequestHandler: MessageHandler<Scene, ObjectRemoveRequest, ObjectRemoveResponse>
     {

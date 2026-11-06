@@ -12,7 +12,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _EMISSION
   - _SPECULAR_COLOR
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
@@ -129,7 +128,6 @@ Material:
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 0.5}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &280224936542284736
 MonoBehaviour:
   m_ObjectHideFlags: 11

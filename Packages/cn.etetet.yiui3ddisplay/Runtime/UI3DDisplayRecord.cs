@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 用于记录原始层，并在渲染器中可见。
+    /// 用于记录3D展示子节点的原始Layer与Renderer可见状态，并在移除或销毁时恢复原始设置。
     /// </summary>
     public sealed class UI3DDisplayRecord : MonoBehaviour
     {
@@ -12,6 +12,9 @@ namespace YIUIFramework
         private Renderer          m_AttachRenderer;
         private UI3DDisplayCamera m_ShowCamera;
 
+        /// <summary>
+        /// 初始化记录组件的渲染器及相机引用，保存原始Layer和启用状态。
+        /// </summary>
         internal void Initialize(Renderer renderer, UI3DDisplayCamera camera)
         {
             m_AttachRenderer = renderer;

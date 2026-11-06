@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端地面点坐标目标选择器处理器，校验并截断最大施法距离后将目标点存入 SpellTargetComponent 和黑板。
+    /// </summary>
     public class BTTargetSelectorPositionHandler : ABTHandler<TargetSelectorPosition>
     {
         protected override int Run(TargetSelectorPosition node, BTEnv env)

@@ -4,15 +4,30 @@ using System.Linq;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 进程级服务发现代理组件系统（<see cref="ServiceDiscoveryAgent"/>）。
+    /// 架构定位：
+    /// 1. 位于业务场景（<see cref="ServiceDiscoveryProxy"/>）与服务发现中心（<see cref="ServiceDiscovery"/>）之间的中间聚合层；
+    /// 2. 负责解析活跃 Master 节点（支持本地 Bootstrap 单例直连或从 MongoDB 读取租约记录），并在后台执行全量 Agent 注册与增量服务增删同步；
+    /// 3. 维护进程级全量服务本地缓存与二级索引，向本进程内订阅了服务变更的业务场景（Proxy）扇出通知，并执行 Fencing Epoch 校验以隔离旧主脏推送。
+    /// </summary>
     [EntitySystemOf(typeof(ServiceDiscoveryAgent))]
     public static partial class ServiceDiscoveryAgentSystem
     {
+        /// <summary>主节点查找退避重试最大阶数</summary>
         private const int MasterLookupMaxRetryCount = 30;
+        /// <summary>主节点解析重试基础退避间隔（毫秒）</summary>
         private const int MasterResolveRetryBaseInterval = 100;
+        /// <summary>主节点解析重试最大退避间隔（毫秒）</summary>
         private const int MasterResolveRetryMaxInterval = 1000;
+        /// <summary>当主节点不可用时，外部请求等待 Agent 就绪的最大重试次数</summary>
         private const int MasterResolveMaxRetryCountWhenEndpointUnavailable = 30;
+        /// <summary>向主节点注册 Agent 的超时时间（毫秒）</summary>
         private const int RegisterAgentTimeoutMs = 5000;
 
+        /// <summary>
+        /// 组件唤醒时获取跨进程消息发送器、挂载本地 Proxy 心跳巡检组件，并拉起后台主节点解析与全量注册循环。
+        /// </summary>
         [EntitySystem]
         private static void Awake(this ServiceDiscoveryAgent self)
         {
@@ -28,6 +43,9 @@ namespace ET.Server
         {
         }
 
+        /// <summary>
+        /// 判断当前 Agent 是否已完成向活跃 Master 节点的全量注册并处于就绪状态。
+        /// </summary>
         public static bool IsReady(this ServiceDiscoveryAgent self)
         {
             return self != null
@@ -35,21 +53,33 @@ namespace ET.Server
                    && self.HasStatus(ServiceDiscoveryAgentStatus.AgentRegistered);
         }
 
+        /// <summary>
+        /// 检查当前 Agent 是否包含指定的状态标志位。
+        /// </summary>
         private static bool HasStatus(this ServiceDiscoveryAgent self, ServiceDiscoveryAgentStatus status)
         {
             return (self.Status & status) != 0;
         }
 
+        /// <summary>
+        /// 设置指定的状态标志位。
+        /// </summary>
         private static void SetStatus(this ServiceDiscoveryAgent self, ServiceDiscoveryAgentStatus status)
         {
             self.Status |= status;
         }
 
+        /// <summary>
+        /// 清除指定的状态标志位。
+        /// </summary>
         private static void ClearStatus(this ServiceDiscoveryAgent self, ServiceDiscoveryAgentStatus status)
         {
             self.Status &= ~status;
         }
 
+        /// <summary>
+        /// 确保已挂载向主节点发送心跳的组件（<see cref="ServiceDiscoveryAgentMasterHeartbeat"/>）。
+        /// </summary>
         public static void EnsureMasterHeartbeatComponent(this ServiceDiscoveryAgent self)
         {
             if (self == null)
@@ -63,6 +93,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 移除向主节点发送心跳的组件（当主节点切换或失效时调用）。
+        /// </summary>
         public static void RemoveMasterHeartbeatComponent(this ServiceDiscoveryAgent self)
         {
             if (self == null)
@@ -76,16 +109,25 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 触发后台主节点解析与全量注册协程。
+        /// </summary>
         public static void TriggerBackgroundRegister(this ServiceDiscoveryAgent self)
         {
             self.EnsureBackgroundRegisterStarted();
         }
 
+        /// <summary>
+        /// 触发后台增量服务变更（Dirty Scenes）同步协程。
+        /// </summary>
         public static void TriggerBackgroundMutationSync(this ServiceDiscoveryAgent self)
         {
             self.EnsureBackgroundMutationSyncStarted();
         }
 
+        /// <summary>
+        /// 若当前尚未处于 Bootstrapping 状态，则标记状态并启动后台全量注册协程。
+        /// </summary>
         private static void EnsureBackgroundRegisterStarted(this ServiceDiscoveryAgent self)
         {
             if (self == null || self.HasStatus(ServiceDiscoveryAgentStatus.Bootstrapping))
@@ -97,6 +139,9 @@ namespace ET.Server
             self.BackgroundRegisterLoopAsync().Coroutine();
         }
 
+        /// <summary>
+        /// 若 Agent 已就绪且存在未同步的本地服务变更，且尚未启动增量同步协程，则启动后台增量同步协程。
+        /// </summary>
         private static void EnsureBackgroundMutationSyncStarted(this ServiceDiscoveryAgent self)
         {
             if (self == null || !self.IsReady() || !self.HasDirtyPublishedScenes() ||
@@ -109,6 +154,9 @@ namespace ET.Server
             self.BackgroundMutationSyncLoopAsync().Coroutine();
         }
 
+        /// <summary>
+        /// 后台全量注册协程循环：不断尝试解析活跃主节点并携带本进程已发布服务列表向 Master 发起全量注册，直到成功或组件销毁。
+        /// </summary>
         private static async ETTask BackgroundRegisterLoopAsync(this ServiceDiscoveryAgent self)
         {
             EntityRef<ServiceDiscoveryAgent> selfRef = self;
@@ -178,6 +226,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 后台增量变更同步协程循环：将 <see cref="ServiceDiscoveryAgent.DirtyPublishedScenes"/> 中记录的本地服务增删同步给主节点。
+        /// </summary>
         private static async ETTask BackgroundMutationSyncLoopAsync(this ServiceDiscoveryAgent self)
         {
             EntityRef<ServiceDiscoveryAgent> selfRef = self;
@@ -253,6 +304,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 等待后台注册重试退避延迟。
+        /// </summary>
         private static async ETTask<bool> WaitBackgroundRegisterRetryDelayAsync(EntityRef<ServiceDiscoveryAgent> selfRef, int delay)
         {
             ServiceDiscoveryAgent self = selfRef;
@@ -285,6 +339,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 等待后台增量同步重试退避延迟。
+        /// </summary>
         private static async ETTask<bool> WaitBackgroundMutationSyncRetryDelayAsync(EntityRef<ServiceDiscoveryAgent> selfRef, int delay)
         {
             ServiceDiscoveryAgent self = selfRef;
@@ -317,6 +374,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 判断当前是否需要向主节点执行全量注册。
+        /// </summary>
         private static bool NeedRegisterToDiscovery(this ServiceDiscoveryAgent self)
         {
             return self != null
@@ -324,11 +384,17 @@ namespace ET.Server
                        || !self.HasStatus(ServiceDiscoveryAgentStatus.AgentRegistered));
         }
 
+        /// <summary>
+        /// 判断是否存在尚未同步到主节点的本地服务变更。
+        /// </summary>
         private static bool HasDirtyPublishedScenes(this ServiceDiscoveryAgent self)
         {
             return self != null && self.DirtyPublishedScenes.Count > 0;
         }
 
+        /// <summary>
+        /// 在协程锁保护下尝试执行一次主节点地址解析与全量 Agent 注册。
+        /// </summary>
         private static async ETTask<bool> TryEnsureAgentRegisteredOnceAsync(this ServiceDiscoveryAgent self)
         {
             EntityRef<ServiceDiscoveryAgent> selfRef = self;
@@ -347,6 +413,7 @@ namespace ET.Server
 
                 if (self.ServiceDiscoveryActorId == default)
                 {
+                    // 优先尝试本地进程内 Bootstrap 注入的主节点端点；若不存在则从 MongoDB 加载当前活跃 Master 记录
                     if (!self.TryApplyInheritedMasterEndpoint())
                     {
                         await self.TryLoadActiveMasterFromDbAsync();
@@ -376,6 +443,7 @@ namespace ET.Server
                     return false;
                 }
 
+                // 若在全量注册期间又有新的本地服务变更产生，则立即触发增量同步
                 if (self.IsReady() && self.HasDirtyPublishedScenes())
                 {
                     self.TriggerBackgroundMutationSync();
@@ -385,6 +453,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 尝试从 <see cref="ServiceDiscoveryBootstrapSingleton"/> 获取本地单机直连的主节点 ActorId。
+        /// </summary>
         private static bool TryApplyInheritedMasterEndpoint(this ServiceDiscoveryAgent self)
         {
             ServiceDiscoveryBootstrapSingleton bootstrap =
@@ -403,6 +474,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 等待当前 Agent 完成主节点注册并进入就绪状态；若超过最大重试次数仍未就绪，则抛出 <see cref="ErrorCode.ERR_ServiceDiscoveryMasterUnavailable"/>。
+        /// </summary>
         private static async ETTask EnsureReadyForRequestAsync(this ServiceDiscoveryAgent self, string requestName)
         {
             EntityRef<ServiceDiscoveryAgent> selfRef = self;
@@ -453,6 +527,9 @@ namespace ET.Server
                 $"service discovery agent not ready, request: {requestName}, scene: {self.Root().Name}");
         }
 
+        /// <summary>
+        /// 从 MongoDB 查询主节点租约记录（<see cref="ServiceDiscoveryMaster"/>），校验租约未过期且 Epoch 单调不减后切换到该主节点端点。
+        /// </summary>
         private static async ETTask TryLoadActiveMasterFromDbAsync(this ServiceDiscoveryAgent self)
         {
             if (self == null)
@@ -521,6 +598,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 切换主节点目标 ActorId，清除已注册状态并移除旧主心跳组件。
+        /// </summary>
         private static void SwitchToEndpoint(this ServiceDiscoveryAgent self, ActorId targetActorId, string reason)
         {
             if (self.ServiceDiscoveryActorId == targetActorId)
@@ -536,6 +616,9 @@ namespace ET.Server
                 $"ServiceDiscoveryAgent switch endpoint scene: {self.Root().Name} reason: {reason} from: {oldActorId} to: {targetActorId}");
         }
 
+        /// <summary>
+        /// 标记在当前主节点端点上需要重新进行全量注册（例如增量同步遇到非主备切换错误时）。
+        /// </summary>
         private static void MarkNeedFullRegisterOnCurrentEndpoint(this ServiceDiscoveryAgent self, string reason)
         {
             if (self == null)
@@ -551,6 +634,9 @@ namespace ET.Server
                 $"ServiceDiscoveryAgent mark full register required scene: {self.Root().Name} reason: {reason} current: {currentActorId}");
         }
 
+        /// <summary>
+        /// 使当前缓存的主节点 ActorId 失效，清除已注册状态并触发后台重新解析 Master 与全量注册。
+        /// </summary>
         public static void InvalidateEndpointAndTriggerBackgroundRegister(this ServiceDiscoveryAgent self, string reason)
         {
             if (self == null)
@@ -567,6 +653,9 @@ namespace ET.Server
                 $"ServiceDiscoveryAgent invalidate endpoint scene: {self.Root().Name} reason: {reason} old: {oldActorId}");
         }
 
+        /// <summary>
+        /// 带主备故障转移重试（Failover）地向主服务发现节点转发请求。
+        /// </summary>
         public static async ETTask<T> ForwardToDiscoveryByFailover<T>(this ServiceDiscoveryAgent self, IRequest request,
             string requestName) where T : class, IResponse
         {
@@ -581,6 +670,9 @@ namespace ET.Server
             return await self.ForwardToDiscoveryByFailoverCore<T>(request, requestName);
         }
 
+        /// <summary>
+        /// 向主服务发现节点发送 RPC 请求的核心循环（最多尝试 4 次，遇到主节点不可用时自动触发重新解析）。
+        /// </summary>
         private static async ETTask<T> ForwardToDiscoveryByFailoverCore<T>(this ServiceDiscoveryAgent self, IRequest request,
             string requestName) where T : class, IResponse
         {
@@ -671,6 +763,9 @@ namespace ET.Server
             throw new Exception($"service discovery request retry exhausted, request: {requestName}");
         }
 
+        /// <summary>
+        /// 判断异常是否属于需要重新解析主节点端点的故障转移错误。
+        /// </summary>
         private static bool ShouldResolveMasterAfterFailure(this ServiceDiscoveryAgent self, Exception e)
         {
 
@@ -682,6 +777,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 根据重试次数计算主节点解析的指数退避等待毫秒数。
+        /// </summary>
         private static int GetMasterResolveRetryDelay(int retry)
         {
             if (retry <= 0)
@@ -698,6 +796,9 @@ namespace ET.Server
             return (int)delay;
         }
 
+        /// <summary>
+        /// 向主节点发送 <see cref="ServiceAgentRegisterRequest"/> 全量注册本进程服务，并用主节点返回的全网服务快照重建本地缓存及回放差异给本地 Proxy 订阅者。
+        /// </summary>
         private static async ETTask<bool> TryRegisterAgentToDiscoveryAsync(this ServiceDiscoveryAgent self,
             Dictionary<string, int> versionSnapshot)
         {
@@ -805,6 +906,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 尝试将当前所有脏场景（DirtyPublishedScenes）的增量变更逐个同步到主节点。
+        /// </summary>
         private static async ETTask<bool> TryFlushDirtyScenesOnceAsync(this ServiceDiscoveryAgent self)
         {
             if (self == null || !self.IsReady())
@@ -847,6 +951,9 @@ namespace ET.Server
             return self == null || !self.HasDirtyPublishedScenes();
         }
 
+        /// <summary>
+        /// 尝试向主节点增量同步单个本地场景的服务注册。
+        /// </summary>
         private static async ETTask<bool> TrySyncRegisterSceneAsync(this ServiceDiscoveryAgent self, string sceneName, int version,
             ActorId actorId, StringKV metadata)
         {
@@ -924,6 +1031,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 尝试向主节点增量同步单个本地场景的服务注销。
+        /// </summary>
         private static async ETTask<bool> TrySyncUnregisterSceneAsync(this ServiceDiscoveryAgent self, string sceneName, int version)
         {
             if (self == null || string.IsNullOrEmpty(sceneName) || version <= 0)
@@ -992,6 +1102,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 处理增量同步异常：若属于主节点切换错误则使端点失效并重新选主注册，否则在当前端点重新发起全量注册。
+        /// </summary>
         private static void HandleIncrementalSyncFailure(this ServiceDiscoveryAgent self, Exception e, string reason)
         {
             if (self == null)
@@ -1009,6 +1122,9 @@ namespace ET.Server
             self.MarkNeedFullRegisterOnCurrentEndpoint(reason);
         }
 
+        /// <summary>
+        /// 新增或更新 Agent 本地的服务缓存及二级索引（通过 Proto 对象）。
+        /// </summary>
         private static void AddOrUpdateLocalService(this ServiceDiscoveryAgent self, ServiceInfoProto serviceInfoProto)
         {
             if (serviceInfoProto == null || string.IsNullOrEmpty(serviceInfoProto.SceneName))
@@ -1019,6 +1135,9 @@ namespace ET.Server
             self.AddOrUpdateLocalService(serviceInfoProto.SceneName, serviceInfoProto.ActorId, serviceInfoProto.Metadata);
         }
 
+        /// <summary>
+        /// 新增或更新 Agent 本地的服务缓存实体（<see cref="ServiceInfo"/>）并维护二级索引。
+        /// </summary>
         private static void AddOrUpdateLocalService(this ServiceDiscoveryAgent self, string sceneName, ActorId actorId, StringKV metadata)
         {
             if (string.IsNullOrEmpty(sceneName) || actorId == default)
@@ -1039,6 +1158,9 @@ namespace ET.Server
             ServiceDiscoveryHelper.AddToIndexes(self.ServicesIndexs, self.Indexs, serviceInfo.SceneName, serviceInfo.Metadata);
         }
 
+        /// <summary>
+        /// 当同进程业务场景注册服务时，更新本进程发布表与本地缓存，并立即通知同进程内匹配的订阅者。
+        /// </summary>
         public static void UpsertLocalServiceAfterRegister(this ServiceDiscoveryAgent self, string sceneName, ActorId actorId,
             StringKV metadata)
         {
@@ -1054,6 +1176,9 @@ namespace ET.Server
             self.NotifyProxySubscribers(1, serviceInfoProto);
         }
 
+        /// <summary>
+        /// 当同进程业务场景注销服务时，通知同进程订阅者下线，并从本进程发布表和本地缓存中移除。
+        /// </summary>
         public static void RemoveLocalServiceAfterUnregister(this ServiceDiscoveryAgent self, string sceneName)
         {
             if (string.IsNullOrEmpty(sceneName))
@@ -1073,11 +1198,17 @@ namespace ET.Server
             self.RemoveLocalService(sceneName);
         }
 
+        /// <summary>
+        /// 从 Agent 本地服务缓存与索引中移除指定名称的服务。
+        /// </summary>
         private static void RemoveLocalService(this ServiceDiscoveryAgent self, string sceneName)
         {
             ServiceDiscoveryHelper.RemoveLocalServiceCache(self.SceneNameServices, self.ServicesIndexs, self.Indexs, sceneName);
         }
 
+        /// <summary>
+        /// 清空 Agent 本地的全部服务缓存与索引。
+        /// </summary>
         private static void ClearLocalServices(this ServiceDiscoveryAgent self)
         {
             using ListComponent<string> sceneNames = ListComponent<string>.Create();
@@ -1092,6 +1223,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 对当前本地缓存的所有服务制作一份快照（用于在全量重同步后对比差异）。
+        /// </summary>
         private static Dictionary<string, (ActorId ActorId, StringKV Metadata)> SnapshotLocalServices(this ServiceDiscoveryAgent self)
         {
             Dictionary<string, (ActorId ActorId, StringKV Metadata)> snapshot = new();
@@ -1109,6 +1243,9 @@ namespace ET.Server
             return snapshot;
         }
 
+        /// <summary>
+        /// 将本进程权威的已发布服务列表（<see cref="ServiceDiscoveryAgent.LocalPublishedServices"/>）合并覆盖到主节点返回的快照中，防止全量注册期间发生的本地增删被旧快照冲掉。
+        /// </summary>
         private static void MergeCurrentOwnedLocalServicesIntoSnapshot(this ServiceDiscoveryAgent self, Address ownedAddress,
             Dictionary<string, (ActorId ActorId, StringKV Metadata)> services)
         {
@@ -1150,6 +1287,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 捕获当前本进程已发布服务的版本号快照。
+        /// </summary>
         private static Dictionary<string, int> CapturePublishedSceneVersions(this ServiceDiscoveryAgent self)
         {
             Dictionary<string, int> snapshot = new();
@@ -1171,6 +1311,9 @@ namespace ET.Server
             return snapshot;
         }
 
+        /// <summary>
+        /// 捕获所有待增量同步的脏场景快照列表。
+        /// </summary>
         private static List<(string SceneName, int Version, bool Exists, ActorId ActorId, StringKV Metadata)>
             CaptureDirtySceneSnapshots(this ServiceDiscoveryAgent self)
         {
@@ -1206,6 +1349,9 @@ namespace ET.Server
             return snapshots;
         }
 
+        /// <summary>
+        /// 判断本地缓存中是否已存在完全一致（ActorId 与 Metadata 均相同）的同名服务。
+        /// </summary>
         private static bool HasSameLocalService(this ServiceDiscoveryAgent self, string sceneName, ActorId actorId, StringKV metadata)
         {
             if (self == null || string.IsNullOrEmpty(sceneName) || actorId == default)
@@ -1227,6 +1373,9 @@ namespace ET.Server
             return ServiceDiscoveryHelper.IsSameService(serviceInfo.ActorId, serviceInfo.Metadata, actorId, metadata);
         }
 
+        /// <summary>
+        /// 尝试为指定本地缓存的服务创建一份 <see cref="ServiceInfoProto"/> 快照。
+        /// </summary>
         private static bool TryCreateLocalServiceSnapshot(this ServiceDiscoveryAgent self, string sceneName,
             out ServiceInfoProto serviceInfoProto)
         {
@@ -1251,6 +1400,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 将本进程所有已发布的本地服务填充到 <see cref="ServiceAgentRegisterRequest.LocalServices"/> 中。
+        /// </summary>
         private static void AppendOwnedLocalServices(this ServiceDiscoveryAgent self, ServiceAgentRegisterRequest request)
         {
             if (self == null || request == null)
@@ -1270,6 +1422,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 递增指定本地发布场景的版本号并将其加入待同步脏集合。
+        /// </summary>
         private static void MarkLocalPublishedSceneDirty(this ServiceDiscoveryAgent self, string sceneName)
         {
             if (self == null || string.IsNullOrEmpty(sceneName))
@@ -1296,6 +1451,9 @@ namespace ET.Server
             self.DirtyPublishedScenes.Add(sceneName);
         }
 
+        /// <summary>
+        /// 若指定场景的当前版本号与已同步版本号一致，则清除其 Dirty 标记。
+        /// </summary>
         private static void MarkPublishedSceneSynced(this ServiceDiscoveryAgent self, string sceneName, int version)
         {
             if (self == null || string.IsNullOrEmpty(sceneName) || version <= 0)
@@ -1315,6 +1473,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 批量标记快照中的场景版本已同步完成。
+        /// </summary>
         private static void MarkPublishedScenesSynced(this ServiceDiscoveryAgent self, Dictionary<string, int> versionSnapshot)
         {
             if (self == null || versionSnapshot == null)
@@ -1328,6 +1489,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 标记指定本地场景为 Dirty，并根据 Agent 是否就绪触发增量同步或全量注册。
+        /// </summary>
         private static void ScheduleLocalPublishedSceneSync(this ServiceDiscoveryAgent self, string sceneName)
         {
             if (self == null || string.IsNullOrEmpty(sceneName))
@@ -1345,6 +1509,9 @@ namespace ET.Server
             self.TriggerBackgroundRegister();
         }
 
+        /// <summary>
+        /// 更新本进程权威发布表中的服务信息并调度后台同步。
+        /// </summary>
         private static void UpsertOwnedLocalService(this ServiceDiscoveryAgent self, string sceneName, ActorId actorId,
             StringKV metadata)
         {
@@ -1364,6 +1531,9 @@ namespace ET.Server
             self.ScheduleLocalPublishedSceneSync(sceneName);
         }
 
+        /// <summary>
+        /// 从本进程权威发布表中移除指定服务并调度后台同步。
+        /// </summary>
         private static void RemoveOwnedLocalService(this ServiceDiscoveryAgent self, string sceneName)
         {
             if (string.IsNullOrEmpty(sceneName))
@@ -1379,6 +1549,9 @@ namespace ET.Server
             self.ScheduleLocalPublishedSceneSync(sceneName);
         }
 
+        /// <summary>
+        /// 当 Agent 与主节点重新全量同步后，对比新旧服务列表差异，向同进程内的 Proxy 订阅者补发增删通知。
+        /// </summary>
         private static void ReplayResyncDiffToProxySubscribers(this ServiceDiscoveryAgent self,
             Dictionary<string, (ActorId ActorId, StringKV Metadata)> oldServices,
             Dictionary<string, (ActorId ActorId, StringKV Metadata)> newServices)
@@ -1427,6 +1600,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 在 Agent 侧登记同进程 Proxy 的服务变更订阅过滤条件，并返回当前匹配的服务快照。
+        /// </summary>
         public static int SubscribeProxyServiceChange(this ServiceDiscoveryAgent self, string sceneName, ActorId subscriberActorId,
             string filterName, StringKV filterMetadata, List<ServiceInfoProto> snapshot)
         {
@@ -1457,12 +1633,18 @@ namespace ET.Server
             return ErrorCode.ERR_Success;
         }
 
+        /// <summary>
+        /// 取消同进程指定 Proxy 场景的所有服务变更订阅。
+        /// </summary>
         public static void UnsubscribeProxyServiceChange(this ServiceDiscoveryAgent self, string sceneName)
         {
             self.ProxySubscriberFilters.Remove(sceneName);
             self.ProxySubscribers.Remove(sceneName);
         }
 
+        /// <summary>
+        /// 遍历本进程内所有 Proxy 订阅者，若变更的服务元数据匹配其任一过滤条件，则向该 Proxy 发送 <see cref="ServiceChangeNotification"/>。
+        /// </summary>
         private static void NotifyProxySubscribers(this ServiceDiscoveryAgent self, int changeType, ServiceInfoProto serviceInfoProto)
         {
             if (serviceInfoProto == null || string.IsNullOrEmpty(serviceInfoProto.SceneName) || serviceInfoProto.ActorId == default)
@@ -1511,6 +1693,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 处理来自主节点的 <see cref="ServiceChangeNotification"/> 通知：先校验 Fencing Epoch，通过后再更新本地缓存并扇出给本地 Proxy。
+        /// </summary>
         public static void OnServiceChangeNotification(this ServiceDiscoveryAgent self, ServiceChangeNotification message)
         {
             if (self == null || message == null || !self.IsReady())
@@ -1526,6 +1711,10 @@ namespace ET.Server
             self.OnServiceChangeNotification(message.ChangeType, message.ServiceInfo);
         }
 
+        /// <summary>
+        /// 校验服务变更通知的 Fencing Epoch 与 MasterActorId：
+        /// 拒绝旧世代（Epoch 较小）的脑裂脏消息；若收到更高 Epoch 的通知则立即使当前端点失效并触发重连新主。
+        /// </summary>
         private static bool ShouldAcceptServiceChangeNotification(this ServiceDiscoveryAgent self, ServiceChangeNotification message)
         {
             if (message == null)
@@ -1574,6 +1763,9 @@ namespace ET.Server
             return true;
         }
 
+        /// <summary>
+        /// 应用单条服务变更（1=新增/更新，2=移除）到 Agent 本地缓存，并扇出给本地 Proxy 订阅者。
+        /// </summary>
         private static void OnServiceChangeNotification(this ServiceDiscoveryAgent self, int changeType, ServiceInfoProto serviceInfoProto)
         {
             if (!self.IsReady())
@@ -1608,6 +1800,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 批量应用服务变更列表。
+        /// </summary>
         public static void OnServiceChangeNotification(this ServiceDiscoveryAgent self, int changeType,
             List<ServiceInfoProto> serviceInfos)
         {
@@ -1622,16 +1817,25 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 根据元数据过滤条件查询 Agent 本地缓存的服务列表（支持二级索引加速）。
+        /// </summary>
         public static List<ServiceInfo> GetServiceInfoByFilter(this ServiceDiscoveryAgent self, StringKV filterMetadata)
         {
             return ServiceDiscoveryHelper.GetServiceInfoByFilter(self.SceneNameServices, self.ServicesIndexs, filterMetadata);
         }
 
+        /// <summary>
+        /// 确保当前 Agent 已完成向主节点注册并处于就绪状态。
+        /// </summary>
         public static async ETTask EnsureReadyAsync(this ServiceDiscoveryAgent self, string requestName)
         {
             await self.EnsureReadyForRequestAsync(requestName);
         }
 
+        /// <summary>
+        /// 异步等待 Agent 就绪后，按元数据过滤条件查询本地服务缓存。
+        /// </summary>
         public static async ETTask<List<ServiceInfo>> QueryLocalByFilterAsync(this ServiceDiscoveryAgent self,
             StringKV filterMetadata)
         {

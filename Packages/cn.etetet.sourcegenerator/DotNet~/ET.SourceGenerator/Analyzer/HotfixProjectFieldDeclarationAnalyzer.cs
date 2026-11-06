@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -6,6 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// Hotfix / HotfixView 热更程序集禁止声明可变状态字段或属性分析器（ET0004）。
+    /// <para>为确保热重载（Reload Dll）时不会丢失任何运行时数据，强制要求 Hotfix 层的所有类只能声明 <c>const</c> 常量，禁止声明任何实例/静态字段或属性；所有状态必须保存在 Model 层的 Entity 组件或 Singleton 中。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class HotfixProjectFieldDeclarationAnalyzer: DiagnosticAnalyzer
     {

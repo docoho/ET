@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,6 +7,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 实体类内部禁止声明方法分析器（ET0006）。
+    /// <para>严格执行 ECS 数据与逻辑分离原则：继承自 <c>Entity</c> 或 <c>LSEntity</c> 的数据类内部只允许定义字段和属性，禁止声明任何方法（除非该实体类显式标记了 <c>[EnableMethod]</c>），所有业务逻辑必须编写在 Hotfix 层的静态 System 扩展方法中。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EntityMethodDeclarationAnalyzer : DiagnosticAnalyzer
     {

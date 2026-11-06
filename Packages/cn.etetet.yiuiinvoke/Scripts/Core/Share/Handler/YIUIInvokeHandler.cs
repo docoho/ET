@@ -1,10 +1,14 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用处理器顶层基础接口，标识唯一的调用字符串键（InvokeType）。
+    /// </summary>
     public interface IYIUIInvokeBaseHandler
     {
         string InvokeType { get; set; }
     }
 
+    /// <summary>无参数、无返回值的YIUI调用处理器接口。</summary>
     public interface IYIUIInvokeHandler : IYIUIInvokeBaseHandler
     {
         void Invoke(Entity self);

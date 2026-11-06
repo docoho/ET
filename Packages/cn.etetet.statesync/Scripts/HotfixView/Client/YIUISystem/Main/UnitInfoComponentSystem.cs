@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.8
-    /// Desc
+    /// Desc    通用单位信息展示子组件（UnitInfo）系统，供玩家信息框、目标信息框及目标的目标信息框复用，负责刷新头像、名称、职业及 HP/MP 进度条
     /// </summary>
     public static partial class UnitInfoComponentSystem
     {
+        /// <summary>
+        /// 监听单位数值变更动态事件（<see cref="NumbericChange"/>），当绑定单位的数值变化时实时刷新 HP 与 MP 显示
+        /// </summary>
         [EntitySystem]
         private static async ETTask DynamicEvent(this UnitInfoComponent self, NumbericChange data)
         {

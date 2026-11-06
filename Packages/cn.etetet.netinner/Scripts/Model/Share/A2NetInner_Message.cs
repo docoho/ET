@@ -1,7 +1,10 @@
-﻿using MemoryPack;
+using MemoryPack;
 
 namespace ET
 {
+    /// <summary>
+    /// 进程内业务 Fiber 发往本进程 <c>NetInner</c> 纤程的跨进程单向消息包装类。
+    /// </summary>
     [Message(1)]
     public class A2NetInner_Message: MessageObject, IMessage, IMessageWrapper
     {
@@ -18,8 +21,11 @@ namespace ET
             ObjectPool.Recycle(this);
         }
         
+        /// <summary>发送方 Fiber ID。</summary>
         public long FromFiber;
+        /// <summary>远端目标实体的 <see cref="ActorId"/>。</summary>
         public ActorId ActorId;
+        /// <summary>实际要发送的内部消息对象。</summary>
         public IMessage MessageObject;
         
         public IMessage GetMessageObject()
@@ -28,6 +34,9 @@ namespace ET
         }
     }
     
+    /// <summary>
+    /// 进程内业务 Fiber 发往本进程 <c>NetInner</c> 纤程的跨进程 RPC 请求包装类。
+    /// </summary>
     [Message(2)]
     [ResponseType(nameof(A2NetInner_Response))]
     public class A2NetInner_Request: MessageObject, IRequest, IMessageWrapper
@@ -47,7 +56,9 @@ namespace ET
         }
         
         public int RpcId { get; set; }
+        /// <summary>远端目标实体的 <see cref="ActorId"/>。</summary>
         public ActorId ActorId;
+        /// <summary>实际要发送的内部 RPC 请求对象。</summary>
         public IRequest MessageObject;
         
         public IMessage GetMessageObject()
@@ -56,6 +67,9 @@ namespace ET
         }
     }
     
+    /// <summary>
+    /// <c>NetInner</c> 纤程收到远端进程 RPC 响应后回传给发起方业务 Fiber 的响应包装类。
+    /// </summary>
     [Message(3)]
     public class A2NetInner_Response: MessageObject, IResponse, IMessageWrapper
     {

@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using YooAsset;
 
 namespace ET.Client
 {
     /// <summary>
     /// YIUI资源管理器 yooasset扩展
+    /// （将 YooAsset 的资源加载、句柄追踪、释放与校验能力桥接注入到 YIUILoadDI 委托中）
     /// </summary>
     [FriendOf(typeof(YIUIYooAssetsLoadComponent))]
     [EntitySystemOf(typeof(YIUIYooAssetsLoadComponent))]
@@ -12,11 +13,17 @@ namespace ET.Client
     {
         #region ObjectSystem
 
+        /// <summary>
+        /// 组件唤醒生命周期回调
+        /// </summary>
         [EntitySystem]
         private static void Awake(this YIUIYooAssetsLoadComponent self)
         {
         }
 
+        /// <summary>
+        /// 组件销毁生命周期回调，释放所有尚未释放的 YooAsset 资源句柄
+        /// </summary>
         [EntitySystem]
         private static void Destroy(this YIUIYooAssetsLoadComponent self)
         {
@@ -25,6 +32,11 @@ namespace ET.Client
 
         #endregion
 
+        /// <summary>
+        /// 初始化 YooAsset 资源包并注册 YIUILoadDI 全局资源加载/释放委托，完成后派发 YIUIEvent_YooAssetsLoad_Completed 事件
+        /// </summary>
+        /// <param name="self">YooAsset 加载扩展组件</param>
+        /// <param name="packageName">YooAsset 资源包名称，默认 DefaultPackage</param>
         public static async ETTask<bool> Initialize(this YIUIYooAssetsLoadComponent self, string packageName = "DefaultPackage")
         {
             self.m_Package = YooAssets.GetPackage(packageName);

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 /*
 MIT License
@@ -34,6 +34,9 @@ using System;
 
 namespace TrueSync {
 
+    /// <summary>
+    /// 基于定点数 <see cref="FP"/> 的确定性二维向量（2D Vector）结构体。
+    /// </summary>
     [Serializable]
     public struct TSVector2 : IEquatable<TSVector2>
     {

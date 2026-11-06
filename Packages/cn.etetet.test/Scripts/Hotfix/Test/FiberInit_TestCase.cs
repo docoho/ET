@@ -1,4 +1,4 @@
-﻿using ET.Server;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -51,6 +51,9 @@ namespace ET.Test
         }
     }
 
+    /// <summary>
+    /// 监听 Fiber 销毁事件，若销毁的 Scene 上挂载了 TestFiberDatabaseCleanupComponent，则自动清理该测试用例创建的临时数据库。
+    /// </summary>
     [Event(SceneType.All)]
     public class FiberDestroyEvent_TestFiberDatabaseCleanup : AEvent<Scene, FiberDestroyEvent>
     {

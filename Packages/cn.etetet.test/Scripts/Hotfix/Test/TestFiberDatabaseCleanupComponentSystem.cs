@@ -5,6 +5,9 @@ using MongoDB.Driver;
 
 namespace ET.Test
 {
+    /// <summary>
+    /// 测试 Fiber 临时数据库清理组件系统，负责登记测试逻辑库并在测试结束后异步 Drop 掉对应的测试 Zone 数据库并轮询确认删除完成。
+    /// </summary>
     [EntitySystemOf(typeof(TestFiberDatabaseCleanupComponent))]
     public static partial class TestFiberDatabaseCleanupComponentSystem
     {
@@ -18,6 +21,9 @@ namespace ET.Test
             self.LogicalDbNames.Clear();
         }
 
+        /// <summary>
+        /// 登记需要在测试结束时自动清理的逻辑数据库名
+        /// </summary>
         public static void RegisterLogicalDbName(this TestFiberDatabaseCleanupComponent self, string logicalDbName)
         {
             if (self == null)

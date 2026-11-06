@@ -1,5 +1,8 @@
 namespace TrueSync {
     partial struct FP {
+        /// <summary>
+        /// 定点数反余弦函数（Acos）预计算查找表（Look-Up Table），用于保证跨平台三角函数结果的确定性与计算性能。
+        /// </summary>
         public static readonly long[] AcosLut = new[] {
             0x1921FB544L, 0x1921F63C7L, 0x1921F124AL, 0x1921EC0CDL, 0x1921E6F50L, 0x1921E1DD3L, 0x1921DCC56L, 0x1921D7AD9L, 
             0x1921D295DL, 0x1921CD7E0L, 0x1921C8663L, 0x1921C34E6L, 0x1921BE369L, 0x1921B91ECL, 0x1921B406FL, 0x1921AEEF2L, 

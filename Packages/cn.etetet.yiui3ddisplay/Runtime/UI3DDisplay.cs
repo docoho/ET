@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Author: 亦亦
 // Mail: 379338943@qq.com
 // Data: 2023年2月12日
@@ -15,10 +15,17 @@ using UnityEngine.UI;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// YIUI 3D展示组件跨层事件调用标识定义。
+    /// 用于从MonoBehaviour层向HotfixView层（YIUI3DDisplayChild）派发拖拽与点击事件。
+    /// </summary>
     public class YIUI3DDisplayInvoke
     {
+        /// <summary>拖拽事件调用标识。</summary>
         public const string OnDragInvoke        = "YIUI3DDisplayInvoke.OnDragInvoke";
+        /// <summary>指针按下事件调用标识。</summary>
         public const string OnPointerDownInvoke = "YIUI3DDisplayInvoke.OnPointerDownInvoke";
+        /// <summary>指针抬起事件调用标识。</summary>
         public const string OnPointerUpInvoke   = "YIUI3DDisplayInvoke.OnPointerUpInvoke";
     }
 }
@@ -26,7 +33,7 @@ namespace ET.Client
 namespace YIUIFramework
 {
     /// <summary>
-    /// 这个类用于在UI中显示3D对象。
+    /// 这个类用于在UI中显示3D对象（基于RenderTexture与独立3D观察相机实现）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public partial class UI3DDisplay : SerializedMonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler

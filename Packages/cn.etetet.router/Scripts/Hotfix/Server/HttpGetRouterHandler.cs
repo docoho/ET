@@ -5,6 +5,10 @@ using System.Text;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 客户端请求获取可用软路由（Router）与登录服（Realm）地址列表的 HTTP 处理器（路径：<c>/get_router</c>）。
+    /// <para>从当前场景的 <see cref="ServiceDiscoveryProxy"/> 中读取实时在线的所有 <c>Realm</c> 内网地址与 <c>Router</c> 公网地址，序列化为 JSON 返回给客户端。</para>
+    /// </summary>
     [HttpHandler(SceneType.RouterManager, "/get_router")]
     public class HttpGetRouterHandler : IHttpHandler
     {

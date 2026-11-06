@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 模板文件创建参数值对象（包含模板源文件路径与目标保存路径）
+    /// </summary>
     public struct CreateVo
     {
         /// <summary>
@@ -25,6 +28,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 基于文本模板生成或局部重写代码文件的抽象基类
+    /// </summary>
     public abstract class BaseTemplate
     {
         /// <summary>

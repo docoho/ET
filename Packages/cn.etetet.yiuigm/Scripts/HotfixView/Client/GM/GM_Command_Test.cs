@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
 
@@ -8,6 +8,9 @@ namespace ET.Client
     //2 命令等级 当执行人等级不足时无法使用
     //3 命令名称 页面上显示的名字
     //4 命令描述 有描述时显示描述 没有时不显示
+    /// <summary>
+    /// 演示GM命令定义与6种参数类型（枚举、字符串、布尔、小数、32位整数、64位长整数）解析的示例命令。
+    /// </summary>
     [GM(EGMType.Test, 1, "测试案列", "测试案列描述.....")]
     public class GM_Test : IGMCommand
     {

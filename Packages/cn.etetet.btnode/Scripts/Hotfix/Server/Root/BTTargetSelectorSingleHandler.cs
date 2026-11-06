@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端单体锁定目标选择器处理器，校验目标是否存在、单位类型匹配、子节点条件、施法距离以及朝向（必须在施法者前方）。
+    /// </summary>
     public class BTTargetSelectorSingleHandler: ABTHandler<TargetSelectorSingle>
     {
         protected override int Run(TargetSelectorSingle node, BTEnv env)

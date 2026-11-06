@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树编辑器右键节点搜索菜单提供者，按继承层级自动构建所有非抽象 BTNode 派生类的多级搜索树，并支持通过 ETTask 异步等待用户选择结果。
+    /// </summary>
     public class RightClickMenu : ScriptableObject, ISearchWindowProvider
     {
         private List<SearchTreeEntry> entries;

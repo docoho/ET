@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 批量修改目标对象或组件上多个 SerializedProperty 序列化属性并自动保存/记录 Undo 的命令处理器（InspectorSetProperties）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorSetPropertiesHandler :
             AUnityBridgeInspectorHandler<InspectorSetPropertiesRequest, InspectorSetPropertiesResponse>
     {

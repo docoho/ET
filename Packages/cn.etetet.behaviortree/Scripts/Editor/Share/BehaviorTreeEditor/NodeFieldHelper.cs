@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树编辑器节点字段反射辅助类，用于提取节点上带有指定特性（如 [BTInput]）的字符串字段值。
+    /// </summary>
     public static class NodeFieldHelper
     {
         public static List<string> GetInputs(NodeView node, System.Type attribute)

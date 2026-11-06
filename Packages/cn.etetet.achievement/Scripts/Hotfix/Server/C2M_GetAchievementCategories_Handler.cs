@@ -1,8 +1,17 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 客户端请求获取成就分类列表（<see cref="C2M_GetAchievementCategories"/>）的 Location RPC 处理器
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_GetAchievementCategories_Handler : MessageLocationHandler<Unit, C2M_GetAchievementCategories, M2C_GetAchievementCategories>
     {
+        /// <summary>
+        /// 处理获取成就分类请求，汇总各分类下的成就总数与已完成数量
+        /// </summary>
+        /// <param name="unit">玩家角色单位</param>
+        /// <param name="request">获取成就分类请求消息</param>
+        /// <param name="response">获取成就分类响应消息</param>
         protected override async ETTask Run(Unit unit, C2M_GetAchievementCategories request, M2C_GetAchievementCategories response)
         {
             try

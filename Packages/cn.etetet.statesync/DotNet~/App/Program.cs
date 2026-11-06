@@ -1,12 +1,17 @@
-﻿using System;
+using System;
 using System.Threading;
 using ET.Server;
 
 namespace ET
 {
+    /// <summary>
+    /// 状态同步（StateSync）服务端独立进程启动入口类
+    /// </summary>
     public static class Program
     {
-        
+        /// <summary>
+        /// 状态同步服务端主函数：调用 <see cref="AvoidCut.Init"/> 防止 Model 程序集被裁剪，启动 Init 并在主循环中驱动纤程调度
+        /// </summary>
         public static void Main()
         {
             try

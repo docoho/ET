@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// 技能消耗数值节点处理器：当黑板中的 Check 为 true 时仅检查施法者对应属性（如 MP/HP）是否足够并返回相应错误码，当 Check 为 false 时实际扣除数值。
+    /// </summary>
     public class BTCostNumericHandler: ABTHandler<BTCostNumeric>
     {
         protected override int Run(BTCostNumeric node, BTEnv env)

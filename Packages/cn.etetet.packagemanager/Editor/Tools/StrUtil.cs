@@ -1,9 +1,15 @@
-﻿using System.IO;
+using System.IO;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 字符串拼接、格式化与模板替换工具类
+    /// </summary>
     public static partial class StrUtil
     {
+        /// <summary>
+        /// 使用 StringBuilder 池拼接两个字符串
+        /// </summary>
         public static string Concat(string str1, string str2)
         {
             var sb = SbPool.Get();
@@ -11,6 +17,9 @@ namespace ET.PackageManager.Editor
             return SbPool.PutAndToStr(sb);
         }
 
+        /// <summary>
+        /// 使用 StringBuilder 池拼接三个字符串
+        /// </summary>
         public static string Concat(string str1, string str2, string str3)
         {
             var sb = SbPool.Get();
@@ -18,6 +27,9 @@ namespace ET.PackageManager.Editor
             return SbPool.PutAndToStr(sb);
         }
 
+        /// <summary>
+        /// 使用 StringBuilder 池拼接多个字符串参数
+        /// </summary>
         public static string Concat(params string[] param)
         {
             var sb = SbPool.Get();
@@ -29,6 +41,9 @@ namespace ET.PackageManager.Editor
             return SbPool.PutAndToStr(sb);
         }
 
+        /// <summary>
+        /// 使用 StringBuilder 池拼接多个任意对象参数
+        /// </summary>
         public static string Concat(params object[] param)
         {
             var sb = SbPool.Get();

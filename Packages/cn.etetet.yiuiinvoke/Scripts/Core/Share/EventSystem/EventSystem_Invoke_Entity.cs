@@ -1,10 +1,10 @@
-﻿#if ET10
+#if ET10
 using System;
 
 namespace ET
 {
     /// <summary>
-    /// InvokeEntity事件
+    /// 扩展EventSystem以支持直接携带宿主Entity实例的InvokeEntity事件分发。
     /// </summary>
     public static class YIUIEventSystem
     {

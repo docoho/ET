@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.14
-    /// Desc
+    /// Desc    主界面底部技能快捷栏（ActionBar）组件系统，负责初始化 12 个技能槽位的快捷键与绑定技能 ID
     /// </summary>
     public static partial class ActionBarComponentSystem
     {
+        /// <summary>
+        /// 初始化技能快捷栏各槽位的快捷键文本与初始技能配置 ID
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this ActionBarComponent self)
         {

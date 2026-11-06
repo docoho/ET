@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端数值变更事件处理器：根据 NumericTypeConfig 配置的广播范围（NoticeType），向自身或视野内客户端广播 M2C_NumericChange。
+    /// </summary>
     [Event(SceneType.Map)]
     public class NumericChangeEvent_Broadcast: AEvent<Scene, NumbericChange>
     {

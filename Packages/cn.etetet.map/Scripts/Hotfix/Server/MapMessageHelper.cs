@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端地图消息广播与单发辅助类（通过玩家的 <see cref="UnitGateInfoComponent"/> 将消息经由 Gate 转发给客户端）。
+    /// </summary>
     public static partial class MapMessageHelper
     {
+        /// <summary>
+        /// 向当前能看见 <paramref name="unit"/> 的所有周围玩家广播消息（广播消息禁止使用 <see cref="IPool"/> 对象池实例，以防多次异步发送期间被回收复用）。
+        /// </summary>
         private static void Broadcast(Unit unit, IMessage message, bool withSelf = true)
         {
             if (message is IPool)
@@ -24,6 +30,9 @@ namespace ET.Server
             }
         }
         
+        /// <summary>
+        /// 仅向指定玩家单位自身的客户端发送消息。
+        /// </summary>
         private static void SendToClient(Unit unit, IMessage message)
         {
             if (!unit.UnitType.IsSame(UnitType.Player))
@@ -34,6 +43,9 @@ namespace ET.Server
             messageSender.Send(unit.GetComponent<UnitGateInfoComponent>().ActorId, message);
         }
         
+        /// <summary>
+        /// 按指定的通知范围类型（<see cref="NoticeType"/>：自己、全体视野广播、除自己外广播、不通知）向客户端发送消息。
+        /// </summary>
         public static void NoticeClient(Unit unit, IMessage message, NoticeType noticeType)
         {
             switch (noticeType)

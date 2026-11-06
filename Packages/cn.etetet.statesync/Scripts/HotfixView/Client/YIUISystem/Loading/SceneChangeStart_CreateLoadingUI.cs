@@ -3,9 +3,15 @@ using UnityEngine.SceneManagement;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 场景切换开始事件（<see cref="SceneChangeStart"/>）处理器，负责打开 Loading 界面并异步加载目标 Unity 地图场景资源
+    /// </summary>
     [Event(SceneType.Client)]
     public class SceneChangeStart_CreateLoadingUI: AEvent<Scene, SceneChangeStart>
     {
+        /// <summary>
+        /// 若需要切换地图资源（<c>args.ChangeScene</c> 为 true），则打开 <see cref="LoadingPanelComponent"/> 并通过 <see cref="ResourcesLoaderComponent"/> 异步加载场景且实时更新加载进度
+        /// </summary>
         protected override async ETTask Run(Scene root, SceneChangeStart args)
         {
             try

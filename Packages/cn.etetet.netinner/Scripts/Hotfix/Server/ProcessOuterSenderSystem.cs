@@ -1,8 +1,14 @@
-﻿using System;
+using System;
 using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 跨进程内网底层通信组件（<see cref="ProcessOuterSender"/>）的系统类。
+    /// <para>挂载在 <c>NetInner</c> 纤程上，管理底层 KCP/TCP 内网 <see cref="AService"/> 与到其他服务端进程的 <see cref="Session"/> 连接池（<see cref="ProcessOuterSender.AddressSessions"/>）：</para>
+    /// <para>1. 发送侧：接收来自 <c>A2NetInner</c> 的跨进程消息或请求，按目标进程 <see cref="Address"/> 复用或建立内网 <see cref="Session"/> 发送数据。</para>
+    /// <para>2. 接收侧：收到其他进程发来的内网包后反序列化出目标 <see cref="FiberInstanceId"/> 和消息体，通过 <see cref="ProcessInnerSender"/> 投递给本进程内的目标业务 Fiber。</para>
+    /// </summary>
     [EntitySystemOf(typeof(ProcessOuterSender))]
     public static partial class ProcessOuterSenderSystem
     {

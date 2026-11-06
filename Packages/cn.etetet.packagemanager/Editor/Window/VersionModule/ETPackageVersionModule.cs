@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +12,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 包列表筛选条件位枚举
+    /// </summary>
     [Flags]
     public enum EPackagesFilterType
     {
@@ -37,6 +40,9 @@ namespace ET.PackageManager.Editor
         ReBan = 1 << 5,
     }
 
+    /// <summary>
+    /// 多重筛选条件逻辑组合方式枚举（唯一单选 / 或 / 与）
+    /// </summary>
     public enum EPackagesFilterOperationType
     {
         [LabelText("唯一")]
@@ -50,7 +56,7 @@ namespace ET.PackageManager.Editor
     }
 
     /// <summary>
-    /// 版本管理
+    /// 版本管理模块（负责展示、搜索、筛选所有已安装包的版本与双向依赖关系，并可将修改同步写回各包的 package.json）
     /// </summary>
     [ETPackageMenu("版本管理", 1000)]
     public partial class ETPackageVersionModule : BasePackageToolModule

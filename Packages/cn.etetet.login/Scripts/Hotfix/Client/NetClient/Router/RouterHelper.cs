@@ -3,8 +3,14 @@ using System.Net;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端路由连接辅助工具类：封装通过 Router 软路由节点建立与后端服（Realm/Gate）KCP 会话及重连握手的完整流程。
+    /// </summary>
     public static partial class RouterHelper
     {
+        /// <summary>
+        /// 创建经过 Router 代理转发的 Session 会话，并自动挂载 PingComponent 和 RouterCheckComponent。
+        /// </summary>
         // 注册router
         public static async ETTask<Session> CreateRouterSession(this NetComponent netComponent, IPEndPoint address, string account, string password)
         {
@@ -27,6 +33,9 @@ namespace ET.Client
             return routerSession;
         }
         
+        /// <summary>
+        /// 从 RouterAddressComponent 选取一个 Router 节点并发起连接握手。
+        /// </summary>
         public static async ETTask<(uint, IPEndPoint)> GetRouterAddress(this NetComponent netComponent, IPEndPoint address, uint localConn, uint remoteConn)
         {
             EntityRef<NetComponent> netComponentRef = netComponent;

@@ -49,9 +49,15 @@ namespace ET.Server
         /// </summary>
         public List<int> RecentAchievements = new();
 
+        /// <summary>
+        /// 所属纤程实例（不序列化到数据库）
+        /// </summary>
         [BsonIgnore]
         public Fiber Fiber { get; set; }
         
+        /// <summary>
+        /// 所属场景类型标识（不序列化到数据库）
+        /// </summary>
         [BsonIgnore]
         public int SceneType { get; set; }
     }

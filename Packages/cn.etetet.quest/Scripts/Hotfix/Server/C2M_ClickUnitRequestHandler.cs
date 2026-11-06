@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+	/// <summary>
+	/// 服务端处理客户端点击单位（C2M_ClickUnitRequest）的消息处理器：将目标设为选中单位，并返回该 NPC 关联的可接/进行中/可提交任务列表。
+	/// </summary>
 	[MessageHandler(SceneType.Map)]
 	public class C2M_ClickUnitRequestHandler : MessageLocationHandler<Unit, C2M_ClickUnitRequest, M2C_ClickUnitResponse>
 	{

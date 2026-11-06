@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 红点调试面板中单条历史堆栈记录项的UI组件系统。
+    /// </summary>
     [FriendOf(typeof(RedDotStackItemComponent))]
     public static partial class RedDotStackItemComponentSystem
     {

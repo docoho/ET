@@ -1,9 +1,12 @@
-﻿using Cinemachine;
+using Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端主角虚拟相机（Cinemachine）控制组件系统：创建绑定主角头部绑点的 CameraFollow 节点并处理鼠标右键视角旋转。
+    /// </summary>
     [EntitySystemOf(typeof(CinemachineComponent))]
     public static partial class CinemachineComponentSystem
     {
@@ -29,6 +32,9 @@ namespace ET.Client
             cinemachineVirtualCamera.Follow = followTransform;
         }
 
+        /// <summary>
+        /// 根据鼠标拖拽偏移量旋转相机跟随点（限制俯仰角在 10°~80° 之间）。
+        /// </summary>
         public static void RotationFollow(this CinemachineComponent self, Vector2 v)
         {
             Vector3 eulerAngles = self.Follow.transform.eulerAngles;

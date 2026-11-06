@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端任务实体（Quest）系统：管理任务下属的目标列表（Objectives）并提供可提交状态检查。
+    /// </summary>
     [EntitySystemOf(typeof(Quest))]
     public static partial class QuestSystem
     {

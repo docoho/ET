@@ -3,11 +3,20 @@ using System.Collections.Generic;
 
 namespace ET.Test
 {
+    /// <summary>
+    /// 测试用例全局分发器单例，在启动时扫描所有标记了 [Test] 的处理器并支持按名称正则表达式筛选测试用例。
+    /// </summary>
     [AllowInstance]
     public class TestDispatcher: Singleton<TestDispatcher>, ISingletonAwake
     {
+        /// <summary>
+        /// 按处理器名称字典序排列的测试处理器映射表
+        /// </summary>
         private SortedDictionary<string, ITestHandler> dispatcher = new(); 
         
+        /// <summary>
+        /// 单例初始化，扫描所有 [Test] 特性标记的类型并实例化注册
+        /// </summary>
         public void Awake()
         {
             HashSet<Type> types = CodeTypes.Instance.GetTypes(typeof (TestAttribute));

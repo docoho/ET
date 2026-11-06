@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ET.PackageManager.Editor
 {
     /// <summary>
-    /// 一键生成属于自己的Package
+    /// 一键生成属于自己的 Package 模块面板（Odin Inspector 视图）
     /// </summary>
     [ETPackageMenu("创建")]
     public class ETPackageCreateModule : BasePackageToolModule

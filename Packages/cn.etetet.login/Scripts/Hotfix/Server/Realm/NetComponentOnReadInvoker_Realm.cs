@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// Realm 服外网消息读取分发器：进行消息频率统计限流校验后，将 ISessionMessage 分发给对应的处理器。
+    /// </summary>
     [Invoke(SceneType.Realm)]
     public class NetComponentOnReadInvoker_Realm: AInvokeHandler<NetComponentOnRead>
     {
@@ -10,6 +13,7 @@ namespace ET.Server
             Session session = args.Session;
             object message = args.Message;
             
+            // 防刷频校验：单种消息超过频次阈值时直接断开连接
             MessageStatisticsComponent messageStatisticsComponent = session.GetComponent<MessageStatisticsComponent>();
             if (!messageStatisticsComponent.Check(message.GetType(), 10))
             {

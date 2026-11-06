@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,10 +10,13 @@ using Type = System.Type;
 namespace ET.PackageManager.Editor
 {
     /// <summary>
-    /// ET包管理 自动化工具
+    /// ET包管理 自动化工具主窗口（基于 OdinMenuEditorWindow，通过反射扫描 ETPackageMenuAttribute 自动构建左侧菜单树）
     /// </summary>
     public class ETPackageAutoTool : OdinMenuEditorWindow
     {
+        /// <summary>
+        /// 打开 ET 包管理自动化工具窗口
+        /// </summary>
         [MenuItem("ET/ETPackage 包管理自动化工具")]
         public static void OpenWindow()
         {
@@ -39,12 +42,18 @@ namespace ET.PackageManager.Editor
             EditorApplication.ExecuteMenuItem("Assets/Refresh");
         }
 
+        /// <summary>
+        /// 卸载包管理缓存的所有 ScriptableObject 配置资源
+        /// </summary>
         public static void UnloadAllAssets()
         {
             PackageHelper.Unload();
             PackageVersionHelper.Unload();
         }
 
+        /// <summary>
+        /// 重新加载包管理的所有 ScriptableObject 配置资源
+        /// </summary>
         public static void ReLoadAllAssets()
         {
             PackageHelper.LoadAsset();
@@ -54,6 +63,9 @@ namespace ET.PackageManager.Editor
         private OdinMenuTree           m_OdinMenuTree;
         private List<BaseTreeMenuItem> m_AllMenuItem = new List<BaseTreeMenuItem>();
 
+        /// <summary>
+        /// 扫描程序集中带有 ETPackageMenuAttribute 的模块类，按 Order 排序构建菜单树
+        /// </summary>
         protected override OdinMenuTree BuildMenuTree()
         {
             m_OdinMenuTree                            =  new OdinMenuTree();

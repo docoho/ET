@@ -6,6 +6,9 @@ using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// Buff 配置表管理单例，存储并管理所有通过 BSON 反序列化加载的 BuffConfig。
+    /// </summary>
     [ConfigProcess(ConfigType.Code)]
     public partial class BuffConfigCategory : Singleton<BuffConfigCategory>, IConfig
     {
@@ -51,6 +54,9 @@ namespace ET
         partial void EndRef();
     }
 
+    /// <summary>
+    /// 单个 Buff 的配置数据，包含基础持续时间、叠加规则、移除标记以及挂载的各种生命周期行为树效果节点（EffectNode）。
+    /// </summary>
     [HideReferenceObjectPicker]
     [System.Serializable]
     public partial class BuffConfig : Object
@@ -121,6 +127,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 获取指定生命周期类型的行为树根节点（例如 EffectServerBuffAdd、EffectServerBuffTick 等）。
+        /// </summary>
         public T GetEffect<T>() where T : EffectNode
         {
             this.effectDict.TryGetValue(typeof(T), out EffectNode effectNode);
@@ -138,6 +147,9 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// Buff 同 ID 重复添加时的叠加规则枚举。
+    /// </summary>
     public enum OverLayRuleType
     {
         [LabelText("无")]

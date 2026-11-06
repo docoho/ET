@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,16 +10,31 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 包管理器核心辅助类（负责读取本地已注册的 UPM 包、管理最新版本缓存资产 PackageInfoAsset、维护黑名单以及将 A.B.C 版本号转换为长整型比较）
+    /// </summary>
     public static class PackageHelper
     {
+        /// <summary>
+        /// 包管理器自身在工程中的目录路径
+        /// </summary>
         public const string ETPackagePath = "Packages/cn.etetet.packagemanager";
 
+        /// <summary>
+        /// 编辑器配置资产存放目录路径
+        /// </summary>
         public const string ETPackageAssetsFolderPath = ETPackagePath + "/Editor/Assets";
 
+        /// <summary>
+        /// PackageInfoAsset 资源路径
+        /// </summary>
         public const string ETPackageInfoAssetPath = ETPackageAssetsFolderPath + "/PackageInfoAsset.asset";
 
         private static PackageInfoAsset m_PackageInfoAsset;
 
+        /// <summary>
+        /// 获取当前加载的 PackageInfoAsset 实例（未加载时自动加载或创建）
+        /// </summary>
         public static PackageInfoAsset PackageInfoAsset
         {
             get

@@ -2,6 +2,9 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树节点标题栏颜色特性，用于在行为树可视化编辑器中区分不同类别的节点（如协程节点、条件节点等）。
+    /// </summary>
     [EnableClass]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public sealed class BTNodeTitleColorAttribute : Attribute

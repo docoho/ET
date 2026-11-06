@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,13 +8,22 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 包版本管理模块分部类（负责一键批量覆盖更新当前筛选出的所有可更新包）
+    /// </summary>
     public partial class ETPackageVersionModule
     {
+        /// <summary>
+        /// 仅在“更新”筛选模式下且存在可更新包时显示“更新当前所有”按钮
+        /// </summary>
         private bool ShowIfUpdateAll()
         {
             return FilterType == EPackagesFilterType.Update && m_FilterPackageInfoDataList.Count > 0;
         }
 
+        /// <summary>
+        /// 一键批量更新当前筛选列表中所有有新版本的包（覆盖更新模式）
+        /// </summary>
         [Button("更新当前所有", 50)]
         [GUIColor(0f, 1f, 0f)]
         [BoxGroup("筛选包数据", centerLabel: true)]
@@ -37,6 +46,9 @@ namespace ET.PackageManager.Editor
             });
         }
 
+        /// <summary>
+        /// 删除本地旧包目录并同步更新所有依赖该包的其它包版本记录
+        /// </summary>
         private bool UpdateDependencies(PackageVersionData packageData)
         {
             var packagePath = Application.dataPath.Replace("Assets", "Packages") + "/" + packageData.Name;

@@ -2,6 +2,9 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能编辑器常量与命名规范辅助类（约定主技能 ID 为 10 的倍数，资产命名为 s{Id} / b{Id}）。
+    /// </summary>
     public static class SpellEditorConstants
     {
         public const string MenuPath = "ET/Spell/Spell Editor";
@@ -13,11 +16,17 @@ namespace ET
         private const string LegacyBuffAssetPrefix = "Buff";
         public const int SpellGroupSize = 10;
 
+        /// <summary>
+        /// 判断给定 ID 是否为主技能 ID（约定为 10 的倍数）。
+        /// </summary>
         public static bool IsMainSpell(int id)
         {
             return id % SpellGroupSize == 0;
         }
 
+        /// <summary>
+        /// 判断给定 ID 是否为子技能 ID（非 10 的倍数）。
+        /// </summary>
         public static bool IsSubSpell(int id)
         {
             return id % SpellGroupSize != 0;

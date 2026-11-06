@@ -7,6 +7,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET
 {
+    /// <summary>
+    /// 禁止直接持有 <c>Entity</c> 强引用成员分析器（ET0111）。
+    /// <para>1. 检查所有类或结构体的字段与自动属性（含数组及泛型容器元素），禁止直接声明 <c>Entity</c> 派生类型，强制要求使用 <c>EntityRef&lt;T&gt;</c>（或 <c>EntityWeakRef&lt;T&gt;</c>）以通过 <c>InstanceId</c> 校验实体生命周期有效性，防止悬空引用。</para>
+    /// <para>2. 在跨线程共享的 <c>Singleton&lt;T&gt;</c> 及其子类中，进一步禁止持有 <c>Entity</c> 或 <c>EntityRef&lt;T&gt;</c>。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EntityMemberAnalyzer : DiagnosticAnalyzer
     {

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端矩形范围目标选择器处理器。
+    /// </summary>
     public class BTTargetSelectorRectangleHandler: ABTHandler<TargetSelectorRectangle>
     {
         protected override int Run(TargetSelectorRectangle node, BTEnv env)

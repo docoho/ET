@@ -1,10 +1,13 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
     //GM命令分类
     //将会根据枚举生成页签
     //GMGroup特性标记转换为显示名称
     //UniqueId特性标记唯一ID
     //ID会从小到大排序
+    /// <summary>
+    /// GM命令分类唯一ID定义，各模块可通过 partial class 扩展自己的GM分类页签。
+    /// </summary>
     [UniqueId]
     public static partial class EGMType
     {

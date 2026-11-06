@@ -1,19 +1,27 @@
 namespace ET.Client
 {
     /// <summary>
-    /// 客户端装备组件系统
+    /// 客户端装备组件系统，负责维护客户端本地装备槽位缓存及处理服务端下发的装备更新
     /// </summary>
     [EntitySystemOf(typeof(EquipmentComponent))]
     public static partial class EquipmentComponentSystem
     {
         #region 生命周期方法
 
+        /// <summary>
+        /// 组件初始化时清空本地已穿戴装备字典
+        /// </summary>
+        /// <param name="self">客户端装备组件实例</param>
         [EntitySystem]
         private static void Awake(this EquipmentComponent self)
         {
             self.EquippedItems.Clear();
         }
 
+        /// <summary>
+        /// 组件销毁时清空本地已穿戴装备字典
+        /// </summary>
+        /// <param name="self">客户端装备组件实例</param>
         [EntitySystem]
         private static void Destroy(this EquipmentComponent self)
         {
@@ -25,8 +33,11 @@ namespace ET.Client
         #region 业务方法
 
         /// <summary>
-        /// 获取穿戴的装备Item
+        /// 获取指定槽位穿戴的装备 Item 实体
         /// </summary>
+        /// <param name="self">客户端装备组件实例</param>
+        /// <param name="slotType">装备槽位类型</param>
+        /// <returns>穿戴的物品实体，若未穿戴则返回 null</returns>
         public static Item GetEquippedItem(this EquipmentComponent self, EquipmentSlotType slotType)
         {
             if (self.EquippedItems.TryGetValue(slotType, out EntityRef<Item> itemRef))
@@ -37,8 +48,11 @@ namespace ET.Client
         }
 
         /// <summary>
-        /// 检查槽位是否有装备
+        /// 检查指定槽位是否已穿戴装备
         /// </summary>
+        /// <param name="self">客户端装备组件实例</param>
+        /// <param name="slotType">装备槽位类型</param>
+        /// <returns>若已穿戴则返回 true，否则返回 false</returns>
         public static bool HasEquippedItem(this EquipmentComponent self, EquipmentSlotType slotType)
         {
             if (self.EquippedItems.TryGetValue(slotType, out EntityRef<Item> itemRef))
@@ -50,8 +64,10 @@ namespace ET.Client
         }
 
         /// <summary>
-        /// 获取所有穿戴的装备数量
+        /// 获取当前所有已穿戴的有效装备总数
         /// </summary>
+        /// <param name="self">客户端装备组件实例</param>
+        /// <returns>已穿戴装备数量</returns>
         public static int GetEquippedItemCount(this EquipmentComponent self)
         {
             int count = 0;

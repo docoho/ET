@@ -1,9 +1,15 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// NetClient 纤程处理主纤程发起的登录请求（Main2NetClient_Login）：
+    /// 1. 拉取 Router 与 Realm 地址列表；
+    /// 2. 通过 Router 连接 Realm 获取 Gate 地址与登录 Key；
+    /// 3. 通过 Router 连接 Gate 完成登录并将长连接保存在 SessionComponent 中。
+    /// </summary>
     [MessageHandler(SceneType.NetClient)]
     public class Main2NetClient_LoginHandler: MessageHandler<Scene, Main2NetClient_Login, NetClient2Main_Login>
     {

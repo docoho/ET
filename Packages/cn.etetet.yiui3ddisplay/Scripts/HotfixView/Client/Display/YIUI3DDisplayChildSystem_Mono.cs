@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +7,14 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（生命周期钩子：初始化、销毁、LateUpdate同步相机、UI显隐时的RenderTexture申请与释放）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
     {
+        /// <summary>
+        /// 初始化3D展示组件：设置Layer、默认相机控制器、全局Y轴防重叠偏移及多目标数据。
+        /// </summary>
         private static void Awake3DDisplay(this YIUI3DDisplayChild self)
         {
             self.SetLayer();

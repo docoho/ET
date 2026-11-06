@@ -90,6 +90,9 @@ namespace ET
         /// </summary>
         SystemReward = 16,
 
+        /// <summary>
+        /// 穿戴/卸下装备
+        /// </summary>
         Equip = 17,
     }
 }

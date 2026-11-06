@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using MongoDB.Bson;
@@ -6,9 +6,17 @@ using MongoDB.Driver;
 
 namespace ET.Server
 {
+	/// <summary>
+	/// MongoDB 数据库操作组件（<see cref="DBComponent"/>）的业务系统类。
+	/// <para>封装对指定区服 MongoDB 数据库的集合创建、文档计数（Count）、存在性判断（Exist）、按 ID/Lambda/JSON 查询（Query）、原子替换（FindOneAndReplace）、批量插入（InsertBatch）、实体保存（Save）、删除（Remove）及索引创建（CreateIndex）操作。</para>
+	/// <para>所有读写操作均通过 <c>CoroutineLockType.MongoDB</c> 配合 <c>id % DBComponent.TaskCount</c> 协程锁分片排队，保证同一实体 ID 的数据库读写严格串行化且不阻塞其他实体的并发请求。</para>
+	/// </summary>
 	[EntitySystemOf(typeof(DBComponent))]
     public static partial class DBComponentSystem
     {
+	    /// <summary>
+	    /// 初始化 MongoDB 客户端连接并获取指定数据库与已有集合列表。
+	    /// </summary>
 	    [EntitySystem]
 	    private static void Awake(this DBComponent self, string dbConnection, string dbName)
 		{
@@ -17,16 +25,25 @@ namespace ET.Server
 			self.GetCollectionNames();
 		}
 
+		/// <summary>
+		/// 获取强类型集合对象（若未指定集合名则默认使用类型名称 <c>typeof(T).Name</c>）。
+		/// </summary>
 		private static IMongoCollection<T> GetCollection<T>(this DBComponent self, string collection = null)
 		{
 		    return self.database.GetCollection<T>(collection ?? GetDefaultCollectionName(typeof(T)));
 		}
 
+	    /// <summary>
+	    /// 按集合名称获取基类为 <see cref="Entity"/> 的集合对象。
+	    /// </summary>
 	    private static IMongoCollection<Entity> GetCollection(this DBComponent self, string name)
 	    {
 		    return self.database.GetCollection<Entity>(name);
 	    }
 
+	    /// <summary>
+	    /// 获取实体类型对应的默认 MongoDB 集合名称（即类名 <c>type.Name</c>）。
+	    /// </summary>
 	    private static string GetDefaultCollectionName(Type type)
 	    {
 		    if (type == null)
@@ -37,6 +54,9 @@ namespace ET.Server
 		    return type.Name;
 	    }
 	    
+	    /// <summary>
+	    /// 拉取当前数据库中已存在的所有集合名称并缓存到 <see cref="DBComponent.CollectionDic"/>。
+	    /// </summary>
 	    public static void GetCollectionNames(this DBComponent self)
 	    {
 		    self.CollectionDic.Clear();
@@ -47,12 +67,18 @@ namespace ET.Server
 		    }
 	    }
         
+	    /// <summary>
+	    /// 按实体类型 <typeparamref name="T"/> 的名称异步创建 MongoDB 集合。
+	    /// </summary>
 	    public static async ETTask CreateCollection<T>(this DBComponent self)
 	    {
 		    string name = GetDefaultCollectionName(typeof(T));
 		    await self.CreateCollection(name);
 	    }
         
+	    /// <summary>
+	    /// 按指定名称异步创建 MongoDB 集合（若集合已存在则自动忽略异常）。
+	    /// </summary>
 	    public static async ETTask CreateCollection(this DBComponent self, string name)
 	    {
 		    try

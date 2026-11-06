@@ -43,6 +43,9 @@ namespace ET.Client
     [ChildOf(typeof(Quest))]
     public class QuestObjective : Entity, IAwake, IDestroy
     {
+        /// <summary>
+        /// 当前已完成的数量
+        /// </summary>
         public int Count;
 
         /// <summary>

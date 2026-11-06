@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 禁止 Lambda 表达式闭包捕获 ET.Entity 及其子类局部变量的 Roslyn 静态分析器（NoETEntityClosure），防止异步回调或延迟委托中访问已销毁/复用的实体。
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LambdaEntityCaptureAnalyzer : DiagnosticAnalyzer
     {

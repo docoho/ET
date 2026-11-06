@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 销毁场景中指定路径或 InstanceId 的 GameObject（支持 Undo）的命令处理器（GameObjectDestroy）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectDestroyHandler : AUnityBridgeHandler<GameObjectDestroyRequest, GameObjectDestroyResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectDestroyRequest command)

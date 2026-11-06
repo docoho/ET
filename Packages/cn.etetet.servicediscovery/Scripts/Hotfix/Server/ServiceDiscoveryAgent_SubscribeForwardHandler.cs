@@ -2,10 +2,17 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 进程级代理（<see cref="ServiceDiscoveryAgent"/>）处理同进程业务场景（<see cref="ServiceDiscoveryProxy"/>）服务变更订阅请求的处理器。
+    /// 确保 Agent 已向主节点注册就绪后，记录 Proxy 的订阅过滤条件，并在响应中立即返回当前匹配的初始服务快照。
+    /// </summary>
     [MessageHandler(SceneType.ServiceDiscoveryAgent)]
     public class ServiceDiscoveryAgent_SubscribeForwardHandler :
         MessageHandler<Scene, ServiceSubscribeRequest, ServiceSubscribeResponse>
     {
+        /// <summary>
+        /// 处理同进程 Proxy 的服务订阅请求。
+        /// </summary>
         protected override async ETTask Run(Scene scene, ServiceSubscribeRequest request, ServiceSubscribeResponse response)
         {
             if (!ServiceDiscoveryHelper.TryValidateRequiredText(request.SceneName, nameof(ServiceSubscribeRequest),
@@ -41,6 +48,7 @@ namespace ET.Server
             string sceneName = scene.Name;
             try
             {
+                // 确保 Agent 已与主节点完成握手并持有最新全量快照
                 await agent.EnsureReadyAsync(nameof(ServiceSubscribeRequest));
                 agent = agentRef;
                 if (agent == null)
@@ -48,6 +56,7 @@ namespace ET.Server
                     return;
                 }
 
+                // 登记 Proxy 的订阅过滤条件，并将当前匹配该过滤条件的服务快照填入 response.Services
                 int error = agent.SubscribeProxyServiceChange(request.SceneName, request.SubscriberActorId, request.FilterName,
                     request.FilterMetadata, response.Services);
                 if (error != ErrorCode.ERR_Success)

@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 单个红点枚举Key的标识ID与可读描述数据。
+    /// </summary>
     [HideLabel]
     [HideReferenceObjectPicker]
     [Serializable]

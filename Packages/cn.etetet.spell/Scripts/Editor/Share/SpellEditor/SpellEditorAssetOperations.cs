@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能编辑器资产操作工具类，提供创建、删除、修改 ID（含自动重写行为树内引用）、整条技能链路深拷贝以及导出 BSON 配置的功能。
+    /// </summary>
     public static class SpellEditorAssetOperations
     {
         public static void SaveAssets()
@@ -16,12 +19,18 @@ namespace ET
             AssetDatabase.Refresh();
         }
 
+        /// <summary>
+        /// 保存资产并将所有 ScriptableObject 导出为运行时 BSON 配置文件。
+        /// </summary>
         public static void ExportConfig()
         {
             SaveAssets();
             ExportScriptableObjectEditor.ExportScriptableObject();
         }
 
+        /// <summary>
+        /// 在行为树编辑器窗口中打开指定的根节点（Cost、TargetSelector 或 EffectNode）。
+        /// </summary>
         public static void OpenBehaviorTree(UnityEngine.Object owner, BTRoot root)
         {
             if (owner == null || root == null)

@@ -1,8 +1,11 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 异步协程行为树节点数据基类，只能挂载在 EffectServerBuffTick 树下，用于执行跨帧/异步的 AI 行为。
+    /// </summary>
     [BTNodeTitleColor(0f, 0.5f, 0f, 1f)]
     public abstract class BTCoroutine: BTNode
     {

@@ -106,8 +106,11 @@ namespace ET.Server
         }
 
         /// <summary>
-        /// 通知客户端装备变化
+        /// 通知客户端装备穿戴或更新变化
         /// </summary>
+        /// <param name="unit">所属角色单位</param>
+        /// <param name="slotType">变更的装备槽位类型</param>
+        /// <param name="item">穿戴的装备物品实体</param>
         private static void NotifyEquipmentChange(Unit unit, EquipmentSlotType slotType, Item item)
         {
             // 使用M2C_UpdateEquipment消息通知装备变化
@@ -122,8 +125,10 @@ namespace ET.Server
         }
 
         /// <summary>
-        /// 通知客户端装备移除
+        /// 通知客户端装备从槽位移除（卸下）
         /// </summary>
+        /// <param name="unit">所属角色单位</param>
+        /// <param name="item">被卸下的装备物品实体</param>
         private static void NotifyEquipmentRemove(Unit unit, Item item)
         {
             // 使用M2C_UpdateEquipment消息通知装备移除（SlotType=-1表示卸下）

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -8,6 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// Hotfix / HotfixView 热更程序集类型声明规范分析器（ET0005 / ET0033）。
+    /// <para>1. 强制要求 Hotfix 层只能声明无状态的 <c>static class</c>（如各种 <c>*System</c>、<c>*Helper</c>），或者继承自带有 <c>[EnableClass]</c> 特性的基类（如 <c>AEvent</c>、<c>MessageHandler</c>）。</para>
+    /// <para>2. 禁止在 Hotfix 层声明 <c>struct</c> 结构体，要求所有数据结构统一定义在 Model / ModelView 层以支持热重载不丢失状态。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassDeclarationInHotfixAnalyzer: DiagnosticAnalyzer
     {

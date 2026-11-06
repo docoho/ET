@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -6,6 +6,9 @@ using Sirenix.Serialization;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 缓存远端 ET 包仓库（Hub）中所有包元数据的 ScriptableObject 资产
+    /// </summary>
     [HideLabel]
     public class PackageHubAsset : SerializedScriptableObject
     {

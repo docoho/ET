@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// Roslyn 静态代码分析器的全局开关配置类。
+    /// </summary>
     public static class AnalyzerGlobalSetting
     {
         /// <summary>

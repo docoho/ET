@@ -1,5 +1,8 @@
 namespace ET
 {
+    /// <summary>
+    /// <see cref="ProcessFiberAddressComponent"/> 生命周期系统：在 Awake 时向 <see cref="ProcessFiberAddressSingleton"/> 注册当前 Fiber 地址，Destroy 时自动注销。
+    /// </summary>
     [EntitySystemOf(typeof(ProcessFiberAddressComponent))]
     public static partial class ProcessFiberAddressComponentSystem
     {

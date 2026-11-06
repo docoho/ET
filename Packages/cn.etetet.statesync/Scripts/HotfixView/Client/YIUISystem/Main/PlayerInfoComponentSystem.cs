@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.7
-    /// Desc
+    /// Desc    主界面左上角本地玩家信息框（PlayerInfo）组件系统，负责绑定本地玩家单位并展示头像、名称及生命/法力条
     /// </summary>
     public static partial class PlayerInfoComponentSystem
     {
+        /// <summary>
+        /// 初始化玩家信息框并注册头像点击事件
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this PlayerInfoComponent self)
         {

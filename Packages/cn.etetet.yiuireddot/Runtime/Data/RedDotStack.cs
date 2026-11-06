@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 堆栈信息
+    /// 单次红点变更操作的调试堆栈快照信息。
     /// </summary>
     public class RedDotStack
     {

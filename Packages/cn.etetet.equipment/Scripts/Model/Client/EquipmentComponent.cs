@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace ET.Client
 {
     /// <summary>
-    /// 客户端装备组件
+    /// 客户端装备管理组件（挂载在客户端 <see cref="Scene"/> 上，缓存当前角色已穿戴的各部位装备引用）
     /// </summary>
     [ComponentOf(typeof(Scene))]
     public class EquipmentComponent: Entity, IAwake, IDestroy

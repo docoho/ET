@@ -1,5 +1,8 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端处理客户端查询指定 NPC 可接取任务列表请求（C2M_QueryAvailableQuests）的消息处理器。
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_QueryAvailableQuestsHandler : MessageLocationHandler<Unit, C2M_QueryAvailableQuests, M2C_QueryAvailableQuests>
     {

@@ -1,8 +1,11 @@
-﻿using ET.Client;
+using ET.Client;
 using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 宠物强制召回异步协程处理器：清空宠物当前攻击目标。
+    /// </summary>
     public class AI_PetReturnHandler: ABTCoroutineHandler<AI_PetReturn>
     {
         protected override async ETTask RunAsync(AI_PetReturn node, BTEnv env)

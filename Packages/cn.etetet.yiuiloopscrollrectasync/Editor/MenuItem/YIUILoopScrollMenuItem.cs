@@ -1,9 +1,12 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI无限循环滚动列表Hierarchy右键创建菜单项（支持横向、纵向、反向及网格Group模板预制体）。
+    /// </summary>
     internal static class YIUILoopScrollMenuItem
     {
         [MenuItem("GameObject/YIUI/LoopScroll/文档", false, 10000)]

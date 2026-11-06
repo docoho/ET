@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
@@ -360,6 +360,9 @@ namespace ET.PackageManager.Editor
             return valueOut;
         }
 
+        /// <summary>
+        /// 使用默认或指定分隔符将字符串拆分为目标类型的数组（自动调用 ParseAny 解析每个元素）
+        /// </summary>
         public static T[] ToArr<T>(string value, string separator = ArrSplitLv1)
         {
             if (ToArr(value, separator, out T[] item, ParseAny<T>))

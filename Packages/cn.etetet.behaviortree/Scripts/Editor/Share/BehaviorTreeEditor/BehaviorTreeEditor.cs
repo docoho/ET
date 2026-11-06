@@ -7,6 +7,9 @@ using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树可视化编辑器主窗口（快捷键 F8），集成节点图画布（TreeView）、跨资产节点类型搜索面板以及运行时执行路径回放与黑板快照调试面板。
+    /// </summary>
     public class BehaviorTreeEditor : EditorWindow
     {
         public TreeView TreeView;

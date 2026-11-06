@@ -11,6 +11,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET
 {
+    /// <summary>
+    /// 命名空间与跨端依赖规范分析器（ET0112 / ET0113 / ET0114）。
+    /// <para>检查源码文件所在目录（Share / Client / Server / Test）与实际声明的命名空间（ET / ET.Client / ET.Server / ET.Test）是否严格一致，并禁止 Share 依赖 Client/Server、禁止 Client 依赖 Server。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamespaceAnalyzer : DiagnosticAnalyzer
     {

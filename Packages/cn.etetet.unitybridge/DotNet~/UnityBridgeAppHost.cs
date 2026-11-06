@@ -7,12 +7,18 @@ using ET.Server;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 命令行端应用宿主，负责初始化日志、加载 ET.Core/ET.Model/ET.Hotfix 程序集并完成 CodeTypes 与 MongoDB 序列化注册。
+    /// </summary>
     internal sealed class UnityBridgeAppHost
     {
         private static bool started;
         private static Assembly hotfixAssembly;
         private static AssemblyLoadContext hotfixAssemblyLoadContext;
 
+        /// <summary>
+        /// 幂等启动宿主环境，完成反射类型扫描与 BSON 序列化注册
+        /// </summary>
         public void Start()
         {
             if (started)

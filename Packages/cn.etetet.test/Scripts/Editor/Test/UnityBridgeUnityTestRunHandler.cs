@@ -5,6 +5,9 @@ using ET.Test;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 编辑器端测试用例运行命令处理器（UnityTestRun），支持通过外部 CLI 命令触发 Unity Editor 内匹配的 [Test] 用例并返回结构化结果。
+    /// </summary>
     internal sealed class UnityBridgeUnityTestRunHandler : AUnityBridgeHandler<UnityTestRunRequest, UnityTestRunResponse>
     {
         protected override async ETTask<IResponse> Run(UnityTestRunRequest command)

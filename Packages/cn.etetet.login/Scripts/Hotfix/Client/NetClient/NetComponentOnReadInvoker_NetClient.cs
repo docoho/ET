@@ -1,7 +1,11 @@
-﻿using System;
+using System;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端网络纤程（NetClient）收到服务器网络包后的读取分发器：
+    /// RPC 响应直接唤醒等待的 Session，普通下行消息通过 ProcessInnerSender 投递给主纤程（ParentFiberId）处理。
+    /// </summary>
     [Invoke(SceneType.NetClient)]
     public class NetComponentOnReadInvoker_NetClient: AInvokeHandler<NetComponentOnRead>
     {

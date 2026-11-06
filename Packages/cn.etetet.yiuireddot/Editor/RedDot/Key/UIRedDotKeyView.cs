@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// YIUI自动化工具中的红点枚举Key管理子视图（支持Key增删改查、引用冲突检测及一键生成 ERedDotKeyType.cs）。
+    /// </summary>
     [HideLabel]
     [HideReferenceObjectPicker]
     internal class UIRedDotKeyView : BaseCreateModule

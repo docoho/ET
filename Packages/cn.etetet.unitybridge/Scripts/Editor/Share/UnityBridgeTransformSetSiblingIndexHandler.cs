@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 调整指定 Transform 在同级子节点中的排序索引（SetSiblingIndex / First / Last，支持 Undo）的命令处理器（TransformSetSiblingIndex）。
+    /// </summary>
     internal sealed class UnityBridgeTransformSetSiblingIndexHandler : AUnityBridgeHandler<TransformSetSiblingIndexRequest, TransformSetSiblingIndexResponse>
     {
         protected override async ETTask<IResponse> Run(TransformSetSiblingIndexRequest command)

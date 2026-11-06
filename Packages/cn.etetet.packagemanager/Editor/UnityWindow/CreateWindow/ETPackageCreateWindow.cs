@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// ET 新包创建向导窗口（无 Odin Inspector 环境下的原生 IMGUI 回退窗口）
+    /// </summary>
     public class ETPackageCreateWindow : EditorWindow
     {
         #if !ODIN_INSPECTOR
@@ -21,24 +24,54 @@ namespace ET.PackageManager.Editor
             GetWindow<ETPackageCreateWindow>()?.Close();
         }
 
+        /// <summary>
+        /// 要生成的包结构类型（Runtime / Editor / Git 等）
+        /// </summary>
         public EPackageCreateType PackageCreateType = EPackageCreateType.All;
 
+        /// <summary>
+        /// Runtime 程序集引用的第三方库类型
+        /// </summary>
         public EPackageRuntimeRefType RuntimeRefType = EPackageRuntimeRefType.All;
 
+        /// <summary>
+        /// 要创建的目录层级与 CodeMode 类型（Client / Server / Share 等）
+        /// </summary>
         public EPackageCreateFolderType FolderType = EPackageCreateFolderType.All;
 
+        /// <summary>
+        /// 包作者名称
+        /// </summary>
         public string PackageAuthor;
 
+        /// <summary>
+        /// 包名称（不含或含 cn.etetet. 前缀）
+        /// </summary>
         public string PackageName;
 
+        /// <summary>
+        /// 包唯一数字 ID（用于生成 PackageType 常量）
+        /// </summary>
         public string PackageId;
 
+        /// <summary>
+        /// 包在 Package Manager 中的显示名称
+        /// </summary>
         public string DisplayName;
 
+        /// <summary>
+        /// 自定义程序集名称
+        /// </summary>
         public string AssemblyName;
 
+        /// <summary>
+        /// 包描述信息
+        /// </summary>
         public string Description;
 
+        /// <summary>
+        /// 当目标包目录已存在时是否强制删除并重新创建
+        /// </summary>
         public bool ForceCreate;
 
         private string PackagePath;

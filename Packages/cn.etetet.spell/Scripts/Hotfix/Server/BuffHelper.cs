@@ -5,17 +5,29 @@ using System.Threading;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端 Buff 生命周期管理核心辅助类（负责 Buff 创建、叠加规则结算、Tick/超时定时器注册、行为树效果触发及客户端网络同步）。
+    /// </summary>
     public static class BuffHelper
     {
+        /// <summary>
+        /// Buff 持续时间到期定时器回调。
+        /// </summary>
         [Invoke(TimerInvokeType.BuffTimeoutTimer)]
         public class BuffTimeoutTimer: ATimer<Buff>
         {
+            /// <summary>
+            /// 到期时以 <see cref="BuffFlags.TimeoutRemove"/> 原因移除该 Buff。
+            /// </summary>
             protected override void Run(Buff self)
             {
                 BuffHelper.RemoveBuff(self, BuffFlags.TimeoutRemove);
             }
         }
 
+        /// <summary>
+        /// 创建 Buff 实体并建立父子 Buff 关联，但暂不执行初始化与叠加效果（常用于施法流程中先挂载 <see cref="SpellTargetComponent"/> 再统一初始化）。
+        /// </summary>
         public static Buff CreateBuffWithoutInit(Unit unit, long casterId, long buffId, int buffConfigId, Buff parent)
         {
             Buff buff = unit.GetComponent<BuffComponent>().CreateBuff(buffId, buffConfigId, casterId);
@@ -37,6 +49,9 @@ namespace ET.Server
             return buff;
         }
 
+        /// <summary>
+        /// 创建并立即初始化 Buff 实体（包含叠加规则判定、定时器注册、触发 <see cref="EffectServerBuffAdd"/> 行为树以及广播 <see cref="M2C_BuffAdd"/>）。
+        /// </summary>
         public static Buff CreateBuff(Unit unit, long casterId, long buffId, int buffConfigId, Buff parent)
         {
             Buff buff = unit.GetComponent<BuffComponent>().CreateBuff(buffId, buffConfigId, casterId);
@@ -57,6 +72,9 @@ namespace ET.Server
             return InitBuff(buff);
         }
         
+        /// <summary>
+        /// 初始化 Buff：处理同配置 ID 的叠加规则（叠层、延长时间、替换），挂载 Tick 与超时定时器，运行服务端添加效果行为树，并通知客户端。
+        /// </summary>
         public static Buff InitBuff(Buff buff)
         {
             Unit unit = buff.Parent.GetParent<Unit>();
@@ -158,6 +176,9 @@ namespace ET.Server
             return buff;
         }
 
+        /// <summary>
+        /// 根据 <see cref="Buff.TickTime"/> 刷新或重建 <see cref="BuffTickComponent"/>。
+        /// </summary>
         private static void RefreshTickComponent(Buff buff)
         {
             buff.RemoveComponent<BuffTickComponent>();
@@ -168,6 +189,9 @@ namespace ET.Server
             }
         }
         
+        /// <summary>
+        /// 更新 Buff 的过期时间戳，重新注册超时定时器并向客户端同步 <see cref="M2C_BuffUpdate"/>。
+        /// </summary>
         public static void UpdateExpireTime(Buff buff, long expireTime)
         {
             buff.ExpireTime = expireTime;
@@ -198,6 +222,9 @@ namespace ET.Server
             MapMessageHelper.NoticeClient(unit, m2CBuffUpdate, buff.GetConfig().NoticeType);
         }
         
+        /// <summary>
+        /// 更新 Buff 的周期触发间隔时间（TickTime），刷新 <see cref="BuffTickComponent"/> 并通知客户端。
+        /// </summary>
         public static void UpdateTickTime(Buff buff, int tickTime)
         {
             int oldTickTime = buff.TickTime;
@@ -220,6 +247,9 @@ namespace ET.Server
             MapMessageHelper.NoticeClient(unit, m2CBuffUpdate, buff.GetConfig().NoticeType);
         }
         
+        /// <summary>
+        /// 更新 Buff 的叠加层数（限制在 <c>[0, MaxStack]</c> 之间，层数归零时自动移除 Buff，否则通知客户端更新）。
+        /// </summary>
         public static void UpdateStack(Buff buff, int stack)
         {
             if (buff.Stack == stack)
@@ -256,6 +286,9 @@ namespace ET.Server
             MapMessageHelper.NoticeClient(unit, m2CBuffUpdate, buffConfig.NoticeType);
         }
 
+        /// <summary>
+        /// 移除指定的 <paramref name="buff"/>，记录移除原因（<paramref name="removeType"/>），触发 <see cref="EffectServerBuffRemove"/> 行为树并通知客户端。
+        /// </summary>
         public static void RemoveBuff(Buff buff, BuffFlags removeType)
         {
             Unit unit = buff.Parent?.GetParent<Unit>();
@@ -291,6 +324,9 @@ namespace ET.Server
             MapMessageHelper.NoticeClient(unit, m2CBuffRemove, buffConfig.NoticeType);
         }
         
+        /// <summary>
+        /// 按 Buff 实体 ID 移除单位身上的指定 Buff。
+        /// </summary>
         public static void RemoveBuff(Unit unit, long id, BuffFlags removeType)
         {
             BuffComponent buffComponent = unit.GetComponent<BuffComponent>();
@@ -304,6 +340,9 @@ namespace ET.Server
             RemoveBuff(buff, removeType);
         }
 
+        /// <summary>
+        /// 按 Buff 配置表 ID 批量移除单位身上所有匹配的 Buff。
+        /// </summary>
         public static void RemoveBuffByConfigId(Unit unit, int configId, BuffFlags removeType)
         {
             BuffComponent buffComponent = unit.GetComponent<BuffComponent>();
@@ -318,6 +357,9 @@ namespace ET.Server
             }
         }
         
+        /// <summary>
+        /// 移除单位身上所有带有指定 <paramref name="flag"/> 标签的 Buff（并以该 <paramref name="flag"/> 作为移除原因）。
+        /// </summary>
         public static void RemoveBuffFlag(Unit unit, BuffFlags flag)
         {
             BuffComponent buffComponent = unit.GetComponent<BuffComponent>();
@@ -336,6 +378,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 移除单位身上所有带有指定 <paramref name="flag"/> 标签的 Buff，并显式指定移除原因 <paramref name="removeType"/>。
+        /// </summary>
         public static void RemoveBuffsByFlag(Unit unit, BuffFlags flag, BuffFlags removeType)
         {
             BuffComponent buffComponent = unit.GetComponent<BuffComponent>();

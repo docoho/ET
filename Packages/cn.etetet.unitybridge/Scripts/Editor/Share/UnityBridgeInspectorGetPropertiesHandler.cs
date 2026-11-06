@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 遍历读取目标对象或指定组件上全部可见 SerializedProperty 序列化属性的命令处理器（InspectorGetProperties）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorGetPropertiesHandler :
             AUnityBridgeInspectorHandler<InspectorGetPropertiesRequest, InspectorGetPropertiesResponse>
     {

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 编辑器常驻宿主（通过 [InitializeOnLoad] 随编辑器启动挂载到 EditorApplication.update），定期轮询 Temp/UnityBridge/requests 目录处理外部 CLI 命令。
+    /// </summary>
     [InitializeOnLoad]
     internal static class UnityBridgeEditorHost
     {

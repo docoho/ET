@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置指定 Transform 的世界坐标或局部坐标（支持 Undo）的命令处理器（TransformSetPosition）。
+    /// </summary>
     internal sealed class UnityBridgeTransformSetPositionHandler : AUnityBridgeHandler<TransformSetPositionRequest, TransformSetPositionResponse>
     {
         protected override async ETTask<IResponse> Run(TransformSetPositionRequest command)

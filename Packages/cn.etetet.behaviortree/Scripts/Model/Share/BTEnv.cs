@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,10 +7,16 @@ using System.Text;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树运行环境（黑板 Blackboard），支持从对象池租借，利用 ValueTypeWrap 和 EntityRef 实现无装箱、防悬空引用的跨节点参数传递。
+    /// </summary>
     public class BTEnv: DisposeObject, IPool
     {
         public long EntityId { get; private set; }
 
+        /// <summary>
+        /// 从对象池创建并初始化一个行为树运行环境。
+        /// </summary>
         public static BTEnv Create(Scene scene, long entityId, bool isFromPool = true)
         {
             BTEnv env = ObjectPool.Fetch<BTEnv>(isFromPool);

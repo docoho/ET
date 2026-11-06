@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 红点通用UI绑定MonoBehaviour基类。
+    /// 自动向RedDotMgr注册指定红点Key的数量变更回调，并根据数量是否大于等于1控制自身GameObject显隐，支持运行时动态切换绑定Key。
+    /// </summary>
     [AddComponentMenu("YIUIFramework/红点/红点通用绑定 【RedDotBind】")]
     public class RedDotBind : MonoBehaviour
     {

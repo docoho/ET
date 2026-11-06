@@ -4,9 +4,15 @@ using System.Linq;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 地图分线动态合线组件系统（周期性扫描低负载分线，将人数总和不超过推荐上限的两条分线自动合并，并销毁空闲分线）。
+    /// </summary>
     [EntitySystemOf(typeof(MergeLinesComponent))]
     public static partial class MergeLinesComponentSystem
     {
+        /// <summary>
+        /// 组件唤醒时启动定期合线检查循环与合线传送执行循环。
+        /// </summary>
         [EntitySystem]
         private static void Awake(this MergeLinesComponent self)
         {
@@ -14,11 +20,17 @@ namespace ET.Server
             self.StartTransferAsync().Coroutine();
         }
         
+        /// <summary>
+        /// 组件销毁清理。
+        /// </summary>
         [EntitySystem]
         private static void Destroy(this MergeLinesComponent self)
         {
         }
         
+        /// <summary>
+        /// 每 100 毫秒轮询一次待合线队列并执行合线传送。
+        /// </summary>
         private static async ETTask StartTransferAsync(this MergeLinesComponent self)
         {
             EntityRef<MergeLinesComponent> selfRef = self;
@@ -35,6 +47,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 检查待合线队列中已到期的合线任务并调用 <see cref="MergeLines"/> 执行合并。
+        /// </summary>
         private static async ETTask TransferAsync(this MergeLinesComponent self)
         {
             MapInfo mapInfo = self.GetParent<MapInfo>();
@@ -61,6 +76,9 @@ namespace ET.Server
             }
         }
         
+        /// <summary>
+        /// 将分线 <paramref name="line2"/> 中的所有在线玩家通过 Location 消息通知无感传送至分线 <paramref name="line1"/>，随后销毁分线 <paramref name="line2"/>。
+        /// </summary>
         // line2合并到line1
         public static async ETTask MergeLines(this MergeLinesComponent self, long line1, long line2)
         {
@@ -109,7 +127,9 @@ namespace ET.Server
             await mapInfo.RemoveCopy(mapCopy2.Id);
         }
         
-
+        /// <summary>
+        /// 每 1000 毫秒执行一次可合并分线扫描。
+        /// </summary>
         private static async ETTask StartCheckAsync(this MergeLinesComponent self)
         {
             EntityRef<MergeLinesComponent> selfRef = self;
@@ -126,6 +146,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 扫描当前地图下的所有运行中分线，寻找无等待进入玩家且人数之和不超过推荐上限的两条分线，将其标记为 <see cref="MapCopyStatus.WaitMerge"/> 并入队。
+        /// </summary>
         private static void CheckAsync(this MergeLinesComponent self)
         {
             MapInfo mapInfo = self.GetParent<MapInfo>();

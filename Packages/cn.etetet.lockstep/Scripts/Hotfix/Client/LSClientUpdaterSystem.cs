@@ -3,10 +3,16 @@ using System.IO;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 帧同步客户端逻辑帧更新器系统，负责客户端本地预测帧推进（最多超前权威帧 5 帧）、本地操作采样上报及追帧限流
+    /// </summary>
     [EntitySystemOf(typeof(LSClientUpdater))]
     [FriendOf(typeof (LSClientUpdater))]
     public static partial class LSClientUpdaterSystem
     {
+        /// <summary>
+        /// 初始化客户端帧同步更新器，缓存本地玩家 ID
+        /// </summary>
         [EntitySystem]
         private static void Awake(this LSClientUpdater self)
         {
@@ -14,6 +20,10 @@ namespace ET.Client
             self.MyId = room.Root().GetComponent<PlayerComponent>().MyId;
         }
         
+        /// <summary>
+        /// 每帧检测是否到达下一预测帧时间点，采集本地输入推进预测模拟并向服务端发送 <see cref="FrameMessage"/>（单次渲染帧最多耗时 5ms 以防卡顿）
+        /// </summary>
+        /// <param name="self">客户端帧同步更新器实例</param>
         [EntitySystem]
         private static void Update(this LSClientUpdater self)
         {
@@ -56,6 +66,12 @@ namespace ET.Client
             }
         }
 
+        /// <summary>
+        /// 构造指定预测帧的全员输入：沿用最新权威帧中其他玩家的输入，并写入本地玩家当前采集到的操作输入
+        /// </summary>
+        /// <param name="self">客户端帧同步更新器实例</param>
+        /// <param name="frame">目标帧号</param>
+        /// <returns>预测帧输入数据</returns>
         private static OneFrameInputs GetOneFrameMessages(this LSClientUpdater self, int frame)
         {
             Room room = self.GetParent<Room>();

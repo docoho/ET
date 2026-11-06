@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 包仓库（Hub）单个分类视图模块（负责展示该分类下的包列表、支持按包名/作者/描述搜索、按下载量降序排序及递归生成子分类菜单）
+    /// </summary>
     public class PackageCategoryModule : BasePackageToolModule
     {
         [Button("文档", 30, Icon = SdfIconType.Link45deg, IconAlignment = IconAlignment.LeftOfText)]
@@ -27,6 +30,9 @@ namespace ET.PackageManager.Editor
             PackageHubHelper.RefreshRequestAll(ShowPackages);
         }
 
+        /// <summary>
+        /// 当前经过搜索过滤与下载量排序后展示在表格中的包数据列表
+        /// </summary>
         [TableList(DrawScrollView = true, IsReadOnly = true)]
         [BoxGroup("所有包", centerLabel: true)]
         [HideLabel]

@@ -1,5 +1,9 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 单个客户端软路由会话节点（<see cref="RouterNode"/>）的系统类。
+    /// <para>管理单个外网客户端连接的生命周期状态，并提供每秒外网收包速率限流检查（<see cref="CheckOuterCount"/>），防止单连接洪水攻击。</para>
+    /// </summary>
     [EntitySystemOf(typeof(RouterNode))]
     public static partial class RouterNodeSystem
     {
@@ -28,6 +32,9 @@ namespace ET.Server
             self.SyncCount = 0;
         }
         
+        /// <summary>
+        /// 统计并检查该路由节点来自外网客户端的每秒收包数量；若每秒超过 1000 个包则返回 <c>false</c> 触发限流断开。
+        /// </summary>
         public static bool CheckOuterCount(this RouterNode self, long timeNow)
         {
             if (self.LastCheckTime == 0)

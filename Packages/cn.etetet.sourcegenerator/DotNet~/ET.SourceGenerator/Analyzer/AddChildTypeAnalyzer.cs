@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -8,6 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 实体子对象添加类型约束分析器（ET0001 / ET0014）。
+    /// <para>1. 检查 <c>entity.AddChild&lt;T&gt;()</c> 或 <c>AddChildWithId&lt;T&gt;()</c> 调用，确保子实体类型 <c>T</c> 标记了 <c>[ChildOf(typeof(ParentEntity))]</c> 或无参 <c>[ChildOf]</c>。</para>
+    /// <para>2. 禁止对基类 <c>Entity</c> / <c>LSEntity</c> 引用直接调用 <c>AddChild</c>（除非所在方法或属性标记了 <c>[EnableAccessEntiyChild]</c>）。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AddChildTypeAnalyzer: DiagnosticAnalyzer
     {

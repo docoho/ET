@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
@@ -8,10 +8,16 @@ using UnityEngine;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 远端包仓库（Hub）中单个包的展示与操作数据模型（支持查看作者/仓库、安装、移除、刷新及付费包引导）
+    /// </summary>
     [Serializable]
     [HideReferenceObjectPicker]
     public class PackageHubData
     {
+        /// <summary>
+        /// 包名称（如 cn.etetet.core）
+        /// </summary>
         [TableColumnWidth(250, Resizable = false)]
         [VerticalGroup("信息")]
         [NonSerialized]
@@ -21,9 +27,15 @@ namespace ET.PackageManager.Editor
         [LabelText("包名")]
         public string PackageName;
 
+        /// <summary>
+        /// 付费扩展包信息（非空表示为付费包）
+        /// </summary>
         [HideInInspector]
         public PackagePayInfo PayInfo;
 
+        /// <summary>
+        /// 是否为付费扩展包
+        /// </summary>
         public bool PayPackage => PayInfo != null;
 
         [TableColumnWidth(250, Resizable = false)]

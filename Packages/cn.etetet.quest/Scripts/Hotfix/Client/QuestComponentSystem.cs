@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端任务组件系统：管理本地缓存的任务列表、任务目标进度更新，并发布对应的客户端 UI 事件。
+    /// </summary>
     [EntitySystemOf(typeof(QuestComponent))]
     public static partial class QuestComponentSystem
     {

@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 软路由节点场景（<c>SceneType.Router</c>）初始化处理器。
+    /// <para>挂载 <see cref="RouterComponent"/> 监听公网端口并绑定内网转发端口，随后通过 <see cref="ServiceDiscoveryProxy"/> 将自身的公网接入地址注册到服务发现中心，供 <c>RouterManager</c> 下发给客户端。</para>
+    /// </summary>
     [Invoke(SceneType.Router)]
     public class FiberInit_Router: AInvokeHandler<FiberInit, ETTask>
     {

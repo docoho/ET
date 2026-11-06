@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 在当前场景中创建空 GameObject 或基础几何体（Primitive）并注册 Undo 的命令处理器（GameObjectCreate）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectCreateHandler : AUnityBridgeHandler<GameObjectCreateRequest, GameObjectCreateResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectCreateRequest command)

@@ -4,9 +4,18 @@ using System.Net;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端 HTTP 监听组件（<see cref="HttpComponent"/>）的生命周期与请求分发系统类。
+    /// <para>基于 .NET <see cref="HttpListener"/> 监听指定的 URL 前缀（支持分号分隔多个地址），接收 HTTP 请求后根据当前 <c>SceneType</c> 与请求路径（<c>AbsolutePath</c>）交由 <see cref="HttpDispatcher"/> 路由到对应的 <see cref="IHttpHandler"/> 处理。</para>
+    /// </summary>
     [EntitySystemOf(typeof(HttpComponent))]
     public static partial class HttpComponentSystem
     {
+        /// <summary>
+        /// 初始化并启动 <see cref="HttpListener"/>，开始异步循环接收 HTTP 请求。
+        /// </summary>
+        /// <param name="self">HTTP 组件实例。</param>
+        /// <param name="address">以分号 <c>;</c> 分隔的监听地址前缀列表（如 <c>http://127.0.0.1:8080/;</c>）。</param>
         [EntitySystem]
         private static void Awake(this HttpComponent self, string address)
         {

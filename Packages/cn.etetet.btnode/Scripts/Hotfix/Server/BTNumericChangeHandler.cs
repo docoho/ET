@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端属性增减节点处理器：修改目标 Unit 的指定数值属性，若修改的是二级子属性（>= NumericComponentSystem.Max），则记录到 BuffChangeNumericRecordComponent 中以便 Buff 移除时自动回滚。
+    /// </summary>
     public class BTNumericChangeHandler: ABTHandler<BTNumericChange>
     {
         protected override int Run(BTNumericChange node, BTEnv env)

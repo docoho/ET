@@ -9,6 +9,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 将指定场景对象或工程资源追加到当前编辑器选中集合（Selection.objects）的命令处理器（SelectionAdd）。
+    /// </summary>
     internal sealed class UnityBridgeSelectionAddHandler : AUnityBridgeHandler<SelectionAddRequest, SelectionAddResponse>
     {
         protected override async ETTask<IResponse> Run(SelectionAddRequest command)

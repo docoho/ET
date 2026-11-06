@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace ET
 {
+    /// <summary>
+    /// 固定独占线程纤程调度器（对应 <see cref="SchedulerType.Thread"/>）：
+    /// 为每个加入此调度器的 <see cref="Fiber"/> 单独创建一个专用的操作系统线程（1 个 Fiber 独占 1 个 Thread），适合高吞吐网络收发（如 NetInner / NetClient）或重度计算的场景。
+    /// </summary>
     // 一个Fiber一个固定的线程
     internal class ThreadScheduler: IScheduler
     {

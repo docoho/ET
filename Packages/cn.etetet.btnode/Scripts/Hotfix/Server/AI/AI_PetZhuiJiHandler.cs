@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 宠物追击与攻击异步协程处理器：自动追击锁定的目标并在射程内释放攻击技能。
+    /// </summary>
     public class AI_PetZhuiJiHandler: ABTCoroutineHandler<AI_PetZhuiJi>
     {
         protected override async ETTask RunAsync(AI_PetZhuiJi node, BTEnv env)

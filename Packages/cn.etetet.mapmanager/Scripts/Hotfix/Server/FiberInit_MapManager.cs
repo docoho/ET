@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// MapManager 地图副本管理纤程初始化处理器。
+    /// </summary>
     [Invoke(SceneType.MapManager)]
     public class FiberInit_MapManager: AInvokeHandler<FiberInit, ETTask>
     {
+        /// <summary>
+        /// 挂载邮箱、定时器、协程锁、内网消息收发、Location 代理及 <see cref="MapManagerComponent"/>，并向服务发现注册与订阅 Location 服务。
+        /// </summary>
         public override async ETTask Handle(FiberInit fiberInit)
         {
             Scene root = fiberInit.Fiber.Root;

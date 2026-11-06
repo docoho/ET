@@ -2,8 +2,14 @@ using System;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端任务业务辅助工具类：封装接取任务、提交任务、更新目标进度及可接条件检查并同步通知客户端。
+    /// </summary>
     public static class QuestHelper
     {
+        /// <summary>
+        /// 为玩家添加任务并向客户端发送 M2C_CreateQuest 消息。
+        /// </summary>
         public static void AddQuest(Unit self, long questId)
         {
             Quest quest = self.GetComponent<QuestComponent>().AddQuest(questId);
@@ -22,6 +28,9 @@ namespace ET.Server
             MapMessageHelper.NoticeClient(self, createQuest, NoticeType.Self);
         }
         
+        /// <summary>
+        /// 提交完成指定任务并向客户端发送 M2C_UpdateQuest 状态更新消息。
+        /// </summary>
         public static void SubmitQuest(Unit self, long questId)
         {
             QuestComponent questComponent = self.GetComponent<QuestComponent>();

@@ -6,6 +6,9 @@ using UnityObject = UnityEngine.Object;
 namespace ET.Client
 {
     #if !YIUIMACRO_SYNCLOAD_CLOSE
+    /// <summary>
+    /// YIUI 同步加载 Sprite 的 Invoke 回调处理器，委托给 YIUIYooAssetsSpriteComponent 处理图集或散图同步加载。
+    /// </summary>
     [Invoke(EYIUIInvokeType.Sync)]
     public class YIUIInvokeLoadSpriteSyncHandler : AInvokeEntityHandler<YIUIInvokeEntity_LoadSprite, Sprite>
     {
@@ -30,6 +33,9 @@ namespace ET.Client
     }
     #endif
 
+    /// <summary>
+    /// YIUI 异步加载 Sprite 的 Invoke 回调处理器，委托给 YIUIYooAssetsSpriteComponent 处理图集或散图异步加载。
+    /// </summary>
     [Invoke(EYIUIInvokeType.Async)]
     public class YIUIInvokeLoadSpriteAsyncHandler : AInvokeEntityHandler<YIUIInvokeEntity_LoadSprite, ETTask<Sprite>>
     {

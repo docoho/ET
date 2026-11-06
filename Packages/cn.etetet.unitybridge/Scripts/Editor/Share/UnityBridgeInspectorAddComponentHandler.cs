@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 向场景对象或 Prefab 资产的目标节点挂载指定类型组件的命令处理器（InspectorAddComponent）。
+    /// </summary>
     internal sealed class UnityBridgeInspectorAddComponentHandler :
             AUnityBridgeInspectorHandler<InspectorAddComponentRequest, InspectorAddComponentResponse>
     {

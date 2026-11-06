@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 强制刷新 AssetDatabase（ImportAssetOptions.ForceUpdate）并跨编译等待完成的延迟命令处理器（Refresh）。
+    /// </summary>
     internal sealed class UnityBridgeRefreshHandler : AUnityBridgeDeferredHandler<Refresh, RefreshResponse>
     {
         protected override async ETTask<RefreshResponse> Run(Refresh command, UnityBridgeDeferredContext deferred)

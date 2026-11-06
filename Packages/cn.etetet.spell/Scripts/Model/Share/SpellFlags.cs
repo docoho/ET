@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能施法打断标记枚举。
+    /// </summary>
     public enum SpellFlags
     {
         MoveInterrupt = 1, // 移动

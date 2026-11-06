@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能编辑器主窗口（菜单路径：ET/Spell/Spell Editor），提供按主技能聚合展示整条 Spell/Buff 链路、直接编辑属性、跳转行为树以及一键复制技能链的功能。
+    /// </summary>
     public sealed class SpellEditorWindow : EditorWindow
     {
         private SpellEditorAssetIndex assetIndex;

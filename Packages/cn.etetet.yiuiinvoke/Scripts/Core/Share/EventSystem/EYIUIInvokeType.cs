@@ -1,7 +1,7 @@
 namespace ET
 {
     /// <summary>
-    /// YIUI公共Invoke事件类型
+    /// YIUI公共Invoke事件类型唯一编号定义（区分同步Sync与异步Async及多返回值变体）。
     /// </summary>
     [UniqueId]
     public static partial class EYIUIInvokeType

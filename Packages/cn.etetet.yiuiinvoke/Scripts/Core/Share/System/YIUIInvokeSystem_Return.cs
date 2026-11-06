@@ -1,10 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用系统（带返回值InvokeReturn与异步InvokeTask分发执行分部类，自动串联Before/After切面监听器）。
+    /// </summary>
     public partial class YIUIInvokeSystem
     {
+        /// <summary>
+        /// 执行无参且带返回值R的YIUI调用（依次执行Before监听器 -> 主Invoker -> After监听器）。
+        /// </summary>
         public R InvokeReturn<T, R>(T self, string invokeType, List<R> returnList = null) where T : Entity
         {
             if (self == null || self.IsDisposed)

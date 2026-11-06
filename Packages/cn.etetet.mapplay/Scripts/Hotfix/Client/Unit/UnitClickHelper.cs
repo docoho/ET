@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端点击场景中单位（如 NPC）的交互辅助工具类。
+    /// </summary>
     public static class UnitClickHelper
     {
         /// <summary>

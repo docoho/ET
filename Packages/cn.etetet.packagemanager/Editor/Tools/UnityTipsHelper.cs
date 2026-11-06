@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Object = UnityEngine.Object;
 using UnityEditor;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ET.PackageManager.Editor
 {
     /// <summary>
-    /// Unity提示框@sy
+    /// Unity 编辑器模态提示框与日志输出辅助类 @sy
     /// </summary>
     public static class UnityTipsHelper
     {

@@ -3,6 +3,9 @@ using ET.Server;
 
 namespace ET.Test
 {
+    /// <summary>
+    /// 测试主控场景（SceneType.Test）Fiber 初始化处理器，挂载基础通信/定时/控制台组件并初始化 TestDispatcher 与区服分配器。
+    /// </summary>
     [Invoke(SceneType.Test)]
     public class FiberInit_Test: AInvokeHandler<FiberInit, ETTask>
     {

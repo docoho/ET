@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— 核心生命周期、异步对象池（ObjAsyncCache）与数据源/预制源接口实现分部类。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     [FriendOf(typeof(YIUILoopScrollChild))]

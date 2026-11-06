@@ -1,5 +1,8 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
+    /// <summary>
+    /// 客户端网关 Session 错误监听组件系统：当 NetClient 纤程中的 Session 销毁时，向主纤程（Main Fiber）发送断开通知。
+    /// </summary>
     [EntitySystemOf(typeof(ClientSessionErrorComponent))]
     public static partial class ClientSessionErrorComponentSystem
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.8
-    /// Desc
+    /// Desc    主界面“目标的目标”信息框（TargetTargetInfo）组件系统，实时追踪并展示当前选中目标所锁定的目标单位信息
     /// </summary>
     public static partial class TargetTargetInfoComponentSystem
     {
+        /// <summary>
+        /// 初始化“目标的目标”信息框，默认隐藏并绑定本地玩家的 <see cref="TargetComponent"/>
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this TargetTargetInfoComponent self)
         {

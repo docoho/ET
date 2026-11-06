@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +6,9 @@ using UnityEditor;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// RedDotKeyAsset 在编辑器下的增删改查、排序与空闲安全ID分配扩展方法。
+    /// </summary>
     public static class RedDotKeyAsset_Extend
     {
         internal static List<RedDotKeyData> GetDataList(this RedDotKeyAsset self)

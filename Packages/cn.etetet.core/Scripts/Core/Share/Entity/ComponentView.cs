@@ -7,9 +7,16 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// Unity 编辑器调试视图组件：当开启 <c>ENABLE_VIEW</c> 宏时，每个注册的 <see cref="Entity"/> 都会在 Hierarchy 中生成一个对应的 GameObject 并挂载此脚本，
+    /// 借助 Odin Inspector 实时在 Inspector 面板中展示并编辑 Entity 的字段与属性。
+    /// </summary>
     [HideMonoScript]
     public class ComponentView : MonoBehaviour
     {
+        /// <summary>
+        /// 当前 GameObject 映射绑定的 ECS <see cref="ET.Entity"/> 安全引用。
+        /// </summary>
         // 你的 Entity 对象
         public EntityRef<Entity> Component
         {
@@ -17,9 +24,11 @@ namespace ET
             set;
         }
         
+        /// <summary>在 Inspector 面板显示的实体运行时 InstanceId</summary>
         [ShowInInspector, DisplayAsString]
         public long InstanceId => this.Entity?.InstanceId ?? 0;
 
+        /// <summary>在 Inspector 面板显示的实体业务 Id</summary>
         [ShowInInspector, DisplayAsString]
         public long Id => this.Entity?.Id ?? 0;
 
@@ -52,6 +61,9 @@ namespace ET
             set => Component = value;
         }
 
+        /// <summary>
+        /// 属性反射快照基类，用于在 Odin Inspector 中渲染并读写实体的公共属性（Property）。
+        /// </summary>
         [InlineProperty, HideLabel, HideReferenceObjectPicker]
         private abstract class MemberSnapshotBase
         {
@@ -119,6 +131,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 通过反射收集目标 Entity 派生类上定义的所有可读写的公共属性（排除基类 <see cref="ET.Entity"/> 自身的属性），生成 Inspector 调试列表。
+        /// </summary>
         private void RefreshDebugMembers()
         {
             Entity entity = this.Entity;

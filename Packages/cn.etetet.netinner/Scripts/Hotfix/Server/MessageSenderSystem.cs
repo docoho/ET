@@ -1,8 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 业务 Fiber 统一 Actor 消息发送器（<see cref="MessageSender"/>）的系统类。
+    /// <para>对上层业务屏蔽“同进程通信”与“跨进程通信”的差异：若目标 <see cref="ActorId.Address"/> 与本进程内网地址相同，则直接走内存无锁队列（<see cref="ProcessInnerSender"/>）；若在不同进程，则包装为 <see cref="A2NetInner_Message"/> 或 <see cref="A2NetInner_Request"/> 转发给本进程的 <c>NetInner</c> 纤程通过内网 Socket 发送。</para>
+    /// </summary>
     [EntitySystemOf(typeof(MessageSender))]
     public static partial class MessageSenderSystem
     {
@@ -12,6 +16,9 @@ namespace ET.Server
             self.ProcessInnerSender = self.Root().GetComponent<ProcessInnerSender>();
         }
         
+        /// <summary>
+        /// 向指定 <paramref name="actorId"/> 发送单向 Actor 消息（自动识别同进程内存投递或跨进程 <c>NetInner</c> 转发）。
+        /// </summary>
         public static void Send(this MessageSender self, ActorId actorId, IMessage message)
         {
             Fiber fiber = self.Fiber();
@@ -32,11 +39,17 @@ namespace ET.Server
             MessageQueue.Instance.Send(fiber, netInnerFiberInstanceId, a2NetInnerMessage);
         }
 
+        /// <summary>
+        /// 向指定 <paramref name="actorId"/> 发送 Actor RPC 请求并等待响应（使用默认超时时间 <see cref="ProcessInnerSender.TIMEOUT_TIME"/>）。
+        /// </summary>
         public static async ETTask<IResponse> Call(this MessageSender self, ActorId actorId, IRequest request, bool needException = true)
         {
             return await self.Call(actorId, request, ProcessInnerSender.TIMEOUT_TIME, needException);
         }
 
+        /// <summary>
+        /// 向指定 <paramref name="actorId"/> 发送带自定义超时时间的 Actor RPC 请求并等待响应。
+        /// </summary>
         public static async ETTask<IResponse> Call(this MessageSender self, ActorId actorId, IRequest request, long timeout,
             bool needException = true)
         {

@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树所有节点的抽象根基类，保存节点唯一 ID、子节点列表以及仅在 Unity 编辑器中使用的布局与注释字段。
+    /// </summary>
     [System.Serializable]
     public abstract class BTNode : Object
     {

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 查询指定 Prefab 资产或场景中 Prefab 实例的类型、状态及关联源资产路径的命令处理器（PrefabGetInfo）。
+    /// </summary>
     internal sealed class UnityBridgePrefabGetInfoHandler : AUnityBridgeHandler<PrefabGetInfoRequest, PrefabGetInfoResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabGetInfoRequest command)

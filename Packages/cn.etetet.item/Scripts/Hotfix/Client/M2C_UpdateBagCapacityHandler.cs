@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端处理服务端推送的背包容量更新通知（M2C_UpdateBagCapacity）。
+    /// </summary>
     [MessageHandler(SceneType.Client)]
     public class M2C_UpdateBagCapacityHandler : MessageHandler<Scene, M2C_UpdateBagCapacity>
     {

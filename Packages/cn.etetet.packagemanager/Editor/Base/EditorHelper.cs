@@ -109,6 +109,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 读取项目内指定相对路径的文本文件内容
+        /// </summary>
         public static string ReadAllText(string path)
         {
             try
@@ -128,6 +131,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 将字节数组写入项目内指定相对路径的文件（自动创建父目录）
+        /// </summary>
         public static bool WriteAllBytes(string path, byte[] bytes, bool log = false)
         {
             try
@@ -157,6 +163,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 读取项目内指定相对路径的文件全部字节
+        /// </summary>
         public static byte[] ReadAllBytes(string path)
         {
             try

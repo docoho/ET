@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// EventSystem面向指定Entity的安全YIUI调用扩展方法（当Entity为空或已销毁时自动跳过，避免抛异常）。
+    /// </summary>
     public static class EventSystem_InvokeEntity_YIUISafetyExtension
     {
         public static void YIUIInvokeEntitySafety<A>(this EventSystem self, Entity entity, long invokeType, A args) where A : struct

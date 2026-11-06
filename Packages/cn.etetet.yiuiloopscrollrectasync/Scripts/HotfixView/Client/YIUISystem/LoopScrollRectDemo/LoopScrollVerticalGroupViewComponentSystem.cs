@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 纵向多列网格（Grid/Group）无限循环滚动列表演示视图组件系统。
+    /// </summary>
     [FriendOf(typeof(LoopScrollVerticalGroupViewComponent))]
     [FriendOf(typeof(LoopScrollRectDemoItemComponent))]
     public static partial class LoopScrollVerticalGroupViewComponentSystem

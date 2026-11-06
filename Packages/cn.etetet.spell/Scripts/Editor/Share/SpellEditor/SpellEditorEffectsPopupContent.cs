@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 技能编辑器中用于管理单个 BuffConfig.Effects 列表的弹出窗口内容（支持新增、打开行为树或删除 EffectNode）。
+    /// </summary>
     internal sealed class SpellEditorEffectsPopupContent: PopupWindowContent
     {
         private readonly BuffConfig config;

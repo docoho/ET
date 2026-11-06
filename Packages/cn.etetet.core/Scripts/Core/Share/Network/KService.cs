@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
@@ -9,24 +9,67 @@ using System.Runtime.InteropServices;
 
 namespace ET
 {
+    /// <summary>
+    /// ET 自定义的 KCP 握手机制与路由控制协议头标志位（位于每个 UDP/KCP 承载包的首字节）。
+    /// </summary>
     public static class KcpProtocalType
     {
+        /// <summary>
+        /// 客户端请求建立连接握手包（1 字节标志 + 4 字节 LocalConn + 4 字节 RemoteConn + 可选真实地址）。
+        /// </summary>
         public const byte SYN = 1;
+        /// <summary>
+        /// 服务端确认连接握手应答包（1 字节标志 + 4 字节 ServerLocalConn + 4 字节 ClientLocalConn）。
+        /// </summary>
         public const byte ACK = 2;
+        /// <summary>
+        /// 主动断开连接通知包（1 字节标志 + 4 字节 LocalConn + 4 字节 RemoteConn + 4 字节 ErrorCode）。
+        /// </summary>
         public const byte FIN = 3;
+        /// <summary>
+        /// 正常 KCP 业务数据报文（1 字节标志 + 4 字节發送方 LocalConn + KCP 原始帧数据，其中 KCP 头部前 4 字节即接收方 LocalConn）。
+        /// </summary>
         public const byte MSG = 4;
+        /// <summary>
+        /// 软路由（Router）重连握手请求包。
+        /// </summary>
         public const byte RouterReconnectSYN = 5;
+        /// <summary>
+        /// 软路由（Router）重连握手确认包。
+        /// </summary>
         public const byte RouterReconnectACK = 6;
+        /// <summary>
+        /// 软路由（Router）初始同步请求包。
+        /// </summary>
         public const byte RouterSYN = 7;
+        /// <summary>
+        /// 软路由（Router）初始同步确认包。
+        /// </summary>
         public const byte RouterACK = 8;
     }
 
+    /// <summary>
+    /// 网络服务应用场景类型枚举。
+    /// </summary>
     public enum ServiceType
     {
+        /// <summary>
+        /// 外网服务（客户端与网关/路由之间的公网通信，消息头仅含 2 字节 Opcode）。
+        /// </summary>
         Outer,
+        /// <summary>
+        /// 内网服务（服务端各进程/纤程之间的局域网通信，消息头含 16 字节 <see cref="FiberInstanceId"/> + 2 字节 Opcode）。
+        /// </summary>
         Inner,
     }
 
+    /// <summary>
+    /// 基于 KCP 协议的网络服务管理类。
+    /// <remarks>
+    /// 负责在单个传输层端口（<see cref="IKcpTransport"/>）上多路复用管理成百上千条虚拟 <see cref="KChannel"/> 连接，
+    /// 并利用有序时间表 <see cref="timeId"/> 按需驱动各 <see cref="KChannel"/> 的定时 <c>Update</c>（避免每帧全量遍历所有连接）。
+    /// </remarks>
+    /// </summary>
     public sealed class KService: AService
     {
         public const int ConnectTimeoutTime = 20 * 1000;

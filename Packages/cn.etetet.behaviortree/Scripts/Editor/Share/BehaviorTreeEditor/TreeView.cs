@@ -11,6 +11,9 @@ using UnityEngine.UIElements;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树节点图核心画布组件（继承自 GraphView），实现整棵行为树的构建、自动排版、拖拽重排父子/兄弟顺序、Undo/Redo 栈、输入输出联动高亮以及保存前静态校验。
+    /// </summary>
     public partial class TreeView: GraphView
     {
         public new class UxmlFactory : UxmlFactory<TreeView, UxmlTraits> { }

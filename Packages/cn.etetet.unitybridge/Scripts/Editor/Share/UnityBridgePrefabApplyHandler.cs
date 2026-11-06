@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 将场景中 Prefab 实例的覆盖修改应用回源 Prefab 资产（PrefabUtility.ApplyPrefabInstance）的命令处理器（PrefabApply）。
+    /// </summary>
     internal sealed class UnityBridgePrefabApplyHandler : AUnityBridgeHandler<PrefabApplyRequest, PrefabApplyResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabApplyRequest command)

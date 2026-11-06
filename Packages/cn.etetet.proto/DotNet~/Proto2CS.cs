@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,20 +7,38 @@ using System.Text.RegularExpressions;
 
 namespace ET
 {
+    /// <summary>
+    /// 单个网络消息与协议号（Opcode）的映射记录。
+    /// </summary>
     internal class OpcodeInfo
     {
+        /// <summary>消息类名称。</summary>
         public string Name;
+        /// <summary>分配的整数协议号。</summary>
         public int Opcode;
     }
 
+    /// <summary>
+    /// Proto 协议文件转 C# 代码对外门面类。
+    /// </summary>
     public static class Proto2CS
     {
+        /// <summary>
+        /// 导出指定包集合中的所有 <c>.proto</c> 协议文件为 C# 消息类。
+        /// </summary>
+        /// <param name="packages">目标包名集合（来自 <c>MainPackage.txt</c>）。</param>
         public static void Export(HashSet<string> packages)
         {
             InnerProto2CS.Proto2CS(packages);
         }
     }
 
+    /// <summary>
+    /// Proto 协议解析与 C# 代码生成核心实现类。
+    /// 扫描目标包下 <c>Proto/</c> 目录中的 <c>{ProtoName}_{C|S|CS}_{StartOpcode}.proto</c> 文件，
+    /// 解析 message 定义、基类接口注释（如 <c>// IRequest</c>）、<c>// ResponseType</c> 注解以及字段类型，
+    /// 生成带有 <c>[MemoryPackable]</c>、<c>[Message]</c>、对象池复用（<c>Create</c>/<c>Dispose</c>）及 <see cref="Opcode"/> 常量的 C# 代码到 <c>cn.etetet.proto/CodeMode/Model/{Client|Server|ClientServer}</c>。
+    /// </summary>
     public static partial class InnerProto2CS
     {
         private static string clientMessagePath;
@@ -29,6 +47,10 @@ namespace ET
         private static readonly char[] splitChars = [' ', '\t'];
         private static readonly List<OpcodeInfo> msgOpcode = [];
 
+        /// <summary>
+        /// 执行全量 Proto 扫描、清理旧生成文件并重新生成 C# 协议代码。
+        /// </summary>
+        /// <param name="targetPackages">参与导出的目标包集合。</param>
         public static void Proto2CS(HashSet<string> targetPackages)
         {
             // 强制调用一下mongo，避免mongo库被裁剪
@@ -88,6 +110,7 @@ namespace ET
                 }
             }
 
+            // 按文件名约定 {protoName}_{C|S|CS}_{startOpcode}.proto 逐个转换
             foreach ((string s, string module) in list)
             {
                 if (!s.EndsWith(".proto"))
@@ -129,6 +152,14 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将单个 <c>.proto</c> 文件解析并生成为 C# 源码文件，按 <paramref name="cs"/> 标志（包含 'C' 或 'S'）输出到对应的 CodeMode 目录。
+        /// </summary>
+        /// <param name="path"><c>.proto</c> 文件路径。</param>
+        /// <param name="module">所属模块包简称。</param>
+        /// <param name="protoName">协议名。</param>
+        /// <param name="cs">端侧标识（"C" 表示客户端+服务端共享外网协议，"S" 表示仅服务端内部协议）。</param>
+        /// <param name="startOpcode">该协议文件的起始 Opcode 编号。</param>
         private static void ProtoFile2CS(string path, string module, string protoName, string cs, int startOpcode)
         {
             msgOpcode.Clear();
@@ -156,6 +187,7 @@ namespace ET
                     continue;
                 }
 
+                // 解析 message 上方的 // ResponseType XxxResponse 注解
                 if (responseTypeRegex.IsMatch(newline))
                 {
                     responseType = responseTypeRegex.Replace(newline, string.Empty);
@@ -179,6 +211,7 @@ namespace ET
                     continue;
                 }
 
+                // 解析 message 声明行及其行尾注释中的接口继承列表（如 message C2G_Ping // ISessionRequest）
                 if (newline.StartsWith("message"))
                 {
                     isMsgStart = true;
@@ -288,6 +321,7 @@ namespace ET
                 }
             }
 
+            // 在文件末尾生成静态部分类 Opcode 常量定义
             sb.Append("\tpublic static partial class Opcode" + "\n\t{\n");
             foreach (OpcodeInfo info in msgOpcode)
             {
@@ -315,6 +349,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将生成的 C# 源码字符串写入目标目录下的 <c>.cs</c> 文件。
+        /// </summary>
         private static void GenerateCS(string result, string path, string proto)
         {
             if (!Directory.Exists(path))
@@ -328,6 +365,9 @@ namespace ET
             sw.Write(result);
         }
 
+        /// <summary>
+        /// 检查父类/接口声明字符串中是否包含指定的接口名称。
+        /// </summary>
         private static bool MessageImplements(string parentClass, string interfaceName)
         {
             if (string.IsNullOrWhiteSpace(parentClass))
@@ -340,6 +380,9 @@ namespace ET
                     .Any(s => s == interfaceName || s.EndsWith($".{interfaceName}") || s.EndsWith($"::{interfaceName}"));
         }
 
+        /// <summary>
+        /// 解析 <c>map&lt;K, V&gt;</c> 语法并生成 C# <see cref="Dictionary{TKey,TValue}"/> 属性及 <c>[MemoryPackOrder]</c> 特性。
+        /// </summary>
         private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)
         {
             int start = newline.IndexOf('<') + 1;
@@ -360,6 +403,9 @@ namespace ET
             sbDispose.Append($"this.{v}.Clear();\n\t\t\t");
         }
 
+        /// <summary>
+        /// 解析 <c>repeated T</c> 语法并生成 C# <see cref="List{T}"/> 属性及 <c>[MemoryPackOrder]</c> 特性。
+        /// </summary>
         private static void Repeated(StringBuilder sb, string newline, StringBuilder sbDispose)
         {
             try
@@ -383,6 +429,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 将 Proto 基础数据类型名映射为 C# 数据类型关键字。
+        /// </summary>
         private static string ConvertType(string type)
         {
             return type switch
@@ -399,6 +448,9 @@ namespace ET
             };
         }
 
+        /// <summary>
+        /// 解析普通标量或自定义结构体成员字段并生成 C# 属性及 <c>[MemoryPackOrder]</c> 特性。
+        /// </summary>
         private static void Members(StringBuilder sb, string newline, StringBuilder sbDispose)
         {
             try

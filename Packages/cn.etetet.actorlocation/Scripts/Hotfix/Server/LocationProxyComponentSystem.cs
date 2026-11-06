@@ -3,9 +3,16 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 业务场景访问位置服务（Location）的客户端代理组件系统（<see cref="LocationProxyComponent"/>）。
+    /// 负责通过 <see cref="ServiceDiscoveryProxy"/> 动态定位当前 Primary Location 节点，封装 Add / Remove / LockWithToken / UnLockWithRetry / Get 操作，并内置主备切换重试与位置锁等待重试。
+    /// </summary>
     [EntitySystemOf(typeof(LocationProxyComponent))]
     public static partial class LocationProxyComponentSystem
     {
+        /// <summary>
+        /// 监听服务下线事件，若下线的是当前缓存的 Primary Location 节点，则立即清空本地主节点缓存以便下次请求重新选择新主。
+        /// </summary>
         [Event(SceneType.All)]
         public class OnServiceChangeRemoveService_ClearLocationPrimary: AEvent<Scene, OnServiceChangeRemoveService>
         {
@@ -60,6 +67,9 @@ namespace ET.Server
             self.locationRequestRetryIntervalMs = 100;
         }
 
+        /// <summary>
+        /// 从本地服务发现缓存中按稳定排序规则选出当前 Primary Location 节点的场景名称。
+        /// </summary>
         private static string GetPrimaryLocationSceneName(this LocationProxyComponent self)
         {
             ServiceDiscoveryProxy serviceDiscoveryProxy = self.Root().GetComponent<ServiceDiscoveryProxy>();
@@ -86,6 +96,9 @@ namespace ET.Server
             return stablePrimarySceneName;
         }
 
+        /// <summary>
+        /// 清空本地缓存的 Primary Location 节点记录。
+        /// </summary>
         private static void ClearPrimary(this LocationProxyComponent self, string reason)
         {
             if (self == null)
@@ -101,6 +114,9 @@ namespace ET.Server
                 $"location proxy clear primary reason: {reason} old: {oldPrimarySceneName}({oldPriorityId}) scene: {self.Root().Name}");
         }
 
+        /// <summary>
+        /// 向 Primary Location 节点发送请求，遇到 Follower 拒绝或主节点不可用时自动清空缓存并等待重试。
+        /// </summary>
         private static async ETTask<IResponse> CallPrimaryWithRetry(this LocationProxyComponent self, long key, IRequest request)
         {
             EntityRef<LocationProxyComponent> selfRef = self;
@@ -202,6 +218,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 向 Location 服务注册实体位置映射。
+        /// </summary>
         public static async ETTask Add(this LocationProxyComponent self, int type, long key, ActorId actorId)
         {
             Log.Info($"location proxy add {key}, {actorId} {self.GetSingleton<TimeInfo>().ServerNow()}");
@@ -218,6 +237,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 锁定实体位置并返回唯一解锁令牌（<c>LockToken</c>）。
+        /// </summary>
         public static async ETTask<long> LockWithToken(this LocationProxyComponent self, int type, long key, ActorId actorId,
             int time = 60000)
         {
@@ -254,6 +276,9 @@ namespace ET.Server
                 $"location unlock requires lock token key: {key} oldActorId: {oldActorId} newActorId: {newActorId}");
         }
 
+        /// <summary>
+        /// 携带 <paramref name="lockToken"/> 解锁实体位置并更新为 <paramref name="newActorId"/>。
+        /// </summary>
         public static async ETTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId,
             ActorId newActorId, long lockToken)
         {
@@ -275,6 +300,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 带幂等补偿检查的解锁方法：当解锁因网络超时重发遇到锁不存在或 Token 不匹配时，会主动查询一次当前位置，若已更新为 <paramref name="newActorId"/> 则视为解锁成功。
+        /// </summary>
         public static async ETTask UnLockWithRetry(this LocationProxyComponent self, int type, long key, ActorId oldActorId,
             ActorId newActorId, long lockToken)
         {
@@ -337,11 +365,17 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 从 Location 服务移除指定实体的位置映射（不校验期望 ActorId）。
+        /// </summary>
         public static async ETTask Remove(this LocationProxyComponent self, int type, long key)
         {
             await self.Remove(type, key, default);
         }
 
+        /// <summary>
+        /// 从 Location 服务移除指定实体的位置映射（校验当前持有者是否为 <paramref name="expectedActorId"/>）。
+        /// </summary>
         public static async ETTask Remove(this LocationProxyComponent self, int type, long key, ActorId expectedActorId)
         {
             Log.Info($"location proxy remove {key}, {self.GetSingleton<TimeInfo>().ServerNow()}");
@@ -359,6 +393,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 查询指定实体的当前 <see cref="ActorId"/>（若目标正处于位置锁定迁移中，则自动等待并重试）。
+        /// </summary>
         public static async ETTask<ActorId> Get(this LocationProxyComponent self, int type, long key)
         {
             if (key == 0)
@@ -423,11 +460,17 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 将当前实体自身（<c>self.Id</c> -> <c>self.GetActorId()</c>）注册到指定 <paramref name="type"/> 的 Location 表中。
+        /// </summary>
         public static async ETTask AddLocation(this Entity self, int type)
         {
             await self.Root().GetComponent<LocationProxyComponent>().Add(type, self.Id, self.GetActorId());
         }
 
+        /// <summary>
+        /// 将当前实体自身从指定 <paramref name="type"/> 的 Location 表中移除（自动携带自身 ActorId 进行期望值保护）。
+        /// </summary>
         public static async ETTask RemoveLocation(this Entity self, int type)
         {
             await self.Root().GetComponent<LocationProxyComponent>().Remove(type, self.Id, self.GetActorId());

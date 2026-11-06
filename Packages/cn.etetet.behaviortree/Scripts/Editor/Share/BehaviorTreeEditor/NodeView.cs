@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,9 @@ using UnityEngine.UIElements;
 
 namespace ET
 {
+    /// <summary>
+    /// 用于在 GraphView 节点内部通过 Odin Inspector 绘制 BTNode 字段的临时 ScriptableObject 包装器。
+    /// </summary>
     [HideMonoScript]
     public class NodeIMGUI : SerializedScriptableObject
     {
@@ -21,6 +24,9 @@ namespace ET
         public BTNode Node;
     }
     
+    /// <summary>
+    /// 行为树编辑器单个节点的 GraphView 视图封装，负责内嵌 Odin Inspector 绘制、子节点自动递归排版、折叠控制、右键菜单（创建/删除/复制/粘贴/替换）以及宽度拖拽调整。
+    /// </summary>
 	    public class NodeView : Node, IDisposable
 	    {
 	        private readonly TreeView treeView;

@@ -1,7 +1,7 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
     /// <summary>
-    /// GM命令参数信息
+    /// GM命令参数信息，包含参数类型、界面提示描述、当前字符串值及枚举类型全名。
     /// </summary>
     [EnableClass]
     public class GMParamInfo

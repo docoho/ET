@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 场景 AOI 网格管理组件系统（负责将 <see cref="AOIEntity"/> 添加到网格、从网格移除以及跨网格移动时的视野差集更新）。
+    /// </summary>
     public static partial class AOIManagerComponentSystem
     {
+        /// <summary>
+        /// 将 <see cref="AOIEntity"/> 按世界坐标 <c>(x, y)</c> 加入对应的 <see cref="Cell"/>，并订阅周围 Enter/Leave 网格及触发双向进入视野。
+        /// </summary>
         public static void Add(this AOIManagerComponent self, AOIEntity aoiEntity, float x, float y)
         {
             int cellX = (int)(x * 1000) / AOIManagerComponent.CellSize;
@@ -37,6 +43,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 将 <see cref="AOIEntity"/> 从当前网格及所有订阅的周围网格中移除，并通知观察者触发离开视野。
+        /// </summary>
         public static void Remove(this AOIManagerComponent self, AOIEntity aoiEntity)
         {
             if (aoiEntity.Cell == null)
@@ -77,6 +86,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 按 <paramref name="cellId"/> 获取对应的 <see cref="Cell"/> 子实体，若不存在则按需懒创建。
+        /// </summary>
         private static Cell GetCell(this AOIManagerComponent self, long cellId)
         {
             Cell cell = self.GetChild<Cell>(cellId);
@@ -88,6 +100,9 @@ namespace ET.Server
             return cell;
         }
 
+        /// <summary>
+        /// 将 <paramref name="aoiEntity"/> 从旧网格 <paramref name="preCell"/> 迁移到新网格 <paramref name="newCell"/>，并通知差集观察者触发进入或离开视野。
+        /// </summary>
         public static void Move(AOIEntity aoiEntity, Cell newCell, Cell preCell)
         {
             aoiEntity.Cell = newCell;
@@ -118,6 +133,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 当单位移动导致所在网格坐标 <c>(cellX, cellY)</c> 变化时，增量更新其所在网格及 Enter/Leave 订阅集合。
+        /// </summary>
         public static void Move(this AOIManagerComponent self, AOIEntity aoiEntity, int cellX, int cellY)
         {
             long newCellId = AOIHelper.CreateCellId(cellX, cellY);

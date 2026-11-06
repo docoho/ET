@@ -12,18 +12,29 @@ using YooAsset.Editor;
 
 namespace ET
 {
+    /// <summary>
+    /// 客户端应用打包与 YooAsset 资源包构建辅助类。
+    /// 提供 macOS/iOS 应用打包菜单、YooAsset AssetBundle 增量构建菜单以及宏定义开关菜单。
+    /// </summary>
     public static class BuildHelper
     {
+        /// <summary>打包输出根目录（<c>./Release</c>）。</summary>
         private const string relativeDirPrefix = "./Release";
 
         public static string BuildFolder = "./Release/{0}/StreamingAssets/";
 
+        /// <summary>
+        /// 菜单项 <c>ET/Loader/Build macOS</c>：一键构建 macOS 客户端应用（输出至 <c>Release/ET.app</c>）。
+        /// </summary>
         [MenuItem("ET/Loader/Build macOS", false)]
         public static void BuildMacOS()
         {
             Build(PlatformType.MacOS, BuildOptions.None);
         }
 
+        /// <summary>
+        /// 菜单项 <c>ET/Loader/Build iOS</c>：构建 iOS Xcode 工程（输出至 <c>Release/iOS/ET</c>）。
+        /// </summary>
         [MenuItem("ET/Loader/Build iOS", false)]
         public static void BuildIOS()
         {
@@ -35,6 +46,10 @@ namespace ET
             Build(PlatformType.IOS, BuildOptions.None);
         }
 
+        /// <summary>
+        /// 菜单项 <c>ET/Loader/Build Bundles (Keep Existing Files)</c>：
+        /// 使用 YooAsset 的 <see cref="ScriptableBuildPipeline"/> 构建所有配置的资源包并复制到 <c>StreamingAssets</c>（保留已有文件）。
+        /// </summary>
         [MenuItem("ET/Loader/Build Bundles (Keep Existing Files)", false)]
         public static void BuildResourceBundles()
         {
@@ -76,6 +91,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 根据类名反射创建 YooAsset 构建阶段所需的加密或清单处理服务实例。
+        /// </summary>
         private static T CreateBuildService<T>(string className) where T : class
         {
             Type serviceType = YooAsset.Editor.EditorTools.GetAssignableTypes(typeof(T)).Find(type => type.FullName == className);
@@ -88,18 +106,27 @@ namespace ET
         }
 
 #if ENABLE_VIEW
+        /// <summary>
+        /// 移除 <c>ENABLE_VIEW</c> 编译宏（关闭 Hierarchy 实体视图调试功能）。
+        /// </summary>
         [MenuItem("ET/Loader/Remove ENABLE_VIEW", false)]
         public static void RemoveEnableView()
         {
             EnableDefineSymbols("ENABLE_VIEW", false);
         }
 #else
+        /// <summary>
+        /// 添加 <c>ENABLE_VIEW</c> 编译宏（开启 Hierarchy 实体视图调试功能）。
+        /// </summary>
         [MenuItem("ET/Loader/Add ENABLE_VIEW", false)]
         public static void AddEnableView()
         {
             EnableDefineSymbols("ENABLE_VIEW", true);
         }
 #endif
+        /// <summary>
+        /// 为当前选中的构建目标平台添加或移除指定的脚本编译宏（Scripting Define Symbols）。
+        /// </summary>
         public static void EnableDefineSymbols(string symbols, bool enable)
         {
             Debug.Log($"EnableDefineSymbols {symbols} {enable}");
@@ -131,6 +158,11 @@ namespace ET
             AssetDatabase.Refresh();
         }
 
+        /// <summary>
+        /// 执行指定平台与构建选项的 Unity Player 打包，输出到 <c>./Release</c> 目录并在完成后打开输出文件夹。
+        /// </summary>
+        /// <param name="type">目标平台枚举。</param>
+        /// <param name="buildOptions">Unity 构建选项标志位。</param>
         public static void Build(PlatformType type, BuildOptions buildOptions)
         {
             BuildTarget buildTarget = BuildTarget.StandaloneWindows;

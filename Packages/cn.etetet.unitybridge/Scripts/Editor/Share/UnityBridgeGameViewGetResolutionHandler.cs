@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 获取当前 GameView 窗口选中分辨率与尺寸类型的命令处理器（GameViewGetResolution）。
+    /// </summary>
     internal sealed class UnityBridgeGameViewGetResolutionHandler : AUnityBridgeHandler<GameViewGetResolutionRequest, GameViewGetResolutionResponse>
     {
         protected override async ETTask<IResponse> Run(GameViewGetResolutionRequest command)

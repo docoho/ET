@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// AOI 视野离开事件处理器：当单位 B 离开玩家 A 的视野范围时，向玩家 A 的客户端发送 M2C_RemoveUnits 通知移除 B。
+    /// </summary>
     // 离开视野
     [Event(SceneType.Map)]
     public class UnitLeaveSightRange_NotifyClient: AEvent<Scene, UnitLeaveSightRange>

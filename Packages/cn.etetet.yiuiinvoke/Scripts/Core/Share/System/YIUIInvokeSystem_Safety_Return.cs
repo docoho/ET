@@ -1,10 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET
 {
+    /// <summary>
+    /// YIUI跨层调用系统（安全带返回值调用SafetyInvokeReturn与安全异步调用SafetyInvokeTask分部类，未注册时不报错并返回默认值）。
+    /// </summary>
     public partial class YIUIInvokeSystem
     {
+        /// <summary>安全执行带返回值的YIUI调用，若未注册对应处理器则静默返回 defaultReturn。</summary>
         public R SafetyInvokeReturn<T, R>(T self, string invokeType, R defaultReturn = default, List<R> returnList = null) where T : Entity
         {
             if (!CheckInvokeReturn<R>(invokeType))

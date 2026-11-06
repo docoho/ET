@@ -3,10 +3,17 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
-
+    /// <summary>
+    /// 帧同步匹配组件系统，负责管理等待匹配的玩家队列并在人数凑齐时向 Map 服申请创建独立对局房间
+    /// </summary>
     [FriendOf(typeof(MatchComponent))]
     public static partial class MatchComponentSystem
     {
+        /// <summary>
+        /// 将玩家加入匹配等待列表；当人数达到 <see cref="LSConstValue.MatchCount"/> 时向随机 Map 节点申请创建房间并通知各玩家匹配成功
+        /// </summary>
+        /// <param name="self">匹配组件实例</param>
+        /// <param name="playerId">申请匹配的玩家 ID</param>
         public static async ETTask Match(this MatchComponent self, long playerId)
         {
             if (self.waitMatchPlayers.Contains(playerId))

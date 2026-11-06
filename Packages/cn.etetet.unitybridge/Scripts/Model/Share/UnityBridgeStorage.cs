@@ -305,6 +305,9 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// UnityBridge JSON 序列化辅助类，基于 MongoDB Bson 序列化器实现对象与带 _t 类型鉴别器的 JSON 互转。
+    /// </summary>
     public static class UnityBridgeMongoJsonHelper
     {
         public static string ToJson(object value)

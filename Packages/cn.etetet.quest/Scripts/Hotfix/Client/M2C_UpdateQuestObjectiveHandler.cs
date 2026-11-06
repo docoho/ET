@@ -1,5 +1,8 @@
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端处理服务端推送的任务目标进度更新通知（M2C_UpdateQuestObjective）。
+    /// </summary>
     [MessageHandler(SceneType.Client)]
     public class M2C_UpdateQuestObjectiveHandler : MessageHandler<Scene, M2C_UpdateQuestObjective>
     {

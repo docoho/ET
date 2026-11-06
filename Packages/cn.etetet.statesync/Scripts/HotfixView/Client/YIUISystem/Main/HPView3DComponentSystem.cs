@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.10
-    /// Desc
+    /// Desc    3D 世界空间血条（HPView3D）组件系统，根据与主角的距离及屏幕可视范围控制显隐并始终朝向主摄像机（Billboard）
     /// </summary>
     public static partial class HPView3DComponentSystem
     {
+        /// <summary>
+        /// 初始化时绑定所属的 <see cref="Unit"/> 实体
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this HPView3DComponent self)
         {

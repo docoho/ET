@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
 namespace YIUIFramework
 {
+    /// <summary>
+    /// 红点调试堆栈解析与格式化辅助类（支持过滤UnityEngine/YIUI内部调用栈帧并缓存文本结果）。
+    /// </summary>
     public static class RedDotStackHelper
     {
         #region 操作

@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 服务端处理客户端提交完成任务请求（C2M_SubmitQuest）的消息处理器：校验提交 NPC 距离与所有任务目标完成度后结算任务。
+    /// </summary>
     [MessageHandler(SceneType.Map)]
     public class C2M_SubmitQuestHandler : MessageLocationHandler<Unit, C2M_SubmitQuest, M2C_SubmitQuest>
     {

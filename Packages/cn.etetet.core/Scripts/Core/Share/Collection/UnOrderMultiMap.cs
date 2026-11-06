@@ -1,10 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET
 {
+	/// <summary>
+	/// 无序的一对多映射字典（继承自 <see cref="Dictionary{TKey, TValue}"/>，一个 Key 对应一个 <see cref="List{K}"/>）。
+	/// <remarks>
+	/// 当不需要像 <see cref="MultiMap{T, K}"/> 那样按 Key 排序时，使用此结构可以获得哈希表 O(1) 的查找和插入性能。
+	/// </remarks>
+	/// </summary>
 	public class UnOrderMultiMap<T, K>: Dictionary<T, List<K>>
 	{
+		/// <summary>
+		/// 向指定键 <paramref name="t"/> 下的列表追加一个元素 <paramref name="k"/>。
+		/// </summary>
 		public void Add(T t, K k)
 		{
 			List<K> list;
@@ -17,6 +26,9 @@ namespace ET
 			list.Add(k);
 		}
 
+		/// <summary>
+		/// 从指定键 <paramref name="t"/> 下的列表中移除元素 <paramref name="k"/>（若列表变空则同时移除该键）。
+		/// </summary>
 		public bool Remove(T t, K k)
 		{
 			List<K> list;
@@ -53,7 +65,7 @@ namespace ET
 		}
 
 		/// <summary>
-		/// 返回内部的list
+		/// 返回内部的list（若键不存在则返回 null）。
 		/// </summary>
 		/// <param name="t"></param>
 		/// <returns></returns>
@@ -67,6 +79,9 @@ namespace ET
 			}
 		}
 
+		/// <summary>
+		/// 获取指定键下列表中的第一个元素（若不存在则返回默认值）。
+		/// </summary>
 		public K GetOne(T t)
 		{
 			List<K> list;
@@ -78,6 +93,9 @@ namespace ET
 			return default(K);
 		}
 
+		/// <summary>
+		/// 判断指定键下的列表是否包含指定元素。
+		/// </summary>
 		public bool Contains(T t, K k)
 		{
 			List<K> list;

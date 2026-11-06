@@ -3,15 +3,36 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 战斗飘字（伤害/治疗跳字）表现层组件系统，使用独立顶层 Overlay Canvas 与对象池管理所有飘字节点的上浮、缩放与渐隐动画
+    /// </summary>
     [EntitySystemOf(typeof(CombatTextComponent))]
     [FriendOf(typeof(CombatTextComponent))]
     public static partial class CombatTextComponentSystem
     {
+        /// <summary>
+        /// 普通飘字持续时长（秒）
+        /// </summary>
         private const float BaseLife = 0.72f;
+
+        /// <summary>
+        /// 暴击飘字持续时长（秒）
+        /// </summary>
         private const float CritLife = 0.85f;
+
+        /// <summary>
+        /// 普通飘字初始上浮速度（像素/秒）
+        /// </summary>
         private const float BaseUpSpeed = 120.0f;
+
+        /// <summary>
+        /// 暴击飘字初始上浮速度（像素/秒）
+        /// </summary>
         private const float CritUpSpeed = 165.0f;
 
+        /// <summary>
+        /// 初始化战斗飘字运行时根节点与顶层 Overlay Canvas
+        /// </summary>
         [EntitySystem]
         private static void Awake(this CombatTextComponent self)
         {
@@ -25,6 +46,9 @@ namespace ET.Client
             self.CanvasRect = self.Canvas.transform as RectTransform;
         }
 
+        /// <summary>
+        /// 组件销毁时一并销毁飘字根 GameObject
+        /// </summary>
         [EntitySystem]
         private static void Destroy(this CombatTextComponent self)
         {
@@ -37,6 +61,9 @@ namespace ET.Client
             self.RootGameObject = null;
         }
 
+        /// <summary>
+        /// 每帧驱动所有激活飘字节点的位移、透明度衰减与缩放插值，到期后自动回收到节点缓存队列
+        /// </summary>
         [EntitySystem]
         private static void LateUpdate(this CombatTextComponent self)
         {
@@ -74,6 +101,15 @@ namespace ET.Client
             }
         }
 
+        /// <summary>
+        /// 在指定世界坐标处生成一个战斗飘字（自动转换屏幕坐标并施加微小的随机位置与水平速度偏移）
+        /// </summary>
+        /// <param name="self">战斗飘字组件实例</param>
+        /// <param name="worldPos">飘字生成的三维世界坐标</param>
+        /// <param name="content">显示的文本内容</param>
+        /// <param name="color">文本颜色</param>
+        /// <param name="fontSize">字体大小</param>
+        /// <param name="critical">是否为暴击效果</param>
         public static void Show(this CombatTextComponent self, Vector3 worldPos, string content, Color color, float fontSize, bool critical)
         {
             Camera cam = Camera.main;

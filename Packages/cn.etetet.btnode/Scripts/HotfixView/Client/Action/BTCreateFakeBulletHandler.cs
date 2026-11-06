@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 客户端创建纯表现层伪追踪子弹特效节点处理器，从施法者挂点平滑飞行至目标挂点并在抵达或超时后销毁。
+    /// </summary>
     public class BTCreateFakeBulletHandler: ABTHandler<BTCreateFakeBullet>
     {
         protected override int Run(BTCreateFakeBullet node, BTEnv env)

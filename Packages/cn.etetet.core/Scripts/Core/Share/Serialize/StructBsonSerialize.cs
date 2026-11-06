@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -7,8 +7,17 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
 {
+    /// <summary>
+    /// 通用值类型（<c>struct</c>）的反射式 MongoDB BSON 序列化器。
+    /// <remarks>
+    /// MongoDB C# Driver 默认不支持自定义结构体的自动映射；此类通过反射遍历结构体的公共字段或标记了 <see cref="BsonElementAttribute"/> 的私有字段完成读写。
+    /// </remarks>
+    /// </summary>
     public class StructBsonSerialize<TValue>: StructSerializerBase<TValue> where TValue : struct
     {
+        /// <summary>
+        /// 将结构体字段序列化为 BSON 文档。
+        /// </summary>
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TValue value)
         {
             Type nominalType = args.NominalType;
@@ -32,6 +41,9 @@ namespace ET
             bsonWriter.WriteEndDocument();
         }
 
+        /// <summary>
+        /// 从 BSON 文档中反序列化还原结构体实例（利用装箱后的 <c>object</c> 调用 <see cref="FieldInfo.SetValue(object, object)"/> 修改字段值）。
+        /// </summary>
         public override TValue Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
             //boxing is required for SetValue to work

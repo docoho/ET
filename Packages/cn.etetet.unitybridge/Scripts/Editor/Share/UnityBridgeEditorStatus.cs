@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 编辑器状态查询辅助类，通过反射读取 Resources/GlobalConfig 资产获取当前项目的 CodeMode 配置。
+    /// </summary>
     internal static class UnityBridgeEditorStatus
     {
         public static string GetCodeMode()

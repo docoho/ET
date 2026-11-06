@@ -1,7 +1,10 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
+    /// <summary>
+    /// 服务端 Buff 宿主受击时触发的行为树根节点，可用于实现反伤护盾、受击触发被动效果等逻辑。
+    /// </summary>
     //[LabelText("Buff被攻击的时候触发 (服务器)")]
     //[HideReferenceObjectPicker]
     public class EffectServerBuffHitted: EffectNode

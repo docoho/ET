@@ -1,9 +1,13 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 通用确认/取消消息弹窗视图组件系统。
+    /// 支持淡入淡出动画（WindowFadeAnim）、自定义按钮文本及通过 UIWindow.NotifyWait 唤醒异步等待调用方。
+    /// </summary>
     [FriendOf(typeof(TipsMessageViewComponent))]
     public static partial class TipsMessageViewComponentSystem
     {

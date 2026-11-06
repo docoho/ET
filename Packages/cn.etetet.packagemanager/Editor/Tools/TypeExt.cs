@@ -1,11 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// Type 反射与数值类型判断扩展工具类
+    /// </summary>
     public static class TypeExt
     {
+        /// <summary>
+        /// 基础数值类型到 NumericType 枚举的映射表
+        /// </summary>
         private static readonly Dictionary<Type, NumericType> g_numTypeMap;
 
         static TypeExt()
@@ -25,6 +31,9 @@ namespace ET.PackageManager.Editor
             g_numTypeMap                = numTypeMap;
         }
 
+        /// <summary>
+        /// 获取指定 Type 对应的 NumericType 枚举值（非数值类型返回 NaN）
+        /// </summary>
         public static NumericType GetNumericType(this Type type)
         {
             if (g_numTypeMap.TryGetValue(type, out NumericType value))
@@ -48,6 +57,9 @@ namespace ET.PackageManager.Editor
             //return !o.IsClass && !o.IsInterface && o.GetInterfaces().Any(q => q == typeof(IFormattable));
         }
 
+        /// <summary>
+        /// 判断一个类型是否为可空数值类型（Nullable&lt;T&gt; 且 T 为数值类型）
+        /// </summary>
         public static bool IsNullableNumericType(this Type type)
         {
             return type.Name.StartsWith("Nullable") && type.GetGenericArguments()[0].IsNumericType();
@@ -75,6 +87,9 @@ namespace ET.PackageManager.Editor
             return true;
         }
 
+        /// <summary>
+        /// 通过反射设置指定字段的值
+        /// </summary>
         public static bool SetFieldValue(this Type type,        string name, object value,
                                          object    inst = null, BindingFlags bindingArray =
                                                  BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
@@ -89,6 +104,9 @@ namespace ET.PackageManager.Editor
             return true;
         }
 
+        /// <summary>
+        /// 通过反射获取指定属性的值
+        /// </summary>
         public static object GetPropertyValue(this Type type, string name, object inst = null,
                                               BindingFlags bindingArray =
                                                       BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public)
@@ -102,6 +120,9 @@ namespace ET.PackageManager.Editor
             return instProp.GetValue(inst);
         }
 
+        /// <summary>
+        /// 通过反射调用静态方法并返回强类型结果
+        /// </summary>
         public static TReturn StaticCall<TReturn>(this Type type, string methodName, object[] param = null,
                                                   TReturn   defReturn = default)
         {
@@ -118,6 +139,9 @@ namespace ET.PackageManager.Editor
         }
     }
 
+    /// <summary>
+    /// 基础数值类型枚举定义
+    /// </summary>
     public enum NumericType
     {
         NaN,

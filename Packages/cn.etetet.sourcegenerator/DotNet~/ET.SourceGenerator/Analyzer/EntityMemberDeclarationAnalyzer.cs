@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -9,6 +9,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace ET
 {
+    /// <summary>
+    /// 实体类内部成员声明与特性互斥规范分析器（ET0010 / ET0020 / ET0023 / ET0028）。
+    /// <para>1. 禁止在 <c>Entity</c> / <c>LSEntity</c> 内部声明委托（Delegate）类型的字段或属性（ET0010）。</para>
+    /// <para>2. 禁止在帧同步实体 <c>LSEntity</c> 内部声明 <c>float</c> 或 <c>double</c> 浮点数字段/属性（包括泛型参数中的浮点数），确保定点数确定性（ET0023）。</para>
+    /// <para>3. 禁止同一个实体类同时标记 <c>[ComponentOf]</c> 和 <c>[ChildOf]</c>（ET0028）。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class EntityMemberDeclarationAnalyzer: DiagnosticAnalyzer
     {

@@ -5,6 +5,9 @@ using UnityScene = UnityEngine.SceneManagement.Scene;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 在编辑器下新建空白或默认对象的场景（EditorSceneManager.NewScene）的命令处理器（SceneNew）。
+    /// </summary>
     internal sealed class UnityBridgeSceneNewHandler : AUnityBridgeHandler<SceneNewRequest, SceneNewResponse>
     {
         protected override async ETTask<IResponse> Run(SceneNewRequest command)

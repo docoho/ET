@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -156,6 +156,9 @@ namespace ET.PackageManager.Editor
             }
         }
 
+        /// <summary>
+        /// 读取模板文件并替换占位符 `${Key}` 后生成目标代码文件
+        /// </summary>
         public static bool CreateCodeFile(string path, string templateName, Dictionary<string, string> valueDic)
         {
             templateName = templateName.Contains(".txt") ? templateName : templateName + ".txt";

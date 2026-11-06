@@ -4,8 +4,8 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 弹窗助手 不知道泛型 只知道UI资源名称时使用
-    /// 缺点这里没办法判断类型是否正确 是否有 IYIUIOpen〈ParamVo〉 接口
+    /// 弹窗助手（按UI预制体资源名称字符串打开Tips弹窗的分部类，适用于不便直接传入泛型类型的动态调用场景）。
+    /// 缺点：编译期无法静态检查目标View是否实现了 IYIUIOpen&lt;ParamVo&gt; 接口。
     /// </summary>
     public static partial class TipsHelper
     {

@@ -2,6 +2,10 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 同步行为树节点处理器泛型基类，负责将通用 BTNode 强转为具体 Node 类型，并在编辑器下自动记录执行轨迹。
+    /// 约定返回值：0（ErrorCode.ERR_Success）代表成功，非 0 代表失败或具体错误码。
+    /// </summary>
     [BTHandler]
     public abstract class ABTHandler<Node>: HandlerObject, IBTHandler where Node : BTNode
     {

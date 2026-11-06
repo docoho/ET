@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Author: 亦亦
 // Mail: 379338943@qq.com
 // Data: 2023年2月12日
@@ -14,7 +14,7 @@ using UnityEngine.UI;
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— ECS子实体主定义，持有宿主LoopScrollRect引用、异步实例池及泛型渲染/点击系统类型缓存。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     [ChildOf]

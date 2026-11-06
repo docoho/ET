@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 将场景中的 GameObject 保存为指定路径的 Prefab 资产（PrefabUtility.SaveAsPrefabAsset）的命令处理器（PrefabSave）。
+    /// </summary>
     internal sealed class UnityBridgePrefabSaveHandler : AUnityBridgeHandler<PrefabSaveRequest, PrefabSaveResponse>
     {
         protected override async ETTask<IResponse> Run(PrefabSaveRequest command)

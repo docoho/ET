@@ -4,6 +4,10 @@ using System.Reflection;
 
 namespace ET
 {
+    /// <summary>
+    /// 条件表达式递归下降语法分析器，按优先级（|| -> && -> ! -> 括号/比较项）将 Token 流转换为行为树节点组合（BTSelector、BTSequence、BTNot 及具体的 BTCondition 子类）。
+    /// 支持形如 "Target.HP(param) >= 100:200101" 的宿主指定、参数列表及自定义错误码语法。
+    /// </summary>
     [EnableClass]
     public class ConditionExprParser
     {
@@ -18,6 +22,9 @@ namespace ET
             this.defaultErrorCode = defaultErrorCode;
         }
 
+        /// <summary>
+        /// 解析 Token 序列并返回构建好的 ConditionRoot 行为树根节点。
+        /// </summary>
         public ConditionRoot Parse()
         {
             ConditionRoot root = this.CreateNode<ConditionRoot>();

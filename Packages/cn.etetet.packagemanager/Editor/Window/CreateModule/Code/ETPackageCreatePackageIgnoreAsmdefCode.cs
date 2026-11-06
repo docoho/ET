@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 根据模板生成新包根目录下的 `Ignore.{AssemblyName}.asmdef`（用于隔离非 Unity 直接编译的脚本目录）
+    /// </summary>
     public class ETPackageCreatePackageIgnoreAsmdefCode : BaseTemplate
     {
         private readonly string m_EventName = "IgnoreAsmdef";

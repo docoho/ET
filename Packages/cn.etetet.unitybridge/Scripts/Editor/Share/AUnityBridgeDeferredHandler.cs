@@ -2,6 +2,10 @@ using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 跨 Unity 状态变化（如触发编译、AssetDatabase.Refresh、进入/退出 PlayMode）的延迟命令处理器抽象基类。
+    /// <para>首次调用 Handle 时将命令持久化到 pending-command.json 并通过 Started() 抛出信号进入挂起；后续在 EditorApplication.update 中通过 Deferred() 轮询直到条件满足返回最终结果。</para>
+    /// </summary>
     internal abstract class AUnityBridgeDeferredHandler<TRequest, TResponse> :
             AUnityBridgeHandler<TRequest, TResponse>, IUnityBridgeDeferredHandler
             where TRequest : class, IRequest

@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using YIUIFramework;
 using System.Collections.Generic;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// GM命令分类页签项UI组件系统，负责渲染分类名称及选中高亮状态。
+    /// </summary>
     [FriendOf(typeof(GMTypeItemComponent))]
     public static partial class GMTypeItemComponentSystem
     {
@@ -17,6 +20,9 @@ namespace ET.Client
         {
         }
 
+        /// <summary>
+        /// 刷新GM分类页签显示名称。
+        /// </summary>
         public static void ResetItem(this GMTypeItemComponent self, int data)
         {
             self.u_DataTypeName.SetValue(GMKeyHelper.GetDesc(data));

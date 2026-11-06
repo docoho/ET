@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 重命名场景中指定 GameObject（支持 Undo）的命令处理器（GameObjectRename）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectRenameHandler : AUnityBridgeHandler<GameObjectRenameRequest, GameObjectRenameResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectRenameRequest command)

@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 控制 Unity Editor 进入运行模式（PlayMode）并跨状态切换等待就绪的延迟命令处理器（EnterPlay）。
+    /// </summary>
     internal sealed class UnityBridgeEnterPlayModeHandler : AUnityBridgeDeferredHandler<EnterPlay, EnterPlayResponse>
     {
         protected override async ETTask<EnterPlayResponse> Run(EnterPlay command, UnityBridgeDeferredContext deferred)

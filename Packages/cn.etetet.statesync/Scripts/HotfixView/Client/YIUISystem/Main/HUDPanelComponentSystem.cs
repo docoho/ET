@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -8,10 +8,13 @@ namespace ET.Client
     /// <summary>
     /// Author  Lsy
     /// Date    2024.12.9
-    /// Desc
+    /// Desc    场景头顶信息容器面板（HUDPanel）组件系统，负责承载并管理场景内所有可见单位的头顶血条 <see cref="HPViewComponent"/>
     /// </summary>
     public static partial class HUDPanelComponentSystem
     {
+        /// <summary>
+        /// YIUI 面板初始化回调
+        /// </summary>
         [EntitySystem]
         private static void YIUIInitialize(this HUDPanelComponent self)
         {

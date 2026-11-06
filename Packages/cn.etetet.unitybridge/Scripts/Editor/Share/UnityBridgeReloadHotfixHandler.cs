@@ -2,6 +2,9 @@ using UnityEditor;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 在 PlayMode 下执行 ET/Scripts/Reload 触发热更代码重载的命令处理器（Reload）。
+    /// </summary>
     internal sealed class UnityBridgeReloadHotfixHandler : AUnityBridgeHandler<Reload, ReloadResponse>
     {
         protected override async ETTask<IResponse> Run(Reload command)

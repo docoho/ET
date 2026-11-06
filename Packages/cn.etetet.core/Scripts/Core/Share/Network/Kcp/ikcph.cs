@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #pragma warning disable CS1591
@@ -9,8 +9,14 @@ using System.Runtime.InteropServices;
 
 namespace ET
 {
+    /// <summary>
+    /// KCP 底层向下层传输介质输出打包好的数据帧时的委托回调。
+    /// </summary>
     public delegate void KcpCallback(byte[] buffer, int length);
 
+    /// <summary>
+    /// KCP 侵入式双向循环链表头节点结构（对应 C 语言版 <c>ikcp.h</c> 中的 <c>IQUEUEHEAD</c>）。
+    /// </summary>
     internal unsafe struct IQUEUEHEAD
     {
         public IQUEUEHEAD* next;

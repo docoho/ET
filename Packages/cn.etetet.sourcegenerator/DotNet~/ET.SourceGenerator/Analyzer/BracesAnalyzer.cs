@@ -8,6 +8,10 @@ namespace ET
 {
 #nullable disable
 
+    /// <summary>
+    /// 控制流语句强制花括号规范分析器（BR001）。
+    /// <para>检查 <c>if</c>、<c>else</c>、<c>for</c>、<c>foreach</c>、<c>while</c>、<c>do</c> 语句体是否使用了 <c>{ }</c> 块包裹，防止省略大括号引发的逻辑歧义。</para>
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class BracesAnalyzer : DiagnosticAnalyzer
     {

@@ -1,4 +1,4 @@
-﻿/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
+/* Copyright (C) <2009-2011> <Thorben Linneweber, Jitter Physics>
 * 
 *  This software is provided 'as-is', without any express or implied
 *  warranty.  In no event will the authors be held liable for any damages
@@ -22,7 +22,8 @@ using System;
 namespace TrueSync
 {
     /// <summary>
-    /// A vector structure.
+    /// 基于定点数 <see cref="FP"/> 的确定性三维向量（3D Vector）结构体。
+    /// <para>A vector structure.</para>
     /// </summary>
     [Serializable]
     public struct TSVector

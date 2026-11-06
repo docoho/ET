@@ -10,6 +10,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树节点代码生成器（菜单：ET/BehaviorTree/Generate BT Nodes），扫描所有标记了 [BTNodeGen] 的静态方法，自动在 cn.etetet.btnode 包下生成对应的 BTNode 数据类与 ABTHandler/ABTCoroutineHandler 处理器类。
+    /// </summary>
     public static class BTNodeGenCodeGeneratorEditor
     {
         private const string NodeOutDirModel = "Packages/cn.etetet.btnode/Scripts/Model/Share/SourceGenerator";

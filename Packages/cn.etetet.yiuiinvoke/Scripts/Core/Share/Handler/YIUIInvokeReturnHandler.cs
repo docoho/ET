@@ -1,5 +1,8 @@
-﻿namespace ET
+namespace ET
 {
+    /// <summary>
+    /// 无参数、带返回值 <typeparamref name="R"/> 的YIUI跨层调用处理器接口。
+    /// </summary>
     public interface IYIUIInvokeReturnHandler<out R> : IYIUIInvokeBaseHandler
     {
         R Invoke(Entity self);

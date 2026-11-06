@@ -1,8 +1,15 @@
 namespace ET.Server
 {
+    /// <summary>
+    /// 位置服务（Location）Fiber 初始化处理器。
+    /// 负责挂载通信、定时器、协程锁、数据库以及 <see cref="LocationComponent"/>，并将当前节点附带 <see cref="ServiceMetaKey.PriorityId"/> 注册到服务发现，通过稳定排序选举主 Location 节点。
+    /// </summary>
     [Invoke(SceneType.Location)]
     public class FiberInit_Location: AInvokeHandler<FiberInit, ETTask>
     {
+        /// <summary>
+        /// 执行 Location 场景的初始化、服务注册与主备状态刷新。
+        /// </summary>
         public override async ETTask Handle(FiberInit fiberInit)
         {
             Scene root = fiberInit.Fiber.Root;

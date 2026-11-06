@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using YIUIFramework;
@@ -6,12 +6,14 @@ using YIUIFramework;
 namespace ET.Client
 {
     /// <summary>
-    /// 3DDisplay的扩展组件
+    /// 3DDisplay的扩展组件（多目标模式支持：允许在同一个3D展示场景中添加/移除并独立点击/拖拽多个3D对象）。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/FhGGwVZSyiCqHCkTVQYcKHQCnKf
     /// </summary>
     public static partial class YIUI3DDisplayChildSystem
     {
-        //可动态设置改变多目标 但是尽量不要
+        /// <summary>
+        /// 动态切换多目标模式（初始化或清理多目标缓存）。
+        /// </summary>
         public static void ResetMultipleTargetMode(this YIUI3DDisplayChild self, bool value)
         {
             self.MultipleTargetMode = value;

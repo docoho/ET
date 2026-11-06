@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace ET
 {
+    /// <summary>
+    /// 行为树节点输入参数特性，标记该 string 字段表示要从 BTEnv 黑板中读取的变量键名，并声明期望的变量类型以供编辑器下拉框筛选与保存前静态校验。
+    /// </summary>
     [EnableClass]
     public class BTInput: Attribute
     {

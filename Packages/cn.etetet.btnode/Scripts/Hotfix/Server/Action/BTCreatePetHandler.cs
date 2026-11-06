@@ -1,5 +1,8 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
+    /// <summary>
+    /// 服务端创建宠物单位节点处理器。
+    /// </summary>
     public class BTCreatePetHandler: ABTHandler<BTCreatePet>
     {
         protected override int Run(BTCreatePet node, BTEnv env)

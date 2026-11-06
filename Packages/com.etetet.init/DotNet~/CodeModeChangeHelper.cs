@@ -1,19 +1,31 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace ET
 {
+    /// <summary>
+    /// 代码运行模式（CodeMode）切换辅助类。
+    /// 通过在各包（<c>Packages/cn.etetet.*</c>）的子目录中动态生成或删除 Unity 的程序集引用文件（<c>AssemblyReference.asmref</c>），
+    /// 控制哪些包的哪些代码层（Model/Hotfix/ModelView/HotfixView/Core/Loader/Config/Editor）以及哪些端（Client/Server/Share/Test）汇入对应的主程序集参与编译。
+    /// </summary>
     public static class CodeModeChangeHelper
     {
+        /// <summary>扫描包的根路径列表。</summary>
         private static readonly string[] moduleDirs = { "Packages", "Library/PackageCache" };
 
+        /// <summary>包内源码目录类型：手写源码目录 <c>Scripts</c> 与工具生成代码目录 <c>CodeMode</c>。</summary>
         private static readonly string[] scriptDirs = { "Scripts", "CodeMode" };
 
+        /// <summary>ET 架构分层目录名称，对应汇入 <c>ET.{modelDir}</c> 程序集。</summary>
         private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config", "Editor" };
 
+        /// <summary>端侧隔离目录名称。</summary>
         private static readonly string[] serverDirs = { "Server", "Client", "Share", "Test", "ClientServer" };
 
+        /// <summary>
+        /// 白名单集合：定义了在每种 <c>CodeMode</c>（Client / Server / ClientServer）下允许生成 <c>AssemblyReference.asmref</c> 的目录相对路径组合。
+        /// </summary>
         private static readonly HashSet<string> v = new()
         {
             "Client/Scripts/Model/Client",
@@ -89,6 +101,11 @@ namespace ET
             "ClientServer/Scripts/ModelView/Test",
         };
 
+        /// <summary>
+        /// 遍历所有 <c>cn.etetet.*</c> 包，根据指定的 <paramref name="codeMode"/> 和主包依赖集合 <paramref name="targetPackages"/> 更新各目录下的 <c>AssemblyReference.asmref</c>。
+        /// </summary>
+        /// <param name="codeMode">目标代码模式名称（"Client"、"Server" 或 "ClientServer"）。</param>
+        /// <param name="targetPackages">从 <c>MainPackage.txt</c> 读取的当前生效包名集合。</param>
         public static void ChangeToCodeMode(string codeMode, HashSet<string> targetPackages)
         {
             Console.WriteLine($"目标包列表: {string.Join(", ", targetPackages)}");
@@ -138,6 +155,10 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 单个目录的 <c>AssemblyReference.asmref</c> 清理与重建逻辑：
+        /// 先删除已有的 <c>.asmref</c>，若该包属于目标依赖包（或者是通用的 Editor 目录）且路径组合在当前 <paramref name="codeMode"/> 白名单中，则重新生成引用文件。
+        /// </summary>
         private static void HandleAssemblyReferenceFile(string codeMode, string moduleDir, string scriptDir, string modelDir, string serverDir, bool isTargetPackage)
         {
             string filePath = Path.Combine(moduleDir, scriptDir, modelDir, serverDir, "AssemblyReference.asmref");
@@ -153,6 +174,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 若存在指定的 <c>AssemblyReference.asmref</c> 文件则将其删除。
+        /// </summary>
         private static void DeleteAssemblyReference(string path)
         {
             if (File.Exists(path))
@@ -161,6 +185,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 创建 <c>AssemblyReference.asmref</c> 文件，使其目录下的脚本汇入 <c>ET.{modelDir}</c> 程序集。
+        /// </summary>
         private static void CreateAssemblyReference(string path, string modelDir)
         {
             File.WriteAllText(path, $"{{ \"reference\": \"ET.{modelDir}\" }}");

@@ -1,14 +1,17 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace TrueSync {
 
     /// <summary>
-    /// Represents a Q31.32 fixed-point number.
+    /// 表示 Q31.32 格式的 64 位有符号定点数（Fixed-Point Number，高 32 位为带符号整数部分，低 32 位为小数部分）。
+    /// <para>在帧同步（LockStep）等需要跨平台、跨 CPU 架构保证 100% 确定性浮点计算的场景中替代 <c>float</c> 与 <c>double</c>。</para>
+    /// <para>Represents a Q31.32 fixed-point number.</para>
     /// </summary>
     [Serializable]
     public partial struct FP : IEquatable<FP>, IComparable<FP> {
 
+        /// <summary>底层 64 位原始定点数存储值（实际数值 = <c>_serializedValue / 2^32</c>）。</summary>
         public long _serializedValue;
 
 		public const long MAX_VALUE = long.MaxValue;

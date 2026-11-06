@@ -3,9 +3,17 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
+    /// <summary>
+    /// 房间接收客户端上报的单帧操作输入消息（<see cref="FrameMessage"/>）处理器
+    /// </summary>
     [MessageHandler(SceneType.RoomRoot)]
     public class FrameMessageHandler: MessageHandler<Scene, FrameMessage>
     {
+        /// <summary>
+        /// 处理客户端帧输入：每秒下发一次客户端时间微调指令 <see cref="Room2C_AdjustUpdateTime"/>，过滤过期或超前过多的帧消息，并将有效输入写入 <see cref="FrameBuffer"/>
+        /// </summary>
+        /// <param name="root">房间纤程根场景</param>
+        /// <param name="message">客户端上报的单帧操作输入消息</param>
         protected override async ETTask Run(Scene root, FrameMessage message)
         {
             using FrameMessage _ = message;  // 让消息回到池中

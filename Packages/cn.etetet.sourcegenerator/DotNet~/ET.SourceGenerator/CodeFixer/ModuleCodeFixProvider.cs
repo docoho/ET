@@ -13,6 +13,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ModuleCodeFixProvider)), Shared]
+/// <summary>
+/// 针对跨模块字段访问诊断（ET1003）的 IDE 快速修复提供器（CodeFixProvider）。
+/// <para>当检测到当前类访问了归属于特定模块（标记了 <c>[Module("Xxx")]</c>）的实体字段而自身未声明对应模块标签时，提供一键为当前类添加 <c>[Module("Xxx")]</c> 特性的修复操作。</para>
+/// </summary>
 public class ModuleCodeFixProvider : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds =>

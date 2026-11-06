@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace YIUIFramework
 {
     /// <summary>
-    /// 红点 管理器
+    /// 红点管理器 —— 对外公开操作API分部类（获取节点、增删变化监听、设置叶节点数量及开关玩家提示偏好）。
     /// </summary>
     public partial class RedDotMgr
     {

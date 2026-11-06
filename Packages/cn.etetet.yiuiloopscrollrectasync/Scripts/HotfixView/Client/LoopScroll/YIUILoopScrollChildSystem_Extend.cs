@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ET.Client
 {
     /// <summary>
-    /// 无限循环列表 (异步)
+    /// 无限循环列表 (异步) —— 单元格重填（RefillCells）、刷新、平滑滚动及刷新期间防误触锁屏控制分部类。
     /// 文档: https://lib9kmxvq7k.feishu.cn/wiki/HPbwwkhsKi9aDik5VEXcqPhDnIh
     /// </summary>
     [FriendOf(typeof(YIUILoopScrollChild))]

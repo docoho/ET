@@ -8,19 +8,49 @@ using OfficeOpenXml;
 
 namespace ET
 {
+    /// <summary>
+    /// 数值类型（NumericType）Excel 导出预处理器。
+    /// <remarks>
+    /// 扫描所有 <c>Packages/cn.etetet.*</c> 包下的 <c>Luban/Config/Datas/NumericType.xlsx</c>，
+    /// 汇总校验唯一性（防止跨包 ID 或名称冲突），并自动为勾选了二级属性（<c>GenSecondAttr == "1"</c>）的数值生成
+    /// <c>Base</c>（×10+1）、<c>Add</c>（×10+2）、<c>Pct</c>（×10+3）、<c>FinalAdd</c>（×10+4）、<c>FinalPct</c>（×10+5）五项子枚举，
+    /// 最终输出到 <c>Packages/cn.etetet.numeric/Luban/Config/Defines/NumericType.xml</c> 供 Luban 导出 <see cref="NumericType"/> 枚举。
+    /// </remarks>
+    /// </summary>
     public class ExcelHandler_NumericType : IExcelHandler
     {
         private const string NumericTypePackageName = "cn.etetet.numeric";
         private const string NumericTypeXmlPath = "Luban/Config/Defines/NumericType.xml";
 
+        /// <summary>
+        /// 单条数值类型配置项数据结构。
+        /// </summary>
         private sealed class NumericTypeEntry
         {
+            /// <summary>
+            /// 数值枚举名称（如 Speed、MaxHP）。
+            /// </summary>
             public string Name { get; init; }
+
+            /// <summary>
+            /// 数值枚举整数 ID 字符串（如 1000、1002）。
+            /// </summary>
             public string Id { get; init; }
+
+            /// <summary>
+            /// 数值注释说明。
+            /// </summary>
             public string Comment { get; init; }
+
+            /// <summary>
+            /// 是否自动生成 5 个二级属性分量（"1" 表示生成 Base/Add/Pct/FinalAdd/FinalPct）。
+            /// </summary>
             public string GenSecondAttr { get; init; }
         }
 
+        /// <summary>
+        /// 执行所有包内 NumericType.xlsx 的扫描解析与 Luban XML 枚举定义生成。
+        /// </summary>
         public void Run()
         {
             // 遍历所有Packages目录，查找NumericType.xlsx文件
@@ -54,6 +84,9 @@ namespace ET
             Log.Console($"NumericType xml generation completed! Processed {totalEntries} entries from {processedPackages} packages.");
         }
 
+        /// <summary>
+        /// 读取并解析单个包中的 NumericType.xlsx 工作表数据。
+        /// </summary>
         private bool ProcessNumericTypeExcel(
             string excelPath,
             string packageName,
@@ -116,6 +149,9 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 根据汇总的数值条目列表生成 Luban 的 NumericType.xml 枚举定义文件。
+        /// </summary>
         private void GenerateNumericTypeXml(List<NumericTypeEntry> entries)
         {
             entries.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.Ordinal));
@@ -154,6 +190,9 @@ namespace ET
             Log.Console($"Generated {outputPath} with {entries.Count} source entries");
         }
 
+        /// <summary>
+        /// 向 XML enum 节点添加一个 var 枚举项并校验名称唯一性。
+        /// </summary>
         private void AddEnumVar(XElement enumElement, HashSet<string> generatedNames, string name, string value, string comment)
         {
             if (!generatedNames.Add(name))

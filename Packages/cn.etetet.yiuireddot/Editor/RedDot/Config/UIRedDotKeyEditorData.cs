@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System;
 using System.Collections;
@@ -7,6 +7,9 @@ using Sirenix.Serialization;
 
 namespace YIUIFramework.Editor
 {
+    /// <summary>
+    /// 红点关系编辑器中父节点列表单项的下拉选择数据模型。
+    /// </summary>
     [Serializable]
     internal class UIRedDotKeyEditorData
     {

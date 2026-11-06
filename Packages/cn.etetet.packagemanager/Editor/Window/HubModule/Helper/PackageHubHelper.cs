@@ -1,4 +1,4 @@
-﻿#if ODIN_INSPECTOR
+#if ODIN_INSPECTOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,14 +13,26 @@ using UnityEditor.PackageManager;
 
 namespace ET.PackageManager.Editor
 {
+    /// <summary>
+    /// 包仓库（Hub）辅助类（负责从 GitHub 抓取 ET-Packages 组织下的包列表、下载量及付费包目录，并提供分类解析与卸载安全检查）
+    /// </summary>
     public static class PackageHubHelper
     {
+        /// <summary>
+        /// GitHub ET-Packages 组织包列表分页 URL
+        /// </summary>
         private const string PackageURL = "https://github.com/orgs/ET-Packages/packages?page=";
 
+        /// <summary>
+        /// PackageHubAsset 资源在项目中的存放路径
+        /// </summary>
         public const string ETPackageHubAssetPath = PackageHelper.ETPackageAssetsFolderPath + "/PackageHubAsset.asset";
 
         private static PackageHubAsset m_PackageHubAsset;
 
+        /// <summary>
+        /// 获取当前加载的 PackageHubAsset 实例（未加载时自动加载或创建）
+        /// </summary>
         public static PackageHubAsset PackageHubAsset
         {
             get

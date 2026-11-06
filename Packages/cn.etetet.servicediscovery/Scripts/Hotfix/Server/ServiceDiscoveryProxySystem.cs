@@ -4,18 +4,27 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     /// <summary>
-    /// 服务发现代理组件系统
+    /// 服务发现代理组件系统（挂载于各业务 Scene 上，供业务层注册自身服务、订阅其他服务变更以及按路由键调用目标服务）。
     /// </summary>
     [EntitySystemOf(typeof(ServiceDiscoveryProxy))]
     public static partial class ServiceDiscoveryProxySystem
     {
+        /// <summary>解析目标服务 ActorId 时的默认最大重试次数</summary>
         private const int DefaultServiceResolveRetryTimes = 20;
+        /// <summary>解析目标服务重试时的默认等待间隔（毫秒）</summary>
         private const int DefaultServiceResolveRetryIntervalMs = 100;
+        /// <summary>服务变更类型：新增或更新</summary>
         private const int ServiceChangeTypeAdd = 1;
+        /// <summary>服务变更类型：移除</summary>
         private const int ServiceChangeTypeRemove = 2;
+        /// <summary>服务变更来源标识：初始订阅响应快照</summary>
         private const string ServiceChangeSourceSubscribeSnapshot = "subscribe-response";
+        /// <summary>服务变更来源标识：进程 Agent 实时推送</summary>
         private const string ServiceChangeSourceAgentPush = "agent-notification";
 
+        /// <summary>
+        /// 当业务 Scene 销毁时，向同进程 <see cref="ServiceDiscoveryAgent"/> 发送单向消息通知注销本场景服务并移除订阅。
+        /// </summary>
         [EntitySystem]
         private static void Destroy(this ServiceDiscoveryProxy self)
         {
@@ -35,6 +44,9 @@ namespace ET.Server
             MessageQueue.Instance.Send(scene.Fiber, self.AgentFiberInstanceId, message);
         }
 
+        /// <summary>
+        /// 组件唤醒时校验场景类型、定位本进程的 <see cref="SceneType.ServiceDiscoveryAgent"/> FiberInstanceId，并启动 Proxy 心跳组件。
+        /// </summary>
         [EntitySystem]
         private static void Awake(this ServiceDiscoveryProxy self)
         {
@@ -70,7 +82,7 @@ namespace ET.Server
         }
 
         /// <summary>
-        /// 注册到服务发现服务器
+        /// 注册到服务发现服务器（自动附带当前场景的 <see cref="ServiceMetaKey.SceneType"/> 和 <see cref="ServiceMetaKey.Zone"/> 元数据）。
         /// </summary>
         public static async ETTask RegisterToServiceDiscovery(this ServiceDiscoveryProxy self, StringKV metadata = null)
         {
@@ -152,7 +164,7 @@ namespace ET.Server
         }
 
         /// <summary>
-        /// 订阅服务变更
+        /// 订阅服务变更（向同进程 Agent 注册过滤条件，并将返回的初始快照写入本地缓存）。
         /// </summary>
         public static async ETTask SubscribeServiceChange(this ServiceDiscoveryProxy self, string filterName, StringKV filterMeta)
         {
@@ -236,6 +248,9 @@ namespace ET.Server
             self.ClearLocalServices(false);
         }
 
+        /// <summary>
+        /// 通过进程内通信（<see cref="ProcessInnerSender"/>）将请求转发给同进程的 <see cref="ServiceDiscoveryAgent"/>。
+        /// </summary>
         public static async ETTask<T> ForwardToDiscoveryByFailover<T>(this ServiceDiscoveryProxy self, IRequest request,
             string requestName)
             where T : class, IResponse
@@ -278,6 +293,9 @@ namespace ET.Server
             return response;
         }
 
+        /// <summary>
+        /// 根据目标 <see cref="SceneType"/> 与路由键（<paramref name="routeKey"/>）解析目标服务的 <see cref="ActorId"/>（若本地缓存暂未同步到位则自动等待重试）。
+        /// </summary>
         public static async ETTask<ActorId> ResolveServiceActorIdByRouteKeyAsync(this ServiceDiscoveryProxy self, int sceneType,
             long routeKey = 0)
         {
@@ -320,6 +338,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 根据目标 <see cref="SceneType"/> 与路由键（<paramref name="routeKey"/>）定位服务并发起 RPC 调用（支持自动重试可恢复的路由/网络错误）。
+        /// </summary>
         public static async ETTask<T> CallBySceneTypeAsync<T>(this ServiceDiscoveryProxy self, int sceneType, IRequest request,
             string requestName, long routeKey = 0, bool needException = false, bool throwResponseError = false) where T : class, IResponse
         {
@@ -401,6 +422,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 单次从本地缓存中按 <paramref name="sceneType"/> 查找服务列表，并通过确定性排序取模选择对应的 <see cref="ActorId"/>。
+        /// </summary>
         private static ActorId ResolveServiceActorIdByRouteKeyOnce(this ServiceDiscoveryProxy self, int sceneType, string sceneTypeName,
             long routeKey)
         {
@@ -414,18 +438,27 @@ namespace ET.Server
             return SelectServiceActorIdByRouteKey(localServices, routeKey, sceneTypeName);
         }
 
+        /// <summary>
+        /// 判断服务解析异常是否可重试。
+        /// </summary>
         private static bool ShouldRetryResolveService(this ServiceDiscoveryProxy self, RpcException rpcException)
         {
             return rpcException.Error == ErrorCode.ERR_ServiceNotFound
                    || ServiceDiscoveryErrorHelper.ShouldTriggerFailover(rpcException.Error);
         }
 
+        /// <summary>
+        /// 判断服务调用返回的错误码是否属于可重试错误（如服务未找到、目标 Actor 不存在或超时）。
+        /// </summary>
         private static bool ShouldRetryServiceCallError(int error)
         {
             return error == ErrorCode.ERR_ServiceNotFound
                    || ServiceDiscoveryErrorHelper.ShouldTriggerFailover(error);
         }
 
+        /// <summary>
+        /// 对候选服务列表按确定性规则（SceneName -> IP -> Port -> Fiber -> InstanceId）排序后，根据 <paramref name="routeKey"/> 取模选出目标 <see cref="ActorId"/>。
+        /// </summary>
         private static ActorId SelectServiceActorIdByRouteKey(List<ServiceInfo> serviceInfos, long routeKey, string sceneTypeName)
         {
             if (serviceInfos == null || serviceInfos.Count == 0)
@@ -445,6 +478,9 @@ namespace ET.Server
             return orderedServices[GetRouteIndex(routeKey, orderedServices.Count)].ActorId;
         }
 
+        /// <summary>
+        /// 将有符号 <paramref name="routeKey"/> 转为无符号整数并对服务数量取模，得到路由下标。
+        /// </summary>
         private static int GetRouteIndex(long routeKey, int count)
         {
             if (count <= 0)
@@ -456,6 +492,9 @@ namespace ET.Server
             return (int)(normalizedRouteKey % (ulong)count);
         }
 
+        /// <summary>
+        /// 确定性比较两个 <see cref="ServiceInfo"/>（先按 SceneName 字典序，再按 ActorId 排序），保证各节点路由结果一致。
+        /// </summary>
         private static int CompareServiceInfo(ServiceInfo left, ServiceInfo right)
         {
             int compare = string.Compare(left?.SceneName, right?.SceneName, StringComparison.Ordinal);
@@ -467,6 +506,9 @@ namespace ET.Server
             return CompareActorId(left?.ActorId ?? default, right?.ActorId ?? default);
         }
 
+        /// <summary>
+        /// 确定性比较两个 <see cref="ActorId"/>。
+        /// </summary>
         private static int CompareActorId(ActorId left, ActorId right)
         {
             int compare = string.Compare(left.Address.IP, right.Address.IP, StringComparison.Ordinal);
@@ -490,6 +532,9 @@ namespace ET.Server
             return left.FiberInstanceId.InstanceId.CompareTo(right.FiberInstanceId.InstanceId);
         }
 
+        /// <summary>
+        /// 校验缓存中的 <see cref="ServiceInfo"/> 是否合法。
+        /// </summary>
         private static void ValidateServiceInfo(ServiceInfo serviceInfo, string sceneTypeName)
         {
             if (serviceInfo == null || string.IsNullOrWhiteSpace(serviceInfo.SceneName) || serviceInfo.ActorId == default)
@@ -499,6 +544,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 等待服务解析重试间隔。
+        /// </summary>
         private static async ETTask WaitResolveRetryDelayAsync(this ServiceDiscoveryProxy self)
         {
             int delay = self.ServiceResolveRetryIntervalMs;
@@ -517,6 +565,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 清空 Proxy 本地的全部服务缓存与索引。
+        /// </summary>
         private static void ClearLocalServices(this ServiceDiscoveryProxy self, bool publishRemoveEvent)
         {
             using ListComponent<string> sceneNames = ListComponent<string>.Create();
@@ -531,6 +582,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 新增或更新 Proxy 本地的服务缓存，并向当前业务场景发布 <see cref="OnServiceChangeAddService"/> 事件。
+        /// </summary>
         private static void AddOrUpdateLocalService(this ServiceDiscoveryProxy self, ServiceInfoProto serviceInfoProto)
         {
             if (serviceInfoProto == null || string.IsNullOrEmpty(serviceInfoProto.SceneName) || serviceInfoProto.ActorId == default)
@@ -557,6 +611,9 @@ namespace ET.Server
             EventSystem.Instance.Publish(self.Scene(), new OnServiceChangeAddService { ServiceName = serviceInfoProto.SceneName });
         }
 
+        /// <summary>
+        /// 从 Proxy 本地缓存中移除指定服务，并按需向当前业务场景发布 <see cref="OnServiceChangeRemoveService"/> 事件。
+        /// </summary>
         private static void RemoveLocalService(this ServiceDiscoveryProxy self, string sceneName, bool publishRemoveEvent)
         {
             bool removed = ServiceDiscoveryHelper.RemoveLocalServiceCache(self.SceneNameServices, self.ServicesIndexs, self.Indexs, sceneName);
@@ -571,6 +628,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 处理单条服务变更通知。
+        /// </summary>
         private static void OnServiceChangeNotification(this ServiceDiscoveryProxy self, int changeType,
             ServiceInfoProto serviceInfoProto)
         {
@@ -599,6 +659,9 @@ namespace ET.Server
             self.OnServiceChangeNotification(changeType, serviceInfos, ServiceChangeSourceAgentPush);
         }
 
+        /// <summary>
+        /// 批量处理带来源标识的服务变更通知列表并记录日志。
+        /// </summary>
         private static void OnServiceChangeNotification(this ServiceDiscoveryProxy self, int changeType,
             List<ServiceInfoProto> serviceInfos, string source)
         {
@@ -616,6 +679,9 @@ namespace ET.Server
             }
         }
 
+        /// <summary>
+        /// 打印服务变更详情日志。
+        /// </summary>
         private static void LogServiceChange(this ServiceDiscoveryProxy self, int changeType, ServiceInfoProto serviceInfoProto,
             string source)
         {
@@ -630,6 +696,9 @@ namespace ET.Server
                 $"ServiceDiscoveryProxy update proxy: {proxySceneName} source: {resolvedSource} changeType: {GetServiceChangeTypeName(changeType)} service: {FormatServiceInfo(serviceInfoProto)}");
         }
 
+        /// <summary>
+        /// 将变更类型枚举值转换为可读字符串（add / remove）。
+        /// </summary>
         private static string GetServiceChangeTypeName(int changeType)
         {
             return changeType switch
@@ -640,6 +709,9 @@ namespace ET.Server
             };
         }
 
+        /// <summary>
+        /// 格式化 <see cref="ServiceInfoProto"/> 为日志文本。
+        /// </summary>
         private static string FormatServiceInfo(ServiceInfoProto serviceInfoProto)
         {
             if (serviceInfoProto == null)
@@ -652,6 +724,9 @@ namespace ET.Server
                 $"{{sceneName={sceneName}, actorId={serviceInfoProto.ActorId}, metadata={FormatMetadata(serviceInfoProto.Metadata)}}}";
         }
 
+        /// <summary>
+        /// 格式化元数据字典为有序键值对字符串。
+        /// </summary>
         private static string FormatMetadata(StringKV metadata)
         {
             if (metadata == null || metadata.Count == 0)
@@ -673,6 +748,9 @@ namespace ET.Server
 
         #region 获取ServiceInfo
 
+        /// <summary>
+        /// 根据场景名称获取本地缓存的 <see cref="ServiceInfo"/>（若不存在则抛出异常）。
+        /// </summary>
         public static ServiceInfo GetServiceInfo(this ServiceDiscoveryProxy self, string sceneName)
         {
             if (!self.SceneNameServices.TryGetValue(sceneName, out EntityRef<ServiceInfo> serviceInfoRef))
@@ -683,6 +761,9 @@ namespace ET.Server
             return serviceInfoRef;
         }
 
+        /// <summary>
+        /// 根据 <see cref="SceneType"/> 获取本地缓存的所有匹配服务列表。
+        /// </summary>
         public static List<ServiceInfo> GetBySceneType(this ServiceDiscoveryProxy self, int sceneType)
         {
             return self.GetServiceInfoByFilter(new StringKV
@@ -691,6 +772,9 @@ namespace ET.Server
             });
         }
 
+        /// <summary>
+        /// 根据 <see cref="SceneType"/> 与区服号（Zone）获取本地缓存的所有匹配服务列表。
+        /// </summary>
         public static List<ServiceInfo> GetBySceneTypeAndZone(this ServiceDiscoveryProxy self, int sceneType, int zone)
         {
             return self.GetServiceInfoByFilter(new StringKV
@@ -708,6 +792,9 @@ namespace ET.Server
             return ServiceDiscoveryHelper.GetServiceInfoByFilter(self.SceneNameServices, self.ServicesIndexs, filterMetadata);
         }
 
+        /// <summary>
+        /// 按场景名称直接索引获取 <see cref="ServiceInfo"/>。
+        /// </summary>
         public static ServiceInfo GetByName(this ServiceDiscoveryProxy self, string name)
         {
             return self.SceneNameServices[name];
@@ -717,6 +804,9 @@ namespace ET.Server
 
         #region 兼容调用面
 
+        /// <summary>
+        /// 根据目标服务场景名称查找 ActorId 并发送 RPC 请求。
+        /// </summary>
         public static async ETTask<IResponse> Call(this ServiceDiscoveryProxy self, string sceneName, IRequest request, bool needException = true)
         {
             ServiceInfo serviceInfo = self.GetServiceInfo(sceneName);

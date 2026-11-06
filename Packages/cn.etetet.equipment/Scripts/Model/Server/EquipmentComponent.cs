@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     /// <summary>
-    /// 装备管理组件（挂在Unit上，管理穿戴的装备Item）
+    /// 服务端装备管理组件（挂载在 <see cref="Unit"/> 上，管理角色已穿戴的装备 <see cref="Item"/> 实体）
     /// </summary>
     [ComponentOf(typeof(Unit))]
     public class EquipmentComponent: Entity, IAwake, IDestroy

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 设置或切换场景中指定 GameObject 激活状态（SetActive，支持 Undo）的命令处理器（GameObjectSetActive）。
+    /// </summary>
     internal sealed class UnityBridgeGameObjectSetActiveHandler : AUnityBridgeHandler<GameObjectSetActiveRequest, GameObjectSetActiveResponse>
     {
         protected override async ETTask<IResponse> Run(GameObjectSetActiveRequest command)

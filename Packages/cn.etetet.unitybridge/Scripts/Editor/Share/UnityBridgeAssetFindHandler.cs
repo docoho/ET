@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
+    /// <summary>
+    /// UnityBridge 资源查找命令处理器（AssetFind），基于 AssetDatabase.FindAssets 按过滤条件与目录列表检索工程资源。
+    /// </summary>
     internal sealed class UnityBridgeAssetFindHandler : AUnityBridgeHandler<AssetFindRequest, AssetFindResponse>
     {
         protected override async ETTask<IResponse> Run(AssetFindRequest command)
