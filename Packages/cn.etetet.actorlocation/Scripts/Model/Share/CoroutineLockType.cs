@@ -11,7 +11,7 @@ namespace ET
         public const int Location = PackageType.ActorLocation * 1000 + 1;                  // location进程上使用
 
         /// <summary>
-        /// <see cref="Server.MessageLocationSender"/> 针对同一目标实体按序排队发送位置消息的协程锁。
+        /// <see cref="Server.M essageLocationSender"/> 针对同一目标实体按序排队发送位置消息的协程锁。
         /// </summary>
         public const int MessageLocationSender = PackageType.ActorLocation * 1000 + 2;       // MessageLocationSender中队列消息 
 
