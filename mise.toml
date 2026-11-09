@@ -1,0 +1,20 @@
+[tasks.status]
+description = "查看 ET Git 状态（只读）"
+run = "git status --short"
+shell = "pwsh -NoProfile -Command"
+
+[tasks.dotnet-info]
+description = "检查 .NET SDK 环境（只读）"
+run = "dotnet --info"
+shell = "pwsh -NoProfile -Command"
+
+[tasks.build]
+description = "编译 ET.sln"
+run = "dotnet build ET.sln"
+shell = "pwsh -NoProfile -Command"
+
+[tasks.export-proto]
+description = "编译后导出 Proto 协议代码"
+depends = ["build"]
+run = "dotnet ./Bin/ET.Proto2CS.dll"
+shell = "pwsh -NoProfile -Command"
